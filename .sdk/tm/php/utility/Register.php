@@ -1,0 +1,67 @@
+<?php
+declare(strict_types=1);
+
+// WhoisDomainMonitoring SDK utility registration
+
+require_once __DIR__ . '/../core/UtilityType.php';
+require_once __DIR__ . '/Clean.php';
+require_once __DIR__ . '/Done.php';
+require_once __DIR__ . '/MakeError.php';
+require_once __DIR__ . '/FeatureAdd.php';
+require_once __DIR__ . '/FeatureHook.php';
+require_once __DIR__ . '/FeatureInit.php';
+require_once __DIR__ . '/Fetcher.php';
+require_once __DIR__ . '/MakeFetchDef.php';
+require_once __DIR__ . '/MakeContext.php';
+require_once __DIR__ . '/MakeOptions.php';
+require_once __DIR__ . '/MakeRequest.php';
+require_once __DIR__ . '/MakeResponse.php';
+require_once __DIR__ . '/MakeResult.php';
+require_once __DIR__ . '/MakePoint.php';
+require_once __DIR__ . '/MakeSpec.php';
+require_once __DIR__ . '/MakeUrl.php';
+require_once __DIR__ . '/Param.php';
+require_once __DIR__ . '/PrepareAuth.php';
+require_once __DIR__ . '/PrepareBody.php';
+require_once __DIR__ . '/PrepareHeaders.php';
+require_once __DIR__ . '/PrepareMethod.php';
+require_once __DIR__ . '/PrepareParams.php';
+require_once __DIR__ . '/PreparePath.php';
+require_once __DIR__ . '/PrepareQuery.php';
+require_once __DIR__ . '/ResultBasic.php';
+require_once __DIR__ . '/ResultBody.php';
+require_once __DIR__ . '/ResultHeaders.php';
+require_once __DIR__ . '/TransformRequest.php';
+require_once __DIR__ . '/TransformResponse.php';
+
+WhoisDomainMonitoringUtility::setRegistrar(function (WhoisDomainMonitoringUtility $u): void {
+    $u->clean = [WhoisDomainMonitoringClean::class, 'call'];
+    $u->done = [WhoisDomainMonitoringDone::class, 'call'];
+    $u->make_error = [WhoisDomainMonitoringMakeError::class, 'call'];
+    $u->feature_add = [WhoisDomainMonitoringFeatureAdd::class, 'call'];
+    $u->feature_hook = [WhoisDomainMonitoringFeatureHook::class, 'call'];
+    $u->feature_init = [WhoisDomainMonitoringFeatureInit::class, 'call'];
+    $u->fetcher = [WhoisDomainMonitoringFetcher::class, 'call'];
+    $u->make_fetch_def = [WhoisDomainMonitoringMakeFetchDef::class, 'call'];
+    $u->make_context = [WhoisDomainMonitoringMakeContext::class, 'call'];
+    $u->make_options = [WhoisDomainMonitoringMakeOptions::class, 'call'];
+    $u->make_request = [WhoisDomainMonitoringMakeRequest::class, 'call'];
+    $u->make_response = [WhoisDomainMonitoringMakeResponse::class, 'call'];
+    $u->make_result = [WhoisDomainMonitoringMakeResult::class, 'call'];
+    $u->make_point = [WhoisDomainMonitoringMakePoint::class, 'call'];
+    $u->make_spec = [WhoisDomainMonitoringMakeSpec::class, 'call'];
+    $u->make_url = [WhoisDomainMonitoringMakeUrl::class, 'call'];
+    $u->param = [WhoisDomainMonitoringParam::class, 'call'];
+    $u->prepare_auth = [WhoisDomainMonitoringPrepareAuth::class, 'call'];
+    $u->prepare_body = [WhoisDomainMonitoringPrepareBody::class, 'call'];
+    $u->prepare_headers = [WhoisDomainMonitoringPrepareHeaders::class, 'call'];
+    $u->prepare_method = [WhoisDomainMonitoringPrepareMethod::class, 'call'];
+    $u->prepare_params = [WhoisDomainMonitoringPrepareParams::class, 'call'];
+    $u->prepare_path = [WhoisDomainMonitoringPreparePath::class, 'call'];
+    $u->prepare_query = [WhoisDomainMonitoringPrepareQuery::class, 'call'];
+    $u->result_basic = [WhoisDomainMonitoringResultBasic::class, 'call'];
+    $u->result_body = [WhoisDomainMonitoringResultBody::class, 'call'];
+    $u->result_headers = [WhoisDomainMonitoringResultHeaders::class, 'call'];
+    $u->transform_request = [WhoisDomainMonitoringTransformRequest::class, 'call'];
+    $u->transform_response = [WhoisDomainMonitoringTransformResponse::class, 'call'];
+});
