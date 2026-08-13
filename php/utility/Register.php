@@ -23,6 +23,7 @@ require_once __DIR__ . '/MakeUrl.php';
 require_once __DIR__ . '/Param.php';
 require_once __DIR__ . '/PrepareAuth.php';
 require_once __DIR__ . '/PrepareBody.php';
+require_once __DIR__ . '/Graphql.php';
 require_once __DIR__ . '/PrepareHeaders.php';
 require_once __DIR__ . '/PrepareMethod.php';
 require_once __DIR__ . '/PrepareParams.php';
@@ -59,6 +60,8 @@ WhoisDomainMonitoringUtility::setRegistrar(function (WhoisDomainMonitoringUtilit
     $u->prepare_params = [WhoisDomainMonitoringPrepareParams::class, 'call'];
     $u->prepare_path = [WhoisDomainMonitoringPreparePath::class, 'call'];
     $u->prepare_query = [WhoisDomainMonitoringPrepareQuery::class, 'call'];
+    $u->graphql_body = [WhoisDomainMonitoringGraphql::class, 'body'];
+    $u->graphql_errors = [WhoisDomainMonitoringGraphql::class, 'errors'];
     $u->result_basic = [WhoisDomainMonitoringResultBasic::class, 'call'];
     $u->result_body = [WhoisDomainMonitoringResultBody::class, 'call'];
     $u->result_headers = [WhoisDomainMonitoringResultHeaders::class, 'call'];

@@ -24,6 +24,7 @@ require_relative 'prepare_method'
 require_relative 'prepare_params'
 require_relative 'prepare_path'
 require_relative 'prepare_query'
+require_relative 'graphql'
 require_relative 'result_basic'
 require_relative 'result_body'
 require_relative 'result_headers'
@@ -55,6 +56,8 @@ WhoisDomainMonitoringUtility.registrar = ->(u) {
   u.prepare_params = WhoisDomainMonitoringUtilities::PrepareParams
   u.prepare_path = WhoisDomainMonitoringUtilities::PreparePath
   u.prepare_query = WhoisDomainMonitoringUtilities::PrepareQuery
+  u.graphql_body = WhoisDomainMonitoringUtilities::GraphqlBody
+  u.graphql_errors = WhoisDomainMonitoringUtilities::GraphqlErrors
   u.result_basic = WhoisDomainMonitoringUtilities::ResultBasic
   u.result_body = WhoisDomainMonitoringUtilities::ResultBody
   u.result_headers = WhoisDomainMonitoringUtilities::ResultHeaders

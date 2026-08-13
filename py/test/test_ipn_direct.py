@@ -3,9 +3,9 @@
 import json
 import pytest
 
-from utility.voxgig_struct import voxgig_struct as vs
+from whoisdomainmonitoring_sdk.utility.voxgig_struct import voxgig_struct as vs
 from whoisdomainmonitoring_sdk import WhoisDomainMonitoringSDK
-from core import helpers
+from whoisdomainmonitoring_sdk.core import helpers
 from test import runner
 
 
@@ -56,16 +56,16 @@ def _ipn_direct_setup(mockres):
     calls = []
 
     env = runner.env_override({
-        "WHOISDOMAINMONITORING_TEST_IPN_ENTID": {},
-        "WHOISDOMAINMONITORING_TEST_LIVE": "FALSE",
-        "WHOISDOMAINMONITORING_APIKEY": "NONE",
+        "WHOIS_DOMAIN_MONITORING_TEST_IPN_ENTID": {},
+        "WHOIS_DOMAIN_MONITORING_TEST_LIVE": "FALSE",
+        "WHOIS_DOMAIN_MONITORING_APIKEY": "NONE",
     })
 
-    live = env.get("WHOISDOMAINMONITORING_TEST_LIVE") == "TRUE"
+    live = env.get("WHOIS_DOMAIN_MONITORING_TEST_LIVE") == "TRUE"
 
     if live:
         merged_opts = {
-            "apikey": env.get("WHOISDOMAINMONITORING_APIKEY"),
+            "apikey": env.get("WHOIS_DOMAIN_MONITORING_APIKEY"),
         }
         client = WhoisDomainMonitoringSDK(merged_opts)
         return {

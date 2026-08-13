@@ -36,9 +36,10 @@ func TestWhoiDirect(t *testing.T) {
 			"params": map[string]any{},
 		})
 		if setup.live {
-			// Live mode is lenient: synthetic IDs frequently 4xx and the
-			// list-response shape varies wildly across public APIs. Skip
-			// rather than fail when the call doesn't return a usable list.
+			// Live-mode leniency is a model decision
+			// (main.kit.test.live.strict): synthetic IDs 4xx constantly
+			// against an arbitrary public API, so the default SKIPS here.
+			// A project that owns its test server sets strict and FAILS.
 			if err != nil {
 				t.Skipf("list call failed (likely synthetic IDs against live API): %v", err)
 			}
@@ -91,21 +92,21 @@ func whoiDirectSetup(mockres any) *whoiDirectSetupResult {
 	calls := &[]map[string]any{}
 
 	env := envOverride(map[string]any{
-		"WHOISDOMAINMONITORING_TEST_WHOI_ENTID": map[string]any{},
-		"WHOISDOMAINMONITORING_TEST_LIVE":    "FALSE",
-		"WHOISDOMAINMONITORING_APIKEY":       "NONE",
+		"WHOIS_DOMAIN_MONITORING_TEST_WHOI_ENTID": map[string]any{},
+		"WHOIS_DOMAIN_MONITORING_TEST_LIVE":    "FALSE",
+		"WHOIS_DOMAIN_MONITORING_APIKEY":       "NONE",
 	})
 
-	live := env["WHOISDOMAINMONITORING_TEST_LIVE"] == "TRUE"
+	live := env["WHOIS_DOMAIN_MONITORING_TEST_LIVE"] == "TRUE"
 
 	if live {
 		mergedOpts := map[string]any{
-			"apikey": env["WHOISDOMAINMONITORING_APIKEY"],
+			"apikey": env["WHOIS_DOMAIN_MONITORING_APIKEY"],
 		}
 		client := sdk.NewWhoisDomainMonitoringSDK(mergedOpts)
 
 		idmap := map[string]any{}
-		if entidRaw, ok := env["WHOISDOMAINMONITORING_TEST_WHOI_ENTID"]; ok {
+		if entidRaw, ok := env["WHOIS_DOMAIN_MONITORING_TEST_WHOI_ENTID"]; ok {
 			if entidStr, ok := entidRaw.(string); ok && strings.HasPrefix(entidStr, "{") {
 				json.Unmarshal([]byte(entidStr), &idmap)
 			} else if entidMap, ok := entidRaw.(map[string]any); ok {

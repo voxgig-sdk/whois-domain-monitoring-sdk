@@ -26,8 +26,8 @@ import {
 describe('RedactEntity', async () => {
 
   // Per-test live pacing. Delay is read from sdk-test-control.json's
-  // `test.live.delayMs`; only sleeps when WHOISDOMAINMONITORING_TEST_LIVE=TRUE.
-  afterEach(liveDelay('WHOISDOMAINMONITORING_TEST_LIVE'))
+  // `test.live.delayMs`; only sleeps when WHOIS_DOMAIN_MONITORING_TEST_LIVE=TRUE.
+  afterEach(liveDelay('WHOIS_DOMAIN_MONITORING_TEST_LIVE'))
 
   test('instance', async () => {
     const testsdk = WhoisDomainMonitoringSDK.test()
@@ -62,7 +62,7 @@ describe('RedactEntity', async () => {
     const redact_ref01_ent = client.Redact()
     let redact_ref01_data = setup.data.new.redact['redact_ref01']
 
-    redact_ref01_data = await redact_ref01_ent.create(redact_ref01_data)
+    redact_ref01_data = (await redact_ref01_ent.create(redact_ref01_data)).data()
     assert(null != redact_ref01_data)
 
 

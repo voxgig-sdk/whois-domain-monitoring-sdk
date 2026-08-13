@@ -66,16 +66,16 @@ function email_validate_direct_setup(mockres)
   local calls = {}
 
   local env = runner.env_override({
-    ["WHOISDOMAINMONITORING_TEST_EMAIL_VALIDATE_ENTID"] = {},
-    ["WHOISDOMAINMONITORING_TEST_LIVE"] = "FALSE",
-    ["WHOISDOMAINMONITORING_APIKEY"] = "NONE",
+    ["WHOIS_DOMAIN_MONITORING_TEST_EMAIL_VALIDATE_ENTID"] = {},
+    ["WHOIS_DOMAIN_MONITORING_TEST_LIVE"] = "FALSE",
+    ["WHOIS_DOMAIN_MONITORING_APIKEY"] = "NONE",
   })
 
-  local live = env["WHOISDOMAINMONITORING_TEST_LIVE"] == "TRUE"
+  local live = env["WHOIS_DOMAIN_MONITORING_TEST_LIVE"] == "TRUE"
 
   if live then
     local merged_opts = {
-      apikey = env["WHOISDOMAINMONITORING_APIKEY"],
+      apikey = env["WHOIS_DOMAIN_MONITORING_APIKEY"],
     }
     local client = sdk.new(merged_opts)
     return {

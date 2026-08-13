@@ -16,11 +16,11 @@
 import pytest
 
 from projectname_sdk import WhoisDomainMonitoringSDK
-from core.error import WhoisDomainMonitoringError
-from core.result import WhoisDomainMonitoringResult
-from core.response import WhoisDomainMonitoringResponse
-from core.spec import WhoisDomainMonitoringSpec
-from feature.base_feature import WhoisDomainMonitoringBaseFeature
+from projectname_sdk.core.error import WhoisDomainMonitoringError
+from projectname_sdk.core.result import WhoisDomainMonitoringResult
+from projectname_sdk.core.response import WhoisDomainMonitoringResponse
+from projectname_sdk.core.spec import WhoisDomainMonitoringSpec
+from projectname_sdk.feature.base_feature import WhoisDomainMonitoringBaseFeature
 
 
 def _client():

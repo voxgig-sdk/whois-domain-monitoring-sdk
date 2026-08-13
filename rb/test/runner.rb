@@ -23,8 +23,8 @@ module WhoisDomainMonitoringTestRunner
   end
 
   def self.env_override(m)
-    live = getenv("WHOISDOMAINMONITORING_TEST_LIVE")
-    override = getenv("WHOISDOMAINMONITORING_TEST_OVERRIDE")
+    live = getenv("WHOIS_DOMAIN_MONITORING_TEST_LIVE")
+    override = getenv("WHOIS_DOMAIN_MONITORING_TEST_OVERRIDE")
 
     if live == "TRUE" || override == "TRUE"
       m.each_key do |key|
@@ -44,8 +44,8 @@ module WhoisDomainMonitoringTestRunner
       end
     end
 
-    explain = getenv("WHOISDOMAINMONITORING_TEST_EXPLAIN")
-    m["WHOISDOMAINMONITORING_TEST_EXPLAIN"] = explain if explain && !explain.empty?
+    explain = getenv("WHOIS_DOMAIN_MONITORING_TEST_EXPLAIN")
+    m["WHOIS_DOMAIN_MONITORING_TEST_EXPLAIN"] = explain if explain && !explain.empty?
 
     m
   end

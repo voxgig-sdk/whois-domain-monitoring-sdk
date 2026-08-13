@@ -43,8 +43,8 @@ class WhoisDomainMonitoringTestRunner
 
     public static function env_override(array $m): array
     {
-        $live = self::getenv('WHOISDOMAINMONITORING_TEST_LIVE');
-        $override = self::getenv('WHOISDOMAINMONITORING_TEST_OVERRIDE');
+        $live = self::getenv('WHOIS_DOMAIN_MONITORING_TEST_LIVE');
+        $override = self::getenv('WHOIS_DOMAIN_MONITORING_TEST_OVERRIDE');
 
         if ($live === 'TRUE' || $override === 'TRUE') {
             foreach (array_keys($m) as $key) {
@@ -63,9 +63,9 @@ class WhoisDomainMonitoringTestRunner
             }
         }
 
-        $explain = self::getenv('WHOISDOMAINMONITORING_TEST_EXPLAIN');
+        $explain = self::getenv('WHOIS_DOMAIN_MONITORING_TEST_EXPLAIN');
         if ($explain !== null && $explain !== '') {
-            $m['WHOISDOMAINMONITORING_TEST_EXPLAIN'] = $explain;
+            $m['WHOIS_DOMAIN_MONITORING_TEST_EXPLAIN'] = $explain;
         }
 
         return $m;

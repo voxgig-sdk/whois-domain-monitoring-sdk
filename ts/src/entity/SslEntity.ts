@@ -37,7 +37,7 @@ class SslEntity extends WhoisDomainMonitoringEntityBase<Ssl> {
 
 
 
-  async list(this: any, reqmatch?: SslListMatch, ctrl?: Control): Promise<Ssl[]> {
+  async list(this: any, reqmatch?: SslListMatch, ctrl?: Control): Promise<SslEntity[]> {
 
     const utility = this._utility
 

@@ -62,8 +62,8 @@ function makeCtrl(explain: boolean) {
 // Overrides configuration values with environment variables if available
 function envOverride(m: Record<string, any>) {
   if (
-    'TRUE' === process.env.WHOISDOMAINMONITORING_TEST_LIVE ||
-    'TRUE' === process.env.WHOISDOMAINMONITORING_TEST_OVERRIDE
+    'TRUE' === process.env.WHOIS_DOMAIN_MONITORING_TEST_LIVE ||
+    'TRUE' === process.env.WHOIS_DOMAIN_MONITORING_TEST_OVERRIDE
   ) {
     Object.entries(m).map(n => {
       let envval = process.env[n[0]]
@@ -74,7 +74,7 @@ function envOverride(m: Record<string, any>) {
     })
   }
 
-  m.WHOISDOMAINMONITORING_TEST_EXPLAIN = process.env.WHOISDOMAINMONITORING_TEST_EXPLAIN || m.WHOISDOMAINMONITORING_TEST_EXPLAIN
+  m.WHOIS_DOMAIN_MONITORING_TEST_EXPLAIN = process.env.WHOIS_DOMAIN_MONITORING_TEST_EXPLAIN || m.WHOIS_DOMAIN_MONITORING_TEST_EXPLAIN
 
   return m
 }

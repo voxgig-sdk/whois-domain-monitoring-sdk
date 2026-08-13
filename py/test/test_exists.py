@@ -1,4 +1,4 @@
-# ProjectName SDK exists test
+# WhoisDomainMonitoring SDK exists test
 
 import pytest
 from whoisdomainmonitoring_sdk import WhoisDomainMonitoringSDK

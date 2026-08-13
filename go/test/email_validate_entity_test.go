@@ -44,7 +44,7 @@ func TestEmailValidateEntity(t *testing.T) {
 		// The basic flow consumes synthetic IDs from the fixture. In live mode
 		// without an *_ENTID env override, those IDs hit the live API and 4xx.
 		if setup.syntheticOnly {
-			t.Skip("live entity test uses synthetic IDs from fixture — set WHOISDOMAINMONITORING_TEST_EMAIL_VALIDATE_ENTID JSON to run live")
+			t.Skip("live entity test uses synthetic IDs from fixture — set WHOIS_DOMAIN_MONITORING_TEST_EMAIL_VALIDATE_ENTID JSON to run live")
 			return
 		}
 		client := setup.client
@@ -110,38 +110,38 @@ func email_validateBasicSetup(extra map[string]any) *entityTestSetup {
 	// Detect ENTID env override before envOverride consumes it. When live
 	// mode is on without a real override, the basic test runs against synthetic
 	// IDs from the fixture and 4xx's. Surface this so the test can skip.
-	entidEnvRaw := os.Getenv("WHOISDOMAINMONITORING_TEST_EMAIL_VALIDATE_ENTID")
+	entidEnvRaw := os.Getenv("WHOIS_DOMAIN_MONITORING_TEST_EMAIL_VALIDATE_ENTID")
 	idmapOverridden := entidEnvRaw != "" && strings.HasPrefix(strings.TrimSpace(entidEnvRaw), "{")
 
 	env := envOverride(map[string]any{
-		"WHOISDOMAINMONITORING_TEST_EMAIL_VALIDATE_ENTID": idmap,
-		"WHOISDOMAINMONITORING_TEST_LIVE":      "FALSE",
-		"WHOISDOMAINMONITORING_TEST_EXPLAIN":   "FALSE",
-		"WHOISDOMAINMONITORING_APIKEY":         "NONE",
+		"WHOIS_DOMAIN_MONITORING_TEST_EMAIL_VALIDATE_ENTID": idmap,
+		"WHOIS_DOMAIN_MONITORING_TEST_LIVE":      "FALSE",
+		"WHOIS_DOMAIN_MONITORING_TEST_EXPLAIN":   "FALSE",
+		"WHOIS_DOMAIN_MONITORING_APIKEY":         "NONE",
 	})
 
-	idmapResolved := core.ToMapAny(env["WHOISDOMAINMONITORING_TEST_EMAIL_VALIDATE_ENTID"])
+	idmapResolved := core.ToMapAny(env["WHOIS_DOMAIN_MONITORING_TEST_EMAIL_VALIDATE_ENTID"])
 	if idmapResolved == nil {
 		idmapResolved = core.ToMapAny(idmap)
 	}
 
-	if env["WHOISDOMAINMONITORING_TEST_LIVE"] == "TRUE" {
+	if env["WHOIS_DOMAIN_MONITORING_TEST_LIVE"] == "TRUE" {
 		mergedOpts := vs.Merge([]any{
 			map[string]any{
-				"apikey": env["WHOISDOMAINMONITORING_APIKEY"],
+				"apikey": env["WHOIS_DOMAIN_MONITORING_APIKEY"],
 			},
 			extra,
 		})
 		client = sdk.NewWhoisDomainMonitoringSDK(core.ToMapAny(mergedOpts))
 	}
 
-	live := env["WHOISDOMAINMONITORING_TEST_LIVE"] == "TRUE"
+	live := env["WHOIS_DOMAIN_MONITORING_TEST_LIVE"] == "TRUE"
 	return &entityTestSetup{
 		client:        client,
 		data:          entityData,
 		idmap:         idmapResolved,
 		env:           env,
-		explain:       env["WHOISDOMAINMONITORING_TEST_EXPLAIN"] == "TRUE",
+		explain:       env["WHOIS_DOMAIN_MONITORING_TEST_EXPLAIN"] == "TRUE",
 		live:          live,
 		syntheticOnly: live && !idmapOverridden,
 		now:           time.Now().UnixMilli(),

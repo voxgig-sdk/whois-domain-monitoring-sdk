@@ -65,16 +65,16 @@ def generate_direct_setup(mockres)
   calls = []
 
   env = Runner.env_override({
-    "WHOISDOMAINMONITORING_TEST_GENERATE_ENTID" => {},
-    "WHOISDOMAINMONITORING_TEST_LIVE" => "FALSE",
-    "WHOISDOMAINMONITORING_APIKEY" => "NONE",
+    "WHOIS_DOMAIN_MONITORING_TEST_GENERATE_ENTID" => {},
+    "WHOIS_DOMAIN_MONITORING_TEST_LIVE" => "FALSE",
+    "WHOIS_DOMAIN_MONITORING_APIKEY" => "NONE",
   })
 
-  live = env["WHOISDOMAINMONITORING_TEST_LIVE"] == "TRUE"
+  live = env["WHOIS_DOMAIN_MONITORING_TEST_LIVE"] == "TRUE"
 
   if live
     merged_opts = {
-      "apikey" => env["WHOISDOMAINMONITORING_APIKEY"],
+      "apikey" => env["WHOIS_DOMAIN_MONITORING_APIKEY"],
     }
     client = WhoisDomainMonitoringSDK.new(merged_opts)
     return {
