@@ -23,7 +23,7 @@ func NewWhoisDomainMonitoringSDK(options map[string]any) *WhoisDomainMonitoringS
 
 	sdk.utility = NewUtility()
 
-	config := MakeConfig()
+	config := SharedConfig()
 
 	sdk.rootctx = sdk.utility.MakeContext(map[string]any{
 		"client":  sdk,

@@ -28,7 +28,7 @@ class WhoisDomainMonitoringSDK
     utility = WhoisDomainMonitoringUtility.new
     @_utility = utility
 
-    config = WhoisDomainMonitoringConfig.make_config
+    config = WhoisDomainMonitoringConfig.shared_config
 
     @_rootctx = utility.make_context.call({
       "client" => self,

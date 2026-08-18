@@ -40,7 +40,7 @@ class WhoisDomainMonitoringSDK
         $utility = new WhoisDomainMonitoringUtility();
         $this->_utility = $utility;
 
-        $config = WhoisDomainMonitoringConfig::make_config();
+        $config = WhoisDomainMonitoringConfig::shared_config();
 
         $this->_rootctx = ($utility->make_context)([
             "client" => $this,

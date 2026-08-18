@@ -15,7 +15,7 @@ require_relative "../WhoisDomainMonitoring_sdk"
 module WhoisDomainMonitoringFeatureHarness
   # True when this SDK was generated with the named feature.
   def self.has_feature?(name)
-    f = WhoisDomainMonitoringConfig.make_config["feature"]
+    f = WhoisDomainMonitoringConfig.shared_config["feature"]
     f.is_a?(Hash) && !f[name].nil?
   end
 
