@@ -94,14 +94,22 @@ func whoiDirectSetup(mockres any) *whoiDirectSetupResult {
 	env := envOverride(map[string]any{
 		"WHOIS_DOMAIN_MONITORING_TEST_WHOI_ENTID": map[string]any{},
 		"WHOIS_DOMAIN_MONITORING_TEST_LIVE":    "FALSE",
-		"WHOIS_DOMAIN_MONITORING_APIKEY":       "NONE",
+		"WHOIS_DOMAIN_MONITORING_APIKEY":       "",
 	})
 
 	live := env["WHOIS_DOMAIN_MONITORING_TEST_LIVE"] == "TRUE"
 
 	if live {
-		mergedOpts := map[string]any{
+		// sdk-test-control.json's test.client.options seeds the live
+		// client; the generated fields below overwrite anything they name.
+		mergedOpts := map[string]any{}
+		for k, v := range liveClientOptions() {
+			mergedOpts[k] = v
+		}
+		for k, v := range map[string]any{
 			"apikey": env["WHOIS_DOMAIN_MONITORING_APIKEY"],
+		} {
+			mergedOpts[k] = v
 		}
 		client := sdk.NewWhoisDomainMonitoringSDK(mergedOpts)
 

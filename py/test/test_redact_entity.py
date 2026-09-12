@@ -85,7 +85,7 @@ def _redact_basic_setup(extra):
         "WHOIS_DOMAIN_MONITORING_TEST_REDACT_ENTID": idmap,
         "WHOIS_DOMAIN_MONITORING_TEST_LIVE": "FALSE",
         "WHOIS_DOMAIN_MONITORING_TEST_EXPLAIN": "FALSE",
-        "WHOIS_DOMAIN_MONITORING_APIKEY": "NONE",
+        "WHOIS_DOMAIN_MONITORING_APIKEY": "",
     })
 
     idmap_resolved = helpers.to_map(
@@ -95,6 +95,10 @@ def _redact_basic_setup(extra):
 
     if env.get("WHOIS_DOMAIN_MONITORING_TEST_LIVE") == "TRUE":
         merged_opts = vs.merge([
+            # FIRST, so the generated fields below win: sdk-test-control.json's
+            # test.client.options adds to the live client, it does not
+            # redirect it.
+            runner.live_client_options(),
             {
                 "apikey": env.get("WHOIS_DOMAIN_MONITORING_APIKEY"),
             },

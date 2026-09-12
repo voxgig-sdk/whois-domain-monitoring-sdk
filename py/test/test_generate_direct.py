@@ -63,15 +63,18 @@ def _generate_direct_setup(mockres):
     env = runner.env_override({
         "WHOIS_DOMAIN_MONITORING_TEST_GENERATE_ENTID": {},
         "WHOIS_DOMAIN_MONITORING_TEST_LIVE": "FALSE",
-        "WHOIS_DOMAIN_MONITORING_APIKEY": "NONE",
+        "WHOIS_DOMAIN_MONITORING_APIKEY": "",
     })
 
     live = env.get("WHOIS_DOMAIN_MONITORING_TEST_LIVE") == "TRUE"
 
     if live:
-        merged_opts = {
+        # sdk-test-control.json's test.client.options seeds the live
+        # client; the generated fields below overwrite anything they name.
+        merged_opts = dict(runner.live_client_options())
+        merged_opts.update({
             "apikey": env.get("WHOIS_DOMAIN_MONITORING_APIKEY"),
-        }
+        })
         client = WhoisDomainMonitoringSDK(merged_opts)
         return {
             "client": client,
