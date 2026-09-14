@@ -1,5 +1,5 @@
 {
-  "name": "@voxgig-sdk/whois-domain-monitoring",
+  "name": "@voxgig-sdk/whois-domain-monitoring-sdk",
   "version": "0.0.1",
   "description": "Unofficial generated TypeScript SDK for the Kiprio public API. Not affiliated with or endorsed by the upstream API provider.",
   "keywords": [

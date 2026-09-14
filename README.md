@@ -105,7 +105,7 @@ local result, err = client:Utility():load({ input = "example" })
 
 | Language | Package | Install |
 | --- | --- | --- |
-| TypeScript | `@voxgig-sdk/whois-domain-monitoring` | publish pending — [install from git tag](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases) |
+| TypeScript | `@voxgig-sdk/whois-domain-monitoring-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases) |
 | Python | `voxgig-sdk-whois-domain-monitoring` | publish pending — [install from git tag](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases) |
 | PHP | `voxgig-sdk/whois-domain-monitoring` | publish pending — [install from git tag](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases) |
 | Golang | `github.com/voxgig-sdk/whois-domain-monitoring-sdk/go` | `go get github.com/voxgig-sdk/whois-domain-monitoring-sdk/go@latest` |
@@ -119,7 +119,7 @@ local result, err = client:Utility():load({ input = "example" })
 ### TypeScript
 
 ```ts
-import { WhoisDomainMonitoringSDK } from '@voxgig-sdk/whois-domain-monitoring'
+import { WhoisDomainMonitoringSDK } from '@voxgig-sdk/whois-domain-monitoring-sdk'
 
 const client = new WhoisDomainMonitoringSDK({
   apikey: process.env.WHOIS_DOMAIN_MONITORING_APIKEY,
