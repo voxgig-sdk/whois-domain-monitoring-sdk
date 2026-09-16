@@ -3,7 +3,7 @@
     "ssl": {
       "SSL00": {
         "cipher": "s64",
-        "days_remaining": "s65",
+        "days_remaining": 101,
         "domain": "s66",
         "expires_at": "s67",
         "grade": "s68",
@@ -15,7 +15,7 @@
       },
       "SSL01": {
         "cipher": "sc8",
-        "days_remaining": "sc9",
+        "days_remaining": 201,
         "domain": "sca",
         "expires_at": "scb",
         "grade": "scc",
@@ -27,7 +27,7 @@
       },
       "SSL02": {
         "cipher": "s12c",
-        "days_remaining": "s12d",
+        "days_remaining": 301,
         "domain": "s12e",
         "expires_at": "s12f",
         "grade": "s130",
@@ -43,7 +43,7 @@
     "ssl": {
       "ssl_ref01": {
         "cipher": "s190",
-        "days_remaining": "s191",
+        "days_remaining": 401,
         "domain": "s192",
         "expires_at": "s193",
         "grade": "s194",
@@ -52,6 +52,180 @@
         "sans": [],
         "subject": "s198",
         "valid": false
+      }
+    }
+  },
+  "requests": {
+    "GET /ssl": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "sslCheck",
+        "parameters": [
+          {
+            "description": "Domain to inspect",
+            "in": "query",
+            "name": "domain",
+            "required": true,
+            "schema": {
+              "example": "example.com",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Port to connect on",
+            "in": "query",
+            "name": "port",
+            "required": false,
+            "schema": {
+              "default": 443,
+              "example": 443,
+              "type": "integer"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "cipher": "TLS_AES_256_GCM_SHA384",
+                  "days_remaining": 180,
+                  "domain": "example.com",
+                  "expires_at": "2025-01-15T12:00:00Z",
+                  "grade": "A",
+                  "issuer": "DigiCert Inc",
+                  "protocol": "TLSv1.3",
+                  "sans": [
+                    "example.com",
+                    "www.example.com"
+                  ],
+                  "subject": "example.com",
+                  "valid": true
+                },
+                "schema": {
+                  "properties": {
+                    "cipher": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "days_remaining": {
+                      "type": "integer"
+                    },
+                    "domain": {
+                      "type": "string"
+                    },
+                    "expires_at": {
+                      "format": "date-time",
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "grade": {
+                      "example": "A",
+                      "type": "string"
+                    },
+                    "issuer": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "protocol": {
+                      "example": "TLSv1.3",
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "sans": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "subject": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "valid": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "SSL certificate data"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "X-API-Key header required",
+                  "signup_url": "https://kiprio.com/signup"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Missing or invalid API key"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "rate limit: 30 req/min exceeded"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Rate limit exceeded",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the rate limit resets",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          }
+        ],
+        "securitySchemes": {
+          "ApiKeyHeader": {
+            "description": "Get your free API key at https://kiprio.com/signup",
+            "in": "header",
+            "name": "X-API-Key",
+            "type": "apiKey"
+          },
+          "ApiKeyQuery": {
+            "in": "query",
+            "name": "api_key",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
       }
     }
   }

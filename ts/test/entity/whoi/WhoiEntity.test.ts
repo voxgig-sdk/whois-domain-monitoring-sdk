@@ -5,6 +5,8 @@ import * as Fs from 'node:fs'
 
 import { test, describe, afterEach } from 'node:test'
 import assert from 'node:assert'
+import { createLiveTransport } from '../../live-runner'
+import { runLiveEntity } from '../../live-entity'
 
 
 import { WhoisDomainMonitoringSDK, BaseFeature, stdutil } from '../../..'
@@ -47,16 +49,13 @@ describe('WhoiEntity', async () => {
 
     const live = 'TRUE' === process.env.WHOIS_DOMAIN_MONITORING_TEST_LIVE
     for (const op of ['list']) {
-      if (maybeSkipControl(t, 'entityOp', 'whoi.' + op, live)) return
+      if (!live && maybeSkipControl(t, 'entityOp', 'whoi.' + op, live)) return
     }
 
+    
     const setup = basicSetup()
-    // The basic flow consumes synthetic IDs and field values from the
-    // fixture (entity TestData.json). Those don't exist on the live API.
-    // Skip live runs unless the user provided a real ENTID env override.
-    if (setup.syntheticOnly) {
-      t.skip('live entity test uses synthetic IDs from fixture — set WHOIS_DOMAIN_MONITORING_TEST_WHOI_ENTID JSON to run live')
-      return
+    if (setup.live) {
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":[{"active":true,"format":"date-time","name":"created","req":false,"type":"`$STRING`","index$":0},{"active":true,"name":"domain","req":false,"type":"`$STRING`","index$":1},{"active":true,"format":"date-time","name":"expires","req":false,"type":"`$STRING`","index$":2},{"active":true,"name":"nameservers","req":false,"type":"`$ARRAY`","index$":3},{"active":true,"name":"registered","req":false,"type":"`$BOOLEAN`","index$":4},{"active":true,"name":"registrar","req":false,"type":"`$STRING`","index$":5},{"active":true,"name":"status","req":false,"type":"`$ARRAY`","index$":6},{"active":true,"format":"date-time","name":"updated","req":false,"type":"`$STRING`","index$":7}],"name":"whoi","op":{"list":{"input":"data","name":"list","points":[{"active":true,"args":{"query":[{"active":true,"example":"example.com","kind":"query","name":"domain","orig":"domain","reqd":true,"type":"`$STRING`","index$":0}]},"contract":{"id":"GET /whois","json":"{\"operationId\":\"whoisLookup\",\"parameters\":[{\"description\":\"Domain name to look up\",\"in\":\"query\",\"name\":\"domain\",\"required\":true,\"schema\":{\"example\":\"example.com\",\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"example\":{\"created\":\"1995-08-14T04:00:00Z\",\"domain\":\"example.com\",\"expires\":\"2024-08-13T04:00:00Z\",\"nameservers\":[\"a.iana-servers.net\",\"b.iana-servers.net\"],\"registered\":true,\"registrar\":\"RESERVED-Internet Assigned Numbers Authority\",\"status\":[\"client delete prohibited\"],\"updated\":\"2023-08-14T07:01:34Z\"},\"schema\":{\"properties\":{\"created\":{\"format\":\"date-time\",\"nullable\":true,\"type\":\"string\"},\"domain\":{\"example\":\"example.com\",\"type\":\"string\"},\"expires\":{\"format\":\"date-time\",\"nullable\":true,\"type\":\"string\"},\"nameservers\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"registered\":{\"nullable\":true,\"type\":\"boolean\"},\"registrar\":{\"nullable\":true,\"type\":\"string\"},\"status\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"updated\":{\"format\":\"date-time\",\"nullable\":true,\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"WHOIS data\"},\"401\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"X-API-Key header required\",\"signup_url\":\"https://kiprio.com/signup\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Missing or invalid API key\"},\"404\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Resource not found\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[{\"ApiKeyHeader\":[]}],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}","source":"openapi3","version":1},"kind":"http","method":"GET","orig":"/whois","segments":[{"lit":"whois"}],"select":{"exist":["domain"]},"transform":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"list"}},"relations":{"ancestors":[]},"key$":"whoi","name__orig":"whoi","Name":"Whoi","name_":"whoi","name-":"whoi","NAME":"WHOI","index$":9}, {"active":true,"entity":"whoi","key$":"BasicWhoiFlow","kind":"basic","name":"BasicWhoiFlow","param":{},"step":[{"active":true,"data":{},"input":{},"match":{},"op":"list","spec":[],"valid":[{"apply":"ItemExists","def":{"ref":"whoi_ref01"}}],"index$":0}]}, 'Whoi')
     }
     const client = setup.client
     const struct = setup.struct
@@ -109,13 +108,6 @@ function basicSetup(extra?: any) {
       }]
     })
 
-  // Detect whether the user provided a real ENTID JSON via env var. The
-  // basic flow consumes synthetic IDs from the fixture file; without an
-  // override those synthetic IDs reach the live API and 4xx. Surface this
-  // to the test so it can skip rather than fail.
-  const idmapEnvVal = process.env['WHOIS_DOMAIN_MONITORING_TEST_WHOI_ENTID']
-  const idmapOverridden = null != idmapEnvVal && idmapEnvVal.trim().startsWith('{')
-
   const env = envOverride({
     'WHOIS_DOMAIN_MONITORING_TEST_WHOI_ENTID': idmap,
     'WHOIS_DOMAIN_MONITORING_TEST_LIVE': 'FALSE',
@@ -127,7 +119,13 @@ function basicSetup(extra?: any) {
 
   const live = 'TRUE' === env.WHOIS_DOMAIN_MONITORING_TEST_LIVE
 
+  const transport = createLiveTransport()
   if (live) {
+    const rawIds = process.env['WHOIS_DOMAIN_MONITORING_TEST_WHOI_ENTID']
+    idmap = rawIds && rawIds.trim() ? JSON.parse(rawIds) : {}
+    if (!idmap || Array.isArray(idmap) || typeof idmap !== 'object') {
+      throw new Error('Live ENTID must be a JSON object')
+    }
     client = new WhoisDomainMonitoringSDK(merge([
       // FIRST, so the generated fields below win: sdk-test-control.json's
       // test.client.options adds to the live client, it does not redirect it.
@@ -140,7 +138,8 @@ function basicSetup(extra?: any) {
       // argument at all - so a bare 'extra' silently discarded the apikey
       // and server values above and handed the SDK undefined. Harmless
       // while there was nothing in that object; not harmless now.
-      extra || {}
+      extra || {},
+      { system: { fetch: transport.fetch } }
     ]))
   }
 
@@ -153,7 +152,7 @@ function basicSetup(extra?: any) {
     data: entityData,
     explain: 'TRUE' === env.WHOIS_DOMAIN_MONITORING_TEST_EXPLAIN,
     live,
-    syntheticOnly: live && !idmapOverridden,
+    transport,
     now: Date.now(),
   }
 

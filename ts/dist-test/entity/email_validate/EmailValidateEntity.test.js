@@ -40,6 +40,8 @@ const node_path_1 = __importDefault(require("node:path"));
 const Fs = __importStar(require("node:fs"));
 const node_test_1 = require("node:test");
 const node_assert_1 = __importDefault(require("node:assert"));
+const live_runner_1 = require("../../live-runner");
+const live_entity_1 = require("../../live-entity");
 const __1 = require("../../..");
 const utility_1 = require("../../utility");
 // AFTER the imports on purpose: TypeScript hoists `import` above any
@@ -59,16 +61,12 @@ const utility_1 = require("../../utility");
     (0, node_test_1.test)('basic', async (t) => {
         const live = 'TRUE' === process.env.WHOIS_DOMAIN_MONITORING_TEST_LIVE;
         for (const op of ['load']) {
-            if ((0, utility_1.maybeSkipControl)(t, 'entityOp', 'email_validate.' + op, live))
+            if (!live && (0, utility_1.maybeSkipControl)(t, 'entityOp', 'email_validate.' + op, live))
                 return;
         }
         const setup = basicSetup();
-        // The basic flow consumes synthetic IDs and field values from the
-        // fixture (entity TestData.json). Those don't exist on the live API.
-        // Skip live runs unless the user provided a real ENTID env override.
-        if (setup.syntheticOnly) {
-            t.skip('live entity test uses synthetic IDs from fixture — set WHOIS_DOMAIN_MONITORING_TEST_EMAIL_VALIDATE_ENTID JSON to run live');
-            return;
+        if (setup.live) {
+            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": [{ "active": true, "format": "float", "name": "confidence", "req": false, "type": "`$NUMBER`", "index$": 0 }, { "active": true, "name": "disposable", "req": false, "type": "`$BOOLEAN`", "index$": 1 }, { "active": true, "format": "email", "name": "email", "req": false, "type": "`$STRING`", "index$": 2 }, { "active": true, "name": "free_provider", "req": false, "type": "`$BOOLEAN`", "index$": 3 }, { "active": true, "name": "mx_found", "req": false, "type": "`$BOOLEAN`", "index$": 4 }, { "active": true, "name": "role_based", "req": false, "type": "`$BOOLEAN`", "index$": 5 }, { "active": true, "name": "suggest", "req": false, "short": "Suggested correction for typos", "type": "`$STRING`", "index$": 6 }, { "active": true, "name": "syntax_ok", "req": false, "type": "`$BOOLEAN`", "index$": 7 }, { "active": true, "name": "valid", "req": false, "type": "`$BOOLEAN`", "index$": 8 }], "name": "email_validate", "op": { "load": { "input": "data", "name": "load", "points": [{ "active": true, "args": { "query": [{ "active": true, "example": "user@example.com", "kind": "query", "name": "email", "orig": "email", "reqd": true, "type": "`$STRING`", "index$": 0 }] }, "contract": { "id": "GET /email-validate", "json": "{\"operationId\":\"emailValidate\",\"parameters\":[{\"description\":\"Email address to validate\",\"in\":\"query\",\"name\":\"email\",\"required\":true,\"schema\":{\"example\":\"user@example.com\",\"format\":\"email\",\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"example\":{\"confidence\":0.95,\"disposable\":false,\"email\":\"user@example.com\",\"free_provider\":false,\"mx_found\":true,\"role_based\":false,\"suggest\":null,\"syntax_ok\":true,\"valid\":true},\"schema\":{\"properties\":{\"confidence\":{\"format\":\"float\",\"maximum\":1,\"minimum\":0,\"type\":\"number\"},\"disposable\":{\"type\":\"boolean\"},\"email\":{\"format\":\"email\",\"type\":\"string\"},\"free_provider\":{\"type\":\"boolean\"},\"mx_found\":{\"type\":\"boolean\"},\"role_based\":{\"type\":\"boolean\"},\"suggest\":{\"description\":\"Suggested correction for typos\",\"nullable\":true,\"type\":\"string\"},\"syntax_ok\":{\"type\":\"boolean\"},\"valid\":{\"type\":\"boolean\"}},\"type\":\"object\"}}},\"description\":\"Validation result\"},\"400\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Invalid request parameters\"},\"401\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"X-API-Key header required\",\"signup_url\":\"https://kiprio.com/signup\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Missing or invalid API key\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[{\"ApiKeyHeader\":[]}],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}", "source": "openapi3", "version": 1 }, "kind": "http", "method": "GET", "orig": "/email-validate", "segments": [{ "lit": "email-validate" }], "select": { "exist": ["email"] }, "transform": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "load" } }, "relations": { "ancestors": [] }, "key$": "email_validate", "name__orig": "email_validate", "Name": "EmailValidate", "name_": "email_validate", "name-": "email-validate", "NAME": "EMAIL_VALIDATE", "index$": 2 }, { "active": true, "entity": "email_validate", "key$": "BasicEmailValidateFlow", "kind": "basic", "name": "BasicEmailValidateFlow", "param": {}, "step": [{ "active": true, "data": {}, "input": { "ref": "email_validate_ref01", "srcdatavar": "email_validate_ref01_data", "suffix": "_dt0" }, "match": {}, "op": "load", "spec": [], "valid": [{ "apply": "TextFieldMark", "def": { "mark": "Mark01-email_validate_ref01" } }], "index$": 0 }] }, 'EmailValidate');
         }
         const client = setup.client;
         const struct = setup.struct;
@@ -102,12 +100,6 @@ function basicSetup(extra) {
                 '`$VAL`': ['`$FORMAT`', 'upper', '`$COPY`']
             }]
     });
-    // Detect whether the user provided a real ENTID JSON via env var. The
-    // basic flow consumes synthetic IDs from the fixture file; without an
-    // override those synthetic IDs reach the live API and 4xx. Surface this
-    // to the test so it can skip rather than fail.
-    const idmapEnvVal = process.env['WHOIS_DOMAIN_MONITORING_TEST_EMAIL_VALIDATE_ENTID'];
-    const idmapOverridden = null != idmapEnvVal && idmapEnvVal.trim().startsWith('{');
     const env = (0, utility_1.envOverride)({
         'WHOIS_DOMAIN_MONITORING_TEST_EMAIL_VALIDATE_ENTID': idmap,
         'WHOIS_DOMAIN_MONITORING_TEST_LIVE': 'FALSE',
@@ -116,7 +108,13 @@ function basicSetup(extra) {
     });
     idmap = env['WHOIS_DOMAIN_MONITORING_TEST_EMAIL_VALIDATE_ENTID'];
     const live = 'TRUE' === env.WHOIS_DOMAIN_MONITORING_TEST_LIVE;
+    const transport = (0, live_runner_1.createLiveTransport)();
     if (live) {
+        const rawIds = process.env['WHOIS_DOMAIN_MONITORING_TEST_EMAIL_VALIDATE_ENTID'];
+        idmap = rawIds && rawIds.trim() ? JSON.parse(rawIds) : {};
+        if (!idmap || Array.isArray(idmap) || typeof idmap !== 'object') {
+            throw new Error('Live ENTID must be a JSON object');
+        }
         client = new __1.WhoisDomainMonitoringSDK(merge([
             // FIRST, so the generated fields below win: sdk-test-control.json's
             // test.client.options adds to the live client, it does not redirect it.
@@ -129,7 +127,8 @@ function basicSetup(extra) {
             // argument at all - so a bare 'extra' silently discarded the apikey
             // and server values above and handed the SDK undefined. Harmless
             // while there was nothing in that object; not harmless now.
-            extra || {}
+            extra || {},
+            { system: { fetch: transport.fetch } }
         ]));
     }
     const setup = {
@@ -141,7 +140,7 @@ function basicSetup(extra) {
         data: entityData,
         explain: 'TRUE' === env.WHOIS_DOMAIN_MONITORING_TEST_EXPLAIN,
         live,
-        syntheticOnly: live && !idmapOverridden,
+        transport,
         now: Date.now(),
     };
     return setup;

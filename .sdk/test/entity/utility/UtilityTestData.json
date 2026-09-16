@@ -5,21 +5,21 @@
         "algo": "s28",
         "hash": "s29",
         "input": "s2a",
-        "length": "s2b",
+        "length": 43,
         "id": "UTILITY00"
       },
       "UTILITY01": {
         "algo": "s50",
         "hash": "s51",
         "input": "s52",
-        "length": "s53",
+        "length": 83,
         "id": "UTILITY01"
       },
       "UTILITY02": {
         "algo": "s78",
         "hash": "s79",
         "input": "s7a",
-        "length": "s7b",
+        "length": 123,
         "id": "UTILITY02"
       }
     }
@@ -30,7 +30,88 @@
         "algo": "sa0",
         "hash": "sa1",
         "input": "sa2",
-        "length": "sa3"
+        "length": 163
+      }
+    }
+  },
+  "requests": {
+    "GET /hash": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "hashGet",
+        "parameters": [
+          {
+            "description": "String to hash",
+            "in": "query",
+            "name": "input",
+            "required": true,
+            "schema": {
+              "example": "hello world",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Hash algorithm",
+            "in": "query",
+            "name": "algo",
+            "required": false,
+            "schema": {
+              "default": "sha256",
+              "enum": [
+                "md5",
+                "sha1",
+                "sha256",
+                "sha384",
+                "sha512",
+                "sha3-256",
+                "sha3-512"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "algo": {
+                      "type": "string"
+                    },
+                    "hash": {
+                      "type": "string"
+                    },
+                    "input": {
+                      "type": "string"
+                    },
+                    "length": {
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Hash result"
+          }
+        },
+        "security": [],
+        "securitySchemes": {
+          "ApiKeyHeader": {
+            "description": "Get your free API key at https://kiprio.com/signup",
+            "in": "header",
+            "name": "X-API-Key",
+            "type": "apiKey"
+          },
+          "ApiKeyQuery": {
+            "in": "query",
+            "name": "api_key",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "operation"
       }
     }
   }

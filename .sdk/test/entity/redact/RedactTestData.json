@@ -4,7 +4,7 @@
       "REDACT00": {
         "counts": {},
         "entities": [],
-        "original_length": "s3e",
+        "original_length": 62,
         "redact": "s3f",
         "redacted": "s40",
         "text": "s41",
@@ -13,7 +13,7 @@
       "REDACT01": {
         "counts": {},
         "entities": [],
-        "original_length": "s7a",
+        "original_length": 122,
         "redact": "s7b",
         "redacted": "s7c",
         "text": "s7d",
@@ -22,7 +22,7 @@
       "REDACT02": {
         "counts": {},
         "entities": [],
-        "original_length": "sb6",
+        "original_length": 182,
         "redact": "sb7",
         "redacted": "sb8",
         "text": "sb9",
@@ -35,10 +35,204 @@
       "redact_ref01": {
         "counts": {},
         "entities": [],
-        "original_length": "sf2",
+        "original_length": 242,
         "redact": "sf3",
         "redacted": "sf4",
         "text": "sf5"
+      }
+    }
+  },
+  "requests": {
+    "POST /redact": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "redactPii",
+        "parameters": [],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "entities": {
+                    "default": false,
+                    "description": "Include detected entity positions in response",
+                    "type": "boolean"
+                  },
+                  "redact": {
+                    "description": "Comma-separated PII types to redact. Omit for all types.",
+                    "example": "phone,email",
+                    "type": "string"
+                  },
+                  "text": {
+                    "description": "Text to redact",
+                    "example": "Call John on 07911 123456 or email john@example.com",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "text"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "counts": {
+                    "email": 1,
+                    "phone": 1
+                  },
+                  "entities": [
+                    {
+                      "offset": 15,
+                      "type": "phone",
+                      "value": "07911 123456"
+                    }
+                  ],
+                  "original_length": 50,
+                  "redacted": "Call [NAME] on [PHONE] or email [EMAIL]"
+                },
+                "schema": {
+                  "properties": {
+                    "counts": {
+                      "additionalProperties": {
+                        "type": "integer"
+                      },
+                      "example": {
+                        "email": 2,
+                        "phone": 1
+                      },
+                      "type": "object"
+                    },
+                    "entities": {
+                      "items": {
+                        "properties": {
+                          "offset": {
+                            "type": "integer"
+                          },
+                          "type": {
+                            "example": "phone",
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "original_length": {
+                      "type": "integer"
+                    },
+                    "redacted": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Redacted text"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Invalid request parameters"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "X-API-Key header required",
+                  "signup_url": "https://kiprio.com/signup"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Missing or invalid API key"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "rate limit: 30 req/min exceeded"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Rate limit exceeded",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the rate limit resets",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          }
+        ],
+        "securitySchemes": {
+          "ApiKeyHeader": {
+            "description": "Get your free API key at https://kiprio.com/signup",
+            "in": "header",
+            "name": "X-API-Key",
+            "type": "apiKey"
+          },
+          "ApiKeyQuery": {
+            "in": "query",
+            "name": "api_key",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
       }
     }
   }

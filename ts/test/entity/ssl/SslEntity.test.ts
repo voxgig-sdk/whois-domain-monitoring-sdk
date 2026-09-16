@@ -5,6 +5,8 @@ import * as Fs from 'node:fs'
 
 import { test, describe, afterEach } from 'node:test'
 import assert from 'node:assert'
+import { createLiveTransport } from '../../live-runner'
+import { runLiveEntity } from '../../live-entity'
 
 
 import { WhoisDomainMonitoringSDK, BaseFeature, stdutil } from '../../..'
@@ -47,16 +49,13 @@ describe('SslEntity', async () => {
 
     const live = 'TRUE' === process.env.WHOIS_DOMAIN_MONITORING_TEST_LIVE
     for (const op of ['list']) {
-      if (maybeSkipControl(t, 'entityOp', 'ssl.' + op, live)) return
+      if (!live && maybeSkipControl(t, 'entityOp', 'ssl.' + op, live)) return
     }
 
+    
     const setup = basicSetup()
-    // The basic flow consumes synthetic IDs and field values from the
-    // fixture (entity TestData.json). Those don't exist on the live API.
-    // Skip live runs unless the user provided a real ENTID env override.
-    if (setup.syntheticOnly) {
-      t.skip('live entity test uses synthetic IDs from fixture — set WHOIS_DOMAIN_MONITORING_TEST_SSL_ENTID JSON to run live')
-      return
+    if (setup.live) {
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":[{"active":true,"name":"cipher","req":false,"type":"`$STRING`","index$":0},{"active":true,"name":"days_remaining","req":false,"type":"`$INTEGER`","index$":1},{"active":true,"name":"domain","req":false,"type":"`$STRING`","index$":2},{"active":true,"format":"date-time","name":"expires_at","req":false,"type":"`$STRING`","index$":3},{"active":true,"name":"grade","req":false,"type":"`$STRING`","index$":4},{"active":true,"name":"issuer","req":false,"type":"`$STRING`","index$":5},{"active":true,"name":"protocol","req":false,"type":"`$STRING`","index$":6},{"active":true,"name":"sans","req":false,"type":"`$ARRAY`","index$":7},{"active":true,"name":"subject","req":false,"type":"`$STRING`","index$":8},{"active":true,"name":"valid","req":false,"type":"`$BOOLEAN`","index$":9}],"name":"ssl","op":{"list":{"input":"data","name":"list","points":[{"active":true,"args":{"query":[{"active":true,"example":"example.com","kind":"query","name":"domain","orig":"domain","reqd":true,"type":"`$STRING`","index$":0},{"active":true,"example":443,"kind":"query","name":"port","orig":"port","reqd":false,"type":"`$INTEGER`","index$":1}]},"contract":{"id":"GET /ssl","json":"{\"operationId\":\"sslCheck\",\"parameters\":[{\"description\":\"Domain to inspect\",\"in\":\"query\",\"name\":\"domain\",\"required\":true,\"schema\":{\"example\":\"example.com\",\"type\":\"string\"}},{\"description\":\"Port to connect on\",\"in\":\"query\",\"name\":\"port\",\"required\":false,\"schema\":{\"default\":443,\"example\":443,\"type\":\"integer\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"example\":{\"cipher\":\"TLS_AES_256_GCM_SHA384\",\"days_remaining\":180,\"domain\":\"example.com\",\"expires_at\":\"2025-01-15T12:00:00Z\",\"grade\":\"A\",\"issuer\":\"DigiCert Inc\",\"protocol\":\"TLSv1.3\",\"sans\":[\"example.com\",\"www.example.com\"],\"subject\":\"example.com\",\"valid\":true},\"schema\":{\"properties\":{\"cipher\":{\"nullable\":true,\"type\":\"string\"},\"days_remaining\":{\"type\":\"integer\"},\"domain\":{\"type\":\"string\"},\"expires_at\":{\"format\":\"date-time\",\"nullable\":true,\"type\":\"string\"},\"grade\":{\"example\":\"A\",\"type\":\"string\"},\"issuer\":{\"nullable\":true,\"type\":\"string\"},\"protocol\":{\"example\":\"TLSv1.3\",\"nullable\":true,\"type\":\"string\"},\"sans\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"subject\":{\"nullable\":true,\"type\":\"string\"},\"valid\":{\"type\":\"boolean\"}},\"type\":\"object\"}}},\"description\":\"SSL certificate data\"},\"401\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"X-API-Key header required\",\"signup_url\":\"https://kiprio.com/signup\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Missing or invalid API key\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[{\"ApiKeyHeader\":[]}],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}","source":"openapi3","version":1},"kind":"http","method":"GET","orig":"/ssl","segments":[{"lit":"ssl"}],"select":{"exist":["domain","port"]},"transform":{"req":"`reqdata`","res":"`body.sans`"},"index$":0}],"key$":"list"}},"relations":{"ancestors":[]},"key$":"ssl","name__orig":"ssl","Name":"Ssl","name_":"ssl","name-":"ssl","NAME":"SSL","index$":7}, {"active":true,"entity":"ssl","key$":"BasicSslFlow","kind":"basic","name":"BasicSslFlow","param":{},"step":[{"active":true,"data":{},"input":{},"match":{},"op":"list","spec":[],"valid":[{"apply":"ItemExists","def":{"ref":"ssl_ref01"}}],"index$":0}]}, 'Ssl')
     }
     const client = setup.client
     const struct = setup.struct
@@ -109,13 +108,6 @@ function basicSetup(extra?: any) {
       }]
     })
 
-  // Detect whether the user provided a real ENTID JSON via env var. The
-  // basic flow consumes synthetic IDs from the fixture file; without an
-  // override those synthetic IDs reach the live API and 4xx. Surface this
-  // to the test so it can skip rather than fail.
-  const idmapEnvVal = process.env['WHOIS_DOMAIN_MONITORING_TEST_SSL_ENTID']
-  const idmapOverridden = null != idmapEnvVal && idmapEnvVal.trim().startsWith('{')
-
   const env = envOverride({
     'WHOIS_DOMAIN_MONITORING_TEST_SSL_ENTID': idmap,
     'WHOIS_DOMAIN_MONITORING_TEST_LIVE': 'FALSE',
@@ -127,7 +119,13 @@ function basicSetup(extra?: any) {
 
   const live = 'TRUE' === env.WHOIS_DOMAIN_MONITORING_TEST_LIVE
 
+  const transport = createLiveTransport()
   if (live) {
+    const rawIds = process.env['WHOIS_DOMAIN_MONITORING_TEST_SSL_ENTID']
+    idmap = rawIds && rawIds.trim() ? JSON.parse(rawIds) : {}
+    if (!idmap || Array.isArray(idmap) || typeof idmap !== 'object') {
+      throw new Error('Live ENTID must be a JSON object')
+    }
     client = new WhoisDomainMonitoringSDK(merge([
       // FIRST, so the generated fields below win: sdk-test-control.json's
       // test.client.options adds to the live client, it does not redirect it.
@@ -140,7 +138,8 @@ function basicSetup(extra?: any) {
       // argument at all - so a bare 'extra' silently discarded the apikey
       // and server values above and handed the SDK undefined. Harmless
       // while there was nothing in that object; not harmless now.
-      extra || {}
+      extra || {},
+      { system: { fetch: transport.fetch } }
     ]))
   }
 
@@ -153,7 +152,7 @@ function basicSetup(extra?: any) {
     data: entityData,
     explain: 'TRUE' === env.WHOIS_DOMAIN_MONITORING_TEST_EXPLAIN,
     live,
-    syntheticOnly: live && !idmapOverridden,
+    transport,
     now: Date.now(),
   }
 

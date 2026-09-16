@@ -26,5 +26,160 @@
         "url": "s7a"
       }
     }
+  },
+  "requests": {
+    "GET /robots-txt": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "robotsTxtParse",
+        "parameters": [
+          {
+            "description": "Domain URL to fetch robots.txt from",
+            "in": "query",
+            "name": "url",
+            "required": true,
+            "schema": {
+              "example": "https://example.com",
+              "type": "string"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "agents": {
+                      "additionalProperties": {
+                        "properties": {
+                          "allow": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "disallow": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "object"
+                    },
+                    "sitemaps": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "url": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Parsed robots.txt"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Invalid request parameters"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "X-API-Key header required",
+                  "signup_url": "https://kiprio.com/signup"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Missing or invalid API key"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "rate limit: 30 req/min exceeded"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Rate limit exceeded",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the rate limit resets",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          }
+        ],
+        "securitySchemes": {
+          "ApiKeyHeader": {
+            "description": "Get your free API key at https://kiprio.com/signup",
+            "in": "header",
+            "name": "X-API-Key",
+            "type": "apiKey"
+          },
+          "ApiKeyQuery": {
+            "in": "query",
+            "name": "api_key",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    }
   }
 }

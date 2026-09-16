@@ -72,6 +72,12 @@ main: kit: entity: ipn: {
               }
             ]
           }
+          contract: {
+            id: "GET /ip"
+            json: "{\"operationId\":\"ipLookup\",\"parameters\":[{\"description\":\"IP address to look up. Omit for caller's IP.\",\"in\":\"query\",\"name\":\"ip\",\"required\":false,\"schema\":{\"example\":\"8.8.8.8\",\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"example\":{\"asn\":\"AS15169\",\"city\":\"Mountain View\",\"country\":\"United States\",\"country_code\":\"US\",\"ip\":\"8.8.8.8\",\"latitude\":37.386,\"longitude\":-122.0838,\"org\":\"AS15169 Google LLC\",\"timezone\":\"America/Los_Angeles\"},\"schema\":{\"properties\":{\"asn\":{\"nullable\":true,\"type\":\"string\"},\"city\":{\"nullable\":true,\"type\":\"string\"},\"country\":{\"nullable\":true,\"type\":\"string\"},\"country_code\":{\"example\":\"US\",\"nullable\":true,\"type\":\"string\"},\"ip\":{\"example\":\"8.8.8.8\",\"type\":\"string\"},\"latitude\":{\"format\":\"double\",\"nullable\":true,\"type\":\"number\"},\"longitude\":{\"format\":\"double\",\"nullable\":true,\"type\":\"number\"},\"org\":{\"nullable\":true,\"type\":\"string\"},\"timezone\":{\"nullable\":true,\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"IP geolocation data\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"operation\"}"
+            source: "openapi3"
+            version: 1
+          }
           method: "GET"
           orig: "/ip"
           segments: [

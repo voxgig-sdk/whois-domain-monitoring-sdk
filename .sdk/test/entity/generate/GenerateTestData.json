@@ -16,5 +16,469 @@
     "generate": {
       "generate_ref01": {}
     }
+  },
+  "requests": {
+    "GET /qr": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "qrGenerate",
+        "parameters": [
+          {
+            "description": "Text or URL to encode",
+            "in": "query",
+            "name": "url",
+            "required": true,
+            "schema": {
+              "example": "https://example.com",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Output size in pixels (PNG) or viewBox units (SVG)",
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "default": 512,
+              "maximum": 2048,
+              "minimum": 128,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Output format",
+            "in": "query",
+            "name": "format",
+            "required": false,
+            "schema": {
+              "default": "png",
+              "enum": [
+                "png",
+                "svg"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Error correction level",
+            "in": "query",
+            "name": "ec_level",
+            "required": false,
+            "schema": {
+              "default": "M",
+              "enum": [
+                "L",
+                "M",
+                "Q",
+                "H"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Foreground colour (hex)",
+            "in": "query",
+            "name": "fg",
+            "required": false,
+            "schema": {
+              "default": "#000000",
+              "example": "#000000",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Background colour (hex)",
+            "in": "query",
+            "name": "bg",
+            "required": false,
+            "schema": {
+              "default": "#ffffff",
+              "example": "#ffffff",
+              "type": "string"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "image/png": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "image/svg+xml": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "QR code image"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Invalid request parameters"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "rate limit: 30 req/min exceeded"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Rate limit exceeded",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the rate limit resets",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "securitySchemes": {
+          "ApiKeyHeader": {
+            "description": "Get your free API key at https://kiprio.com/signup",
+            "in": "header",
+            "name": "X-API-Key",
+            "type": "apiKey"
+          },
+          "ApiKeyQuery": {
+            "in": "query",
+            "name": "api_key",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "operation"
+      }
+    },
+    "GET /barcode": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "barcodeGenerate",
+        "parameters": [
+          {
+            "description": "Data to encode",
+            "in": "query",
+            "name": "data",
+            "required": true,
+            "schema": {
+              "example": "HELLO123",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Barcode symbology",
+            "in": "query",
+            "name": "format",
+            "required": false,
+            "schema": {
+              "default": "code128",
+              "enum": [
+                "code128",
+                "ean13",
+                "ean8",
+                "upca",
+                "code39",
+                "itf"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Output format",
+            "in": "query",
+            "name": "output",
+            "required": false,
+            "schema": {
+              "default": "svg",
+              "enum": [
+                "svg",
+                "png"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Output width in pixels",
+            "in": "query",
+            "name": "width",
+            "required": false,
+            "schema": {
+              "default": 400,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Output height in pixels",
+            "in": "query",
+            "name": "height",
+            "required": false,
+            "schema": {
+              "default": 120,
+              "type": "integer"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "image/png": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "image/svg+xml": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Barcode image"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Invalid request parameters"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "rate limit: 30 req/min exceeded"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Rate limit exceeded",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the rate limit resets",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "securitySchemes": {
+          "ApiKeyHeader": {
+            "description": "Get your free API key at https://kiprio.com/signup",
+            "in": "header",
+            "name": "X-API-Key",
+            "type": "apiKey"
+          },
+          "ApiKeyQuery": {
+            "in": "query",
+            "name": "api_key",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "operation"
+      }
+    },
+    "GET /screenshot": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "screenshotCapture",
+        "parameters": [
+          {
+            "description": "URL to screenshot",
+            "in": "query",
+            "name": "url",
+            "required": true,
+            "schema": {
+              "example": "https://example.com",
+              "format": "uri",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Viewport width in pixels",
+            "in": "query",
+            "name": "width",
+            "required": false,
+            "schema": {
+              "default": 1280,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Capture full scrollable page",
+            "in": "query",
+            "name": "full_page",
+            "required": false,
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "image/png": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "PNG screenshot"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Invalid request parameters"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "X-API-Key header required",
+                  "signup_url": "https://kiprio.com/signup"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Missing or invalid API key"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "rate limit: 30 req/min exceeded"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Rate limit exceeded",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the rate limit resets",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          }
+        ],
+        "securitySchemes": {
+          "ApiKeyHeader": {
+            "description": "Get your free API key at https://kiprio.com/signup",
+            "in": "header",
+            "name": "X-API-Key",
+            "type": "apiKey"
+          },
+          "ApiKeyQuery": {
+            "in": "query",
+            "name": "api_key",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    }
   }
 }

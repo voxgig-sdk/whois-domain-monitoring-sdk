@@ -2,21 +2,21 @@
   "existing": {
     "grammar": {
       "GRAMMAR00": {
-        "correction_count": "s28",
+        "correction_count": 40,
         "corrections": [],
         "language": "s2a",
         "text": "s2b",
         "id": "GRAMMAR00"
       },
       "GRAMMAR01": {
-        "correction_count": "s50",
+        "correction_count": 80,
         "corrections": [],
         "language": "s52",
         "text": "s53",
         "id": "GRAMMAR01"
       },
       "GRAMMAR02": {
-        "correction_count": "s78",
+        "correction_count": 120,
         "corrections": [],
         "language": "s7a",
         "text": "s7b",
@@ -27,10 +27,216 @@
   "new": {
     "grammar": {
       "grammar_ref01": {
-        "correction_count": "sa0",
+        "correction_count": 160,
         "corrections": [],
         "language": "sa2",
         "text": "sa3"
+      }
+    }
+  },
+  "requests": {
+    "POST /grammar": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "grammarCheck",
+        "parameters": [],
+        "protocol": "http",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "language": {
+                    "default": "en-US",
+                    "description": "BCP 47 language tag",
+                    "example": "en-GB",
+                    "type": "string"
+                  },
+                  "text": {
+                    "description": "Text to check",
+                    "example": "Teh cat sat on teh mat.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "text"
+                ],
+                "type": "object"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "text"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "correction_count": {
+                      "type": "integer"
+                    },
+                    "corrections": {
+                      "items": {
+                        "properties": {
+                          "category": {
+                            "type": "string"
+                          },
+                          "context": {
+                            "properties": {
+                              "length": {
+                                "type": "integer"
+                              },
+                              "offset": {
+                                "type": "integer"
+                              },
+                              "text": {
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "message": {
+                            "type": "string"
+                          },
+                          "replacements": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "rule_desc": {
+                            "type": "string"
+                          },
+                          "rule_id": {
+                            "type": "string"
+                          },
+                          "short_message": {
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "language": {
+                      "type": "string"
+                    },
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Grammar check results"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Invalid request parameters"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "X-API-Key header required",
+                  "signup_url": "https://kiprio.com/signup"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Missing or invalid API key"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "rate limit: 30 req/min exceeded"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Rate limit exceeded",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the rate limit resets",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          }
+        ],
+        "securitySchemes": {
+          "ApiKeyHeader": {
+            "description": "Get your free API key at https://kiprio.com/signup",
+            "in": "header",
+            "name": "X-API-Key",
+            "type": "apiKey"
+          },
+          "ApiKeyQuery": {
+            "in": "query",
+            "name": "api_key",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
       }
     }
   }

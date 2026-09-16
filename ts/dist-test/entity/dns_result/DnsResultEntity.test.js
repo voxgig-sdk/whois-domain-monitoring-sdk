@@ -40,6 +40,8 @@ const node_path_1 = __importDefault(require("node:path"));
 const Fs = __importStar(require("node:fs"));
 const node_test_1 = require("node:test");
 const node_assert_1 = __importDefault(require("node:assert"));
+const live_runner_1 = require("../../live-runner");
+const live_entity_1 = require("../../live-entity");
 const __1 = require("../../..");
 const utility_1 = require("../../utility");
 // AFTER the imports on purpose: TypeScript hoists `import` above any
@@ -59,16 +61,12 @@ const utility_1 = require("../../utility");
     (0, node_test_1.test)('basic', async (t) => {
         const live = 'TRUE' === process.env.WHOIS_DOMAIN_MONITORING_TEST_LIVE;
         for (const op of ['load']) {
-            if ((0, utility_1.maybeSkipControl)(t, 'entityOp', 'dns_result.' + op, live))
+            if (!live && (0, utility_1.maybeSkipControl)(t, 'entityOp', 'dns_result.' + op, live))
                 return;
         }
         const setup = basicSetup();
-        // The basic flow consumes synthetic IDs and field values from the
-        // fixture (entity TestData.json). Those don't exist on the live API.
-        // Skip live runs unless the user provided a real ENTID env override.
-        if (setup.syntheticOnly) {
-            t.skip('live entity test uses synthetic IDs from fixture — set WHOIS_DOMAIN_MONITORING_TEST_DNS_RESULT_ENTID JSON to run live');
-            return;
+        if (setup.live) {
+            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": [{ "active": true, "name": "domain", "req": false, "type": "`$STRING`", "index$": 0 }, { "active": true, "name": "records", "req": false, "type": "`$OBJECT`", "index$": 1 }], "name": "dns_result", "op": { "load": { "input": "data", "name": "load", "points": [{ "active": true, "args": { "query": [{ "active": true, "example": "example.com", "kind": "query", "name": "domain", "orig": "domain", "reqd": true, "type": "`$STRING`", "index$": 0 }, { "active": true, "example": "A,MX,TXT", "kind": "query", "name": "type", "orig": "type", "reqd": false, "type": "`$STRING`", "index$": 1 }] }, "contract": { "id": "GET /dns-lookup", "json": "{\"operationId\":\"dnsLookup\",\"parameters\":[{\"description\":\"Domain to look up\",\"in\":\"query\",\"name\":\"domain\",\"required\":true,\"schema\":{\"example\":\"example.com\",\"type\":\"string\"}},{\"description\":\"Comma-separated list of record types to fetch\",\"in\":\"query\",\"name\":\"types\",\"required\":false,\"schema\":{\"default\":\"A,AAAA,MX,TXT,CNAME,NS\",\"example\":\"A,MX,TXT\",\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"example\":{\"domain\":\"example.com\",\"records\":{\"A\":[{\"ttl\":3600,\"value\":\"93.184.216.34\"}],\"MX\":[{\"priority\":10,\"ttl\":3600,\"value\":\"mail.example.com\"}]}},\"schema\":{\"properties\":{\"domain\":{\"type\":\"string\"},\"records\":{\"additionalProperties\":{\"items\":{\"properties\":{\"priority\":{\"description\":\"MX/SRV priority\",\"type\":\"integer\"},\"ttl\":{\"type\":\"integer\"},\"value\":{\"type\":\"string\"}},\"type\":\"object\"},\"type\":\"array\"},\"type\":\"object\"}},\"type\":\"object\"}}},\"description\":\"DNS records\"},\"401\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"X-API-Key header required\",\"signup_url\":\"https://kiprio.com/signup\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Missing or invalid API key\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[{\"ApiKeyHeader\":[]}],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}", "source": "openapi3", "version": 1 }, "kind": "http", "method": "GET", "orig": "/dns-lookup", "segments": [{ "lit": "dns-lookup" }], "select": { "exist": ["domain", "type"] }, "transform": { "req": "`reqdata`", "res": "`body.records`" }, "index$": 0 }], "key$": "load" } }, "relations": { "ancestors": [] }, "key$": "dns_result", "name__orig": "dns_result", "Name": "DnsResult", "name_": "dns_result", "name-": "dns-result", "NAME": "DNS_RESULT", "index$": 0 }, { "active": true, "entity": "dns_result", "key$": "BasicDnsResultFlow", "kind": "basic", "name": "BasicDnsResultFlow", "param": {}, "step": [{ "active": true, "data": {}, "input": { "ref": "dns_result_ref01", "srcdatavar": "dns_result_ref01_data", "suffix": "_dt0" }, "match": {}, "op": "load", "spec": [], "valid": [{ "apply": "TextFieldMark", "def": { "mark": "Mark01-dns_result_ref01" } }], "index$": 0 }] }, 'DnsResult');
         }
         const client = setup.client;
         const struct = setup.struct;
@@ -102,12 +100,6 @@ function basicSetup(extra) {
                 '`$VAL`': ['`$FORMAT`', 'upper', '`$COPY`']
             }]
     });
-    // Detect whether the user provided a real ENTID JSON via env var. The
-    // basic flow consumes synthetic IDs from the fixture file; without an
-    // override those synthetic IDs reach the live API and 4xx. Surface this
-    // to the test so it can skip rather than fail.
-    const idmapEnvVal = process.env['WHOIS_DOMAIN_MONITORING_TEST_DNS_RESULT_ENTID'];
-    const idmapOverridden = null != idmapEnvVal && idmapEnvVal.trim().startsWith('{');
     const env = (0, utility_1.envOverride)({
         'WHOIS_DOMAIN_MONITORING_TEST_DNS_RESULT_ENTID': idmap,
         'WHOIS_DOMAIN_MONITORING_TEST_LIVE': 'FALSE',
@@ -116,7 +108,13 @@ function basicSetup(extra) {
     });
     idmap = env['WHOIS_DOMAIN_MONITORING_TEST_DNS_RESULT_ENTID'];
     const live = 'TRUE' === env.WHOIS_DOMAIN_MONITORING_TEST_LIVE;
+    const transport = (0, live_runner_1.createLiveTransport)();
     if (live) {
+        const rawIds = process.env['WHOIS_DOMAIN_MONITORING_TEST_DNS_RESULT_ENTID'];
+        idmap = rawIds && rawIds.trim() ? JSON.parse(rawIds) : {};
+        if (!idmap || Array.isArray(idmap) || typeof idmap !== 'object') {
+            throw new Error('Live ENTID must be a JSON object');
+        }
         client = new __1.WhoisDomainMonitoringSDK(merge([
             // FIRST, so the generated fields below win: sdk-test-control.json's
             // test.client.options adds to the live client, it does not redirect it.
@@ -129,7 +127,8 @@ function basicSetup(extra) {
             // argument at all - so a bare 'extra' silently discarded the apikey
             // and server values above and handed the SDK undefined. Harmless
             // while there was nothing in that object; not harmless now.
-            extra || {}
+            extra || {},
+            { system: { fetch: transport.fetch } }
         ]));
     }
     const setup = {
@@ -141,7 +140,7 @@ function basicSetup(extra) {
         data: entityData,
         explain: 'TRUE' === env.WHOIS_DOMAIN_MONITORING_TEST_EXPLAIN,
         live,
-        syntheticOnly: live && !idmapOverridden,
+        transport,
         now: Date.now(),
     };
     return setup;

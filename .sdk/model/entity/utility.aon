@@ -53,6 +53,12 @@ main: kit: entity: utility: {
               }
             ]
           }
+          contract: {
+            id: "GET /hash"
+            json: "{\"operationId\":\"hashGet\",\"parameters\":[{\"description\":\"String to hash\",\"in\":\"query\",\"name\":\"input\",\"required\":true,\"schema\":{\"example\":\"hello world\",\"type\":\"string\"}},{\"description\":\"Hash algorithm\",\"in\":\"query\",\"name\":\"algo\",\"required\":false,\"schema\":{\"default\":\"sha256\",\"enum\":[\"md5\",\"sha1\",\"sha256\",\"sha384\",\"sha512\",\"sha3-256\",\"sha3-512\"],\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"algo\":{\"type\":\"string\"},\"hash\":{\"type\":\"string\"},\"input\":{\"type\":\"string\"},\"length\":{\"type\":\"integer\"}},\"type\":\"object\"}}},\"description\":\"Hash result\"}},\"security\":[],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"operation\"}"
+            source: "openapi3"
+            version: 1
+          }
           method: "GET"
           orig: "/hash"
           segments: [

@@ -1,12 +1,18 @@
 # WhoisDomainMonitoring SDK feature factory
 
 from whoisdomainmonitoring_sdk.feature.base_feature import WhoisDomainMonitoringBaseFeature
+from whoisdomainmonitoring_sdk.feature.ratelimit_feature import WhoisDomainMonitoringRatelimitFeature
+from whoisdomainmonitoring_sdk.feature.retry_feature import WhoisDomainMonitoringRetryFeature
 from whoisdomainmonitoring_sdk.feature.test_feature import WhoisDomainMonitoringTestFeature
+from whoisdomainmonitoring_sdk.feature.timeout_feature import WhoisDomainMonitoringTimeoutFeature
 
 
 _FEATURES = {
     "base": lambda: WhoisDomainMonitoringBaseFeature(),
+    "ratelimit": lambda: WhoisDomainMonitoringRatelimitFeature(),
+    "retry": lambda: WhoisDomainMonitoringRetryFeature(),
     "test": lambda: WhoisDomainMonitoringTestFeature(),
+    "timeout": lambda: WhoisDomainMonitoringTimeoutFeature(),
 }
 
 

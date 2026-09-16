@@ -53,5 +53,176 @@
         "valid": true
       }
     }
+  },
+  "requests": {
+    "GET /email-validate": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "emailValidate",
+        "parameters": [
+          {
+            "description": "Email address to validate",
+            "in": "query",
+            "name": "email",
+            "required": true,
+            "schema": {
+              "example": "user@example.com",
+              "format": "email",
+              "type": "string"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "confidence": 0.95,
+                  "disposable": false,
+                  "email": "user@example.com",
+                  "free_provider": false,
+                  "mx_found": true,
+                  "role_based": false,
+                  "suggest": null,
+                  "syntax_ok": true,
+                  "valid": true
+                },
+                "schema": {
+                  "properties": {
+                    "confidence": {
+                      "format": "float",
+                      "maximum": 1,
+                      "minimum": 0,
+                      "type": "number"
+                    },
+                    "disposable": {
+                      "type": "boolean"
+                    },
+                    "email": {
+                      "format": "email",
+                      "type": "string"
+                    },
+                    "free_provider": {
+                      "type": "boolean"
+                    },
+                    "mx_found": {
+                      "type": "boolean"
+                    },
+                    "role_based": {
+                      "type": "boolean"
+                    },
+                    "suggest": {
+                      "description": "Suggested correction for typos",
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "syntax_ok": {
+                      "type": "boolean"
+                    },
+                    "valid": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Validation result"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Invalid request parameters"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "X-API-Key header required",
+                  "signup_url": "https://kiprio.com/signup"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Missing or invalid API key"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "rate limit: 30 req/min exceeded"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Rate limit exceeded",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the rate limit resets",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          }
+        ],
+        "securitySchemes": {
+          "ApiKeyHeader": {
+            "description": "Get your free API key at https://kiprio.com/signup",
+            "in": "header",
+            "name": "X-API-Key",
+            "type": "apiKey"
+          },
+          "ApiKeyQuery": {
+            "in": "query",
+            "name": "api_key",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    }
   }
 }

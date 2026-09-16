@@ -46,5 +46,185 @@
         "updated": "s147"
       }
     }
+  },
+  "requests": {
+    "GET /whois": {
+      "provenance": "operation-contract",
+      "contract": {
+        "operationId": "whoisLookup",
+        "parameters": [
+          {
+            "description": "Domain name to look up",
+            "in": "query",
+            "name": "domain",
+            "required": true,
+            "schema": {
+              "example": "example.com",
+              "type": "string"
+            }
+          }
+        ],
+        "protocol": "http",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "created": "1995-08-14T04:00:00Z",
+                  "domain": "example.com",
+                  "expires": "2024-08-13T04:00:00Z",
+                  "nameservers": [
+                    "a.iana-servers.net",
+                    "b.iana-servers.net"
+                  ],
+                  "registered": true,
+                  "registrar": "RESERVED-Internet Assigned Numbers Authority",
+                  "status": [
+                    "client delete prohibited"
+                  ],
+                  "updated": "2023-08-14T07:01:34Z"
+                },
+                "schema": {
+                  "properties": {
+                    "created": {
+                      "format": "date-time",
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "domain": {
+                      "example": "example.com",
+                      "type": "string"
+                    },
+                    "expires": {
+                      "format": "date-time",
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "nameservers": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "registered": {
+                      "nullable": true,
+                      "type": "boolean"
+                    },
+                    "registrar": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "status": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "updated": {
+                      "format": "date-time",
+                      "nullable": true,
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "WHOIS data"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "X-API-Key header required",
+                  "signup_url": "https://kiprio.com/signup"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Missing or invalid API key"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Resource not found"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "error": "rate limit: 30 req/min exceeded"
+                },
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "signup_url": {
+                      "format": "uri",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Rate limit exceeded",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the rate limit resets",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          }
+        ],
+        "securitySchemes": {
+          "ApiKeyHeader": {
+            "description": "Get your free API key at https://kiprio.com/signup",
+            "in": "header",
+            "name": "X-API-Key",
+            "type": "apiKey"
+          },
+          "ApiKeyQuery": {
+            "in": "query",
+            "name": "api_key",
+            "type": "apiKey"
+          }
+        },
+        "securitySource": "definition"
+      }
+    }
   }
 }
