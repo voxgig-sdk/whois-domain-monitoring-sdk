@@ -123,6 +123,7 @@ class Config {
 
     auth: {
       prefix: '',
+      name: 'X-API-Key',
     },
 
     headers: {
@@ -131,36 +132,36 @@ class Config {
 
     entity: {
       
-      dns_result: {
-      },
-
-      domain: {
-      },
-
-      email_validate: {
-      },
-
-      generate: {
-      },
-
-      grammar: {
-      },
-
-      ipn: {
-      },
-
-      redact: {
-      },
-
-      ssl: {
-      },
-
-      utility: {
-      },
-
-      whoi: {
-      },
-
+        dns_result: {
+        },
+  
+        domain: {
+        },
+  
+        email_validate: {
+        },
+  
+        generate: {
+        },
+  
+        grammar: {
+        },
+  
+        ipn: {
+        },
+  
+        redact: {
+        },
+  
+        ssl: {
+        },
+  
+        utility: {
+        },
+  
+        whoi: {
+        },
+  
     }
   }
 

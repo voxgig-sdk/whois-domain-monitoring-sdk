@@ -105,12 +105,12 @@ local result, err = client:Utility():load({ input = "example" })
 
 | Language | Package | Install |
 | --- | --- | --- |
-| TypeScript | `@voxgig-sdk/whois-domain-monitoring-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases) |
-| Python | `voxgig-sdk-whois-domain-monitoring` | publish pending — [install from git tag](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases) |
-| PHP | `voxgig-sdk/whois-domain-monitoring` | publish pending — [install from git tag](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases) |
+| TypeScript | `@voxgig-sdk/whois-domain-monitoring-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/tags) |
+| Python | `voxgig-sdk-whois-domain-monitoring` | publish pending — [install from git tag](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/tags) |
+| PHP | `voxgig-sdk/whois-domain-monitoring` | publish pending — [install from git tag](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/tags) |
 | Golang | `github.com/voxgig-sdk/whois-domain-monitoring-sdk/go` | `go get github.com/voxgig-sdk/whois-domain-monitoring-sdk/go@latest` |
-| Ruby | `voxgig-sdk-whois-domain-monitoring` | publish pending — [install from git tag](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases) |
-| Lua | `voxgig-sdk-whois-domain-monitoring` | publish pending — [install from git tag](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases) |
+| Ruby | `voxgig-sdk-whois-domain-monitoring` | publish pending — [install from git tag](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/tags) |
+| Lua | `voxgig-sdk-whois-domain-monitoring` | publish pending — [install from git tag](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/tags) |
 | Go CLI | `github.com/voxgig-sdk/whois-domain-monitoring-sdk/go-cli` | `go install github.com/voxgig-sdk/whois-domain-monitoring-sdk/go-cli/cmd/whois-domain-monitoring@latest` |
 | Go MCP server | `github.com/voxgig-sdk/whois-domain-monitoring-sdk/go-mcp` | `go get github.com/voxgig-sdk/whois-domain-monitoring-sdk/go-mcp@latest` |
 
