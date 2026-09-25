@@ -19,7 +19,6 @@ import type {
   WhoiListMatch,
 } from '../WhoisDomainMonitoringTypes'
 
-// TODO: needs Entity superclass
 class WhoiEntity extends WhoisDomainMonitoringEntityBase<Whoi> {
 
   constructor(client: WhoisDomainMonitoringSDK, entopts: any) {

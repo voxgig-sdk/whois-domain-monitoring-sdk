@@ -1,0 +1,22 @@
+# BasicWhoiFlow
+
+main: kit: flow: BasicWhoiFlow:
+{
+  entity: "whoi",
+  kind: "basic",
+  name: "BasicWhoiFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "whoi_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicWhoiFlow"
+}

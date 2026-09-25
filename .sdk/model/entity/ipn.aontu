@@ -1,0 +1,112 @@
+# Entity: ipn
+
+main: kit: entity: ipn: {
+
+  alias: field: {}
+
+  fields: {
+    asn: {
+      h: "Asn"
+      n: "asn"
+      r: false
+      t: "`$STRING`"
+    }
+    city: {
+      h: "City"
+      n: "city"
+      r: false
+      t: "`$STRING`"
+    }
+    country: {
+      h: "Country"
+      n: "country"
+      r: false
+      t: "`$STRING`"
+    }
+    country_code: {
+      h: "Country Code"
+      n: "country_code"
+      r: false
+      t: "`$STRING`"
+    }
+    ip: {
+      h: "Ip"
+      n: "ip"
+      r: false
+      t: "`$STRING`"
+    }
+    latitude: {
+      fo: "double"
+      h: "Latitude"
+      n: "latitude"
+      r: false
+      t: "`$NUMBER`"
+    }
+    longitude: {
+      fo: "double"
+      h: "Longitude"
+      n: "longitude"
+      r: false
+      t: "`$NUMBER`"
+    }
+    org: {
+      h: "Org"
+      n: "org"
+      r: false
+      t: "`$STRING`"
+    }
+    timezone: {
+      h: "Timezone"
+      n: "timezone"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  name: "ipn"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /ip"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "8.8.8.8"
+                k: "query"
+                n: "ip"
+                or: "ip"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/ip"
+          q: {
+            exist: [
+              "ip"
+            ]
+          }
+          s: [
+            {
+              lit: "ip"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

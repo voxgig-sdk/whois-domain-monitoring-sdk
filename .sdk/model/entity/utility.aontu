@@ -1,0 +1,89 @@
+# Entity: utility
+
+main: kit: entity: utility: {
+
+  alias: field: {}
+
+  fields: {
+    algo: {
+      h: "Algo"
+      n: "algo"
+      r: false
+      t: "`$STRING`"
+    }
+    hash: {
+      h: "Hash"
+      n: "hash"
+      r: false
+      t: "`$STRING`"
+    }
+    input: {
+      h: "Input"
+      n: "input"
+      r: false
+      t: "`$STRING`"
+    }
+    length: {
+      h: "Length"
+      n: "length"
+      r: false
+      t: "`$INTEGER`"
+    }
+  }
+
+  name: "utility"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /hash"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "sha256"
+                k: "query"
+                n: "algo"
+                or: "algo"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "hello world"
+                k: "query"
+                n: "input"
+                or: "input"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/hash"
+          q: {
+            exist: [
+              "algo"
+              "input"
+            ]
+          }
+          s: [
+            {
+              lit: "hash"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

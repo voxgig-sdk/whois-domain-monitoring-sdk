@@ -1,0 +1,77 @@
+# Entity: dns_result
+
+main: kit: entity: dns_result: {
+
+  alias: field: {}
+
+  fields: {
+    domain: {
+      h: "Domain"
+      n: "domain"
+      r: false
+      t: "`$STRING`"
+    }
+    records: {
+      h: "Records"
+      n: "records"
+      r: false
+      t: "`$OBJECT`"
+    }
+  }
+
+  name: "dns_result"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /dns-lookup"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "example.com"
+                k: "query"
+                n: "domain"
+                or: "domain"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: "A,MX,TXT"
+                k: "query"
+                n: "type"
+                or: "type"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/dns-lookup"
+          q: {
+            exist: [
+              "domain"
+              "type"
+            ]
+          }
+          s: [
+            {
+              lit: "dns-lookup"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.records`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

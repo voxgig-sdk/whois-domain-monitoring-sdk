@@ -1,0 +1,74 @@
+# Entity: domain
+
+main: kit: entity: domain: {
+
+  alias: field: {}
+
+  fields: {
+    agents: {
+      h: "Agents"
+      n: "agents"
+      r: false
+      t: "`$OBJECT`"
+    }
+    sitemaps: {
+      h: "Sitemaps"
+      n: "sitemaps"
+      r: false
+      t: "`$ARRAY`"
+    }
+    url: {
+      h: "Url"
+      n: "url"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  name: "domain"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /robots-txt"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "https://example.com"
+                k: "query"
+                n: "url"
+                or: "url"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/robots-txt"
+          q: {
+            exist: [
+              "url"
+            ]
+          }
+          s: [
+            {
+              lit: "robots-txt"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

@@ -1,0 +1,71 @@
+# Entity: grammar
+
+main: kit: entity: grammar: {
+
+  alias: field: {}
+
+  fields: {
+    correction_count: {
+      h: "Correction Count"
+      n: "correction_count"
+      r: false
+      t: "`$INTEGER`"
+    }
+    corrections: {
+      h: "Corrections"
+      n: "corrections"
+      r: false
+      t: "`$ARRAY`"
+    }
+    language: {
+      h: "Language"
+      n: "language"
+      r: false
+      sh: "BCP 47 language tag"
+      t: "`$STRING`"
+    }
+    text: {
+      h: "Text"
+      n: "text"
+      op: {
+        create: {
+          req: true
+          type: "`$STRING`"
+        }
+      }
+      r: false
+      sh: "Text to check"
+      t: "`$STRING`"
+    }
+  }
+
+  name: "grammar"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          co: {
+            id: "POST /grammar"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/grammar"
+          s: [
+            {
+              lit: "grammar"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

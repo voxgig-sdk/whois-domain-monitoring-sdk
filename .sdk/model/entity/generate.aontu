@@ -1,0 +1,225 @@
+# Entity: generate
+
+main: kit: entity: generate: {
+
+  alias: field: {}
+
+  name: "generate"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /qr"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "#ffffff"
+                k: "query"
+                n: "bg"
+                or: "bg"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "M"
+                k: "query"
+                n: "ec_level"
+                or: "ec_level"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "#000000"
+                k: "query"
+                n: "fg"
+                or: "fg"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "png"
+                k: "query"
+                n: "format"
+                or: "format"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 512
+                k: "query"
+                n: "size"
+                or: "size"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                ex: "https://example.com"
+                k: "query"
+                n: "url"
+                or: "url"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/qr"
+          q: {
+            exist: [
+              "bg"
+              "ec_level"
+              "fg"
+              "format"
+              "size"
+              "url"
+            ]
+          }
+          s: [
+            {
+              lit: "qr"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          co: {
+            id: "GET /barcode"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "HELLO123"
+                k: "query"
+                n: "data"
+                or: "data"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: "code128"
+                k: "query"
+                n: "format"
+                or: "format"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 120
+                k: "query"
+                n: "height"
+                or: "height"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                ex: "svg"
+                k: "query"
+                n: "output"
+                or: "output"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 400
+                k: "query"
+                n: "width"
+                or: "width"
+                r: false
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/barcode"
+          q: {
+            exist: [
+              "data"
+              "format"
+              "height"
+              "output"
+              "width"
+            ]
+          }
+          s: [
+            {
+              lit: "barcode"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          co: {
+            id: "GET /screenshot"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: true
+                k: "query"
+                n: "full_page"
+                or: "full_page"
+                r: false
+                t: "`$BOOLEAN`"
+              }
+              {
+                ex: "https://example.com"
+                k: "query"
+                n: "url"
+                or: "url"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: 1280
+                k: "query"
+                n: "width"
+                or: "width"
+                r: false
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/screenshot"
+          q: {
+            exist: [
+              "full_page"
+              "url"
+              "width"
+            ]
+          }
+          s: [
+            {
+              lit: "screenshot"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+  fields: {
+  }
+
+
+
+}

@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SslEntity = void 0;
 const WhoisDomainMonitoringEntityBase_1 = require("../WhoisDomainMonitoringEntityBase");
-// TODO: needs Entity superclass
 class SslEntity extends WhoisDomainMonitoringEntityBase_1.WhoisDomainMonitoringEntityBase {
     constructor(client, entopts) {
         super(client, entopts);

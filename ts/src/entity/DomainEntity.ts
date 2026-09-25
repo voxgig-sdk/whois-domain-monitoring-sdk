@@ -19,7 +19,6 @@ import type {
   DomainListMatch,
 } from '../WhoisDomainMonitoringTypes'
 
-// TODO: needs Entity superclass
 class DomainEntity extends WhoisDomainMonitoringEntityBase<Domain> {
 
   constructor(client: WhoisDomainMonitoringSDK, entopts: any) {

@@ -24,26 +24,94 @@
         "repr": "auto"
       },
       "contributor": {},
+      "doc": {
+        "active": true,
+        "assets": {
+          "path": ".sdk/doc/assets"
+        },
+        "brand": {
+          "label": "",
+          "notice": "",
+          "shortNotice": "",
+          "url": ""
+        },
+        "ci": {
+          "active": true,
+          "branch": "main"
+        },
+        "content": {
+          "path": ".sdk/doc/content"
+        },
+        "edition": {
+          "summary": {
+            "active": true,
+            "base": "node_modules/@voxgig/docgen/project/.sdk",
+            "brand": {},
+            "filter": {
+              "entities": [],
+              "features": [],
+              "targets": []
+            },
+            "kind": "summary",
+            "name": "summary",
+            "origname": "",
+            "output": {
+              "path": "SUMMARY.md"
+            },
+            "package": "@voxgig/docgen",
+            "published": false,
+            "site": {
+              "active": true
+            },
+            "style": {},
+            "title": ""
+          }
+        },
+        "qa": {
+          "vocabulary": []
+        },
+        "style": {
+          "color": {
+            "accent": "#00c6d8",
+            "background": "#f5f5f9",
+            "darkBackground": "#0f1117",
+            "darkText": "#e6edf3",
+            "primary": "#e70042",
+            "text": "#0a0a0a"
+          },
+          "font": "Nunito, system-ui, sans-serif",
+          "fontFile": "",
+          "headingFont": "Nunito, system-ui, sans-serif",
+          "headingFontFile": "",
+          "logo": "",
+          "mode": "light",
+          "mono": "ui-monospace, monospace",
+          "monoFile": ""
+        },
+        "target": {}
+      },
       "entity": {
         "dns_result": {
           "active": true,
           "alias": {
             "field": {}
           },
-          "fields": [
-            {
-              "active": true,
-              "name": "domain",
-              "req": false,
-              "type": "`$STRING`"
+          "fields": {
+            "domain": {
+              "a": true,
+              "h": "Domain",
+              "n": "domain",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "records",
-              "req": false,
-              "type": "`$OBJECT`"
+            "records": {
+              "a": true,
+              "h": "Records",
+              "n": "records",
+              "r": false,
+              "t": "`$OBJECT`"
             }
-          ],
+          },
           "name": "dns_result",
           "op": {
             "load": {
@@ -51,50 +119,50 @@
               "name": "load",
               "points": [
                 {
-                  "active": true,
-                  "args": {
+                  "a": true,
+                  "co": {
+                    "id": "GET /dns-lookup",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
                     "query": [
                       {
-                        "active": true,
-                        "example": "example.com",
-                        "kind": "query",
-                        "name": "domain",
-                        "orig": "domain",
-                        "reqd": true,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "example.com",
+                        "k": "query",
+                        "n": "domain",
+                        "or": "domain",
+                        "r": true,
+                        "t": "`$STRING`"
                       },
                       {
-                        "active": true,
-                        "example": "A,MX,TXT",
-                        "kind": "query",
-                        "name": "type",
-                        "orig": "type",
-                        "reqd": false,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "A,MX,TXT",
+                        "k": "query",
+                        "n": "type",
+                        "or": "type",
+                        "r": false,
+                        "t": "`$STRING`"
                       }
                     ]
                   },
-                  "contract": {
-                    "id": "GET /dns-lookup",
-                    "json": "{\"operationId\":\"dnsLookup\",\"parameters\":[{\"description\":\"Domain to look up\",\"in\":\"query\",\"name\":\"domain\",\"required\":true,\"schema\":{\"example\":\"example.com\",\"type\":\"string\"}},{\"description\":\"Comma-separated list of record types to fetch\",\"in\":\"query\",\"name\":\"types\",\"required\":false,\"schema\":{\"default\":\"A,AAAA,MX,TXT,CNAME,NS\",\"example\":\"A,MX,TXT\",\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"example\":{\"domain\":\"example.com\",\"records\":{\"A\":[{\"ttl\":3600,\"value\":\"93.184.216.34\"}],\"MX\":[{\"priority\":10,\"ttl\":3600,\"value\":\"mail.example.com\"}]}},\"schema\":{\"properties\":{\"domain\":{\"type\":\"string\"},\"records\":{\"additionalProperties\":{\"items\":{\"properties\":{\"priority\":{\"description\":\"MX/SRV priority\",\"type\":\"integer\"},\"ttl\":{\"type\":\"integer\"},\"value\":{\"type\":\"string\"}},\"type\":\"object\"},\"type\":\"array\"},\"type\":\"object\"}},\"type\":\"object\"}}},\"description\":\"DNS records\"},\"401\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"X-API-Key header required\",\"signup_url\":\"https://kiprio.com/signup\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Missing or invalid API key\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[{\"ApiKeyHeader\":[]}],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
-                    "source": "openapi3",
-                    "version": 1
-                  },
-                  "kind": "http",
-                  "method": "GET",
-                  "orig": "/dns-lookup",
-                  "segments": [
-                    {
-                      "lit": "dns-lookup"
-                    }
-                  ],
-                  "select": {
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/dns-lookup",
+                  "q": {
                     "exist": [
                       "domain",
                       "type"
                     ]
                   },
-                  "transform": {
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "dns-lookup"
+                    }
+                  ],
+                  "t": {
                     "req": "`reqdata`",
                     "res": "`body.records`"
                   }
@@ -111,26 +179,29 @@
           "alias": {
             "field": {}
           },
-          "fields": [
-            {
-              "active": true,
-              "name": "agents",
-              "req": false,
-              "type": "`$OBJECT`"
+          "fields": {
+            "agents": {
+              "a": true,
+              "h": "Agents",
+              "n": "agents",
+              "r": false,
+              "t": "`$OBJECT`"
             },
-            {
-              "active": true,
-              "name": "sitemaps",
-              "req": false,
-              "type": "`$ARRAY`"
+            "sitemaps": {
+              "a": true,
+              "h": "Sitemaps",
+              "n": "sitemaps",
+              "r": false,
+              "t": "`$ARRAY`"
             },
-            {
-              "active": true,
-              "name": "url",
-              "req": false,
-              "type": "`$STRING`"
+            "url": {
+              "a": true,
+              "h": "Url",
+              "n": "url",
+              "r": false,
+              "t": "`$STRING`"
             }
-          ],
+          },
           "name": "domain",
           "op": {
             "list": {
@@ -138,40 +209,40 @@
               "name": "list",
               "points": [
                 {
-                  "active": true,
-                  "args": {
+                  "a": true,
+                  "co": {
+                    "id": "GET /robots-txt",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
                     "query": [
                       {
-                        "active": true,
-                        "example": "https://example.com",
-                        "kind": "query",
-                        "name": "url",
-                        "orig": "url",
-                        "reqd": true,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "https://example.com",
+                        "k": "query",
+                        "n": "url",
+                        "or": "url",
+                        "r": true,
+                        "t": "`$STRING`"
                       }
                     ]
                   },
-                  "contract": {
-                    "id": "GET /robots-txt",
-                    "json": "{\"operationId\":\"robotsTxtParse\",\"parameters\":[{\"description\":\"Domain URL to fetch robots.txt from\",\"in\":\"query\",\"name\":\"url\",\"required\":true,\"schema\":{\"example\":\"https://example.com\",\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"agents\":{\"additionalProperties\":{\"properties\":{\"allow\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"disallow\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"}},\"type\":\"object\"},\"type\":\"object\"},\"sitemaps\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Parsed robots.txt\"},\"400\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Invalid request parameters\"},\"401\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"X-API-Key header required\",\"signup_url\":\"https://kiprio.com/signup\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Missing or invalid API key\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[{\"ApiKeyHeader\":[]}],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
-                    "source": "openapi3",
-                    "version": 1
-                  },
-                  "kind": "http",
-                  "method": "GET",
-                  "orig": "/robots-txt",
-                  "segments": [
-                    {
-                      "lit": "robots-txt"
-                    }
-                  ],
-                  "select": {
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/robots-txt",
+                  "q": {
                     "exist": [
                       "url"
                     ]
                   },
-                  "transform": {
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "robots-txt"
+                    }
+                  ],
+                  "t": {
                     "req": "`reqdata`",
                     "res": "`body`"
                   }
@@ -188,65 +259,74 @@
           "alias": {
             "field": {}
           },
-          "fields": [
-            {
-              "active": true,
-              "format": "float",
-              "name": "confidence",
-              "req": false,
-              "type": "`$NUMBER`"
+          "fields": {
+            "confidence": {
+              "a": true,
+              "fo": "float",
+              "h": "Confidence",
+              "n": "confidence",
+              "r": false,
+              "t": "`$NUMBER`"
             },
-            {
-              "active": true,
-              "name": "disposable",
-              "req": false,
-              "type": "`$BOOLEAN`"
+            "disposable": {
+              "a": true,
+              "h": "Disposable",
+              "n": "disposable",
+              "r": false,
+              "t": "`$BOOLEAN`"
             },
-            {
-              "active": true,
-              "format": "email",
-              "name": "email",
-              "req": false,
-              "type": "`$STRING`"
+            "email": {
+              "a": true,
+              "fo": "email",
+              "h": "Email",
+              "n": "email",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "free_provider",
-              "req": false,
-              "type": "`$BOOLEAN`"
+            "free_provider": {
+              "a": true,
+              "h": "Free Provider",
+              "n": "free_provider",
+              "r": false,
+              "t": "`$BOOLEAN`"
             },
-            {
-              "active": true,
-              "name": "mx_found",
-              "req": false,
-              "type": "`$BOOLEAN`"
+            "mx_found": {
+              "a": true,
+              "h": "Mx Found",
+              "n": "mx_found",
+              "r": false,
+              "t": "`$BOOLEAN`"
             },
-            {
-              "active": true,
-              "name": "role_based",
-              "req": false,
-              "type": "`$BOOLEAN`"
+            "role_based": {
+              "a": true,
+              "h": "Role Based",
+              "n": "role_based",
+              "r": false,
+              "t": "`$BOOLEAN`"
             },
-            {
-              "active": true,
-              "name": "suggest",
-              "req": false,
-              "short": "Suggested correction for typos",
-              "type": "`$STRING`"
+            "suggest": {
+              "a": true,
+              "h": "Suggest",
+              "n": "suggest",
+              "r": false,
+              "sh": "Suggested correction for typos",
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "syntax_ok",
-              "req": false,
-              "type": "`$BOOLEAN`"
+            "syntax_ok": {
+              "a": true,
+              "h": "Syntax Ok",
+              "n": "syntax_ok",
+              "r": false,
+              "t": "`$BOOLEAN`"
             },
-            {
-              "active": true,
-              "name": "valid",
-              "req": false,
-              "type": "`$BOOLEAN`"
+            "valid": {
+              "a": true,
+              "h": "Valid",
+              "n": "valid",
+              "r": false,
+              "t": "`$BOOLEAN`"
             }
-          ],
+          },
           "name": "email_validate",
           "op": {
             "load": {
@@ -254,40 +334,40 @@
               "name": "load",
               "points": [
                 {
-                  "active": true,
-                  "args": {
+                  "a": true,
+                  "co": {
+                    "id": "GET /email-validate",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
                     "query": [
                       {
-                        "active": true,
-                        "example": "user@example.com",
-                        "kind": "query",
-                        "name": "email",
-                        "orig": "email",
-                        "reqd": true,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "user@example.com",
+                        "k": "query",
+                        "n": "email",
+                        "or": "email",
+                        "r": true,
+                        "t": "`$STRING`"
                       }
                     ]
                   },
-                  "contract": {
-                    "id": "GET /email-validate",
-                    "json": "{\"operationId\":\"emailValidate\",\"parameters\":[{\"description\":\"Email address to validate\",\"in\":\"query\",\"name\":\"email\",\"required\":true,\"schema\":{\"example\":\"user@example.com\",\"format\":\"email\",\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"example\":{\"confidence\":0.95,\"disposable\":false,\"email\":\"user@example.com\",\"free_provider\":false,\"mx_found\":true,\"role_based\":false,\"suggest\":null,\"syntax_ok\":true,\"valid\":true},\"schema\":{\"properties\":{\"confidence\":{\"format\":\"float\",\"maximum\":1,\"minimum\":0,\"type\":\"number\"},\"disposable\":{\"type\":\"boolean\"},\"email\":{\"format\":\"email\",\"type\":\"string\"},\"free_provider\":{\"type\":\"boolean\"},\"mx_found\":{\"type\":\"boolean\"},\"role_based\":{\"type\":\"boolean\"},\"suggest\":{\"description\":\"Suggested correction for typos\",\"nullable\":true,\"type\":\"string\"},\"syntax_ok\":{\"type\":\"boolean\"},\"valid\":{\"type\":\"boolean\"}},\"type\":\"object\"}}},\"description\":\"Validation result\"},\"400\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Invalid request parameters\"},\"401\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"X-API-Key header required\",\"signup_url\":\"https://kiprio.com/signup\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Missing or invalid API key\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[{\"ApiKeyHeader\":[]}],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
-                    "source": "openapi3",
-                    "version": 1
-                  },
-                  "kind": "http",
-                  "method": "GET",
-                  "orig": "/email-validate",
-                  "segments": [
-                    {
-                      "lit": "email-validate"
-                    }
-                  ],
-                  "select": {
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/email-validate",
+                  "q": {
                     "exist": [
                       "email"
                     ]
                   },
-                  "transform": {
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "email-validate"
+                    }
+                  ],
+                  "t": {
                     "req": "`reqdata`",
                     "res": "`body`"
                   }
@@ -304,7 +384,7 @@
           "alias": {
             "field": {}
           },
-          "fields": [],
+          "fields": {},
           "name": "generate",
           "op": {
             "load": {
@@ -312,80 +392,74 @@
               "name": "load",
               "points": [
                 {
-                  "active": true,
-                  "args": {
+                  "a": true,
+                  "co": {
+                    "id": "GET /qr",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
                     "query": [
                       {
-                        "active": true,
-                        "example": "#ffffff",
-                        "kind": "query",
-                        "name": "bg",
-                        "orig": "bg",
-                        "reqd": false,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "#ffffff",
+                        "k": "query",
+                        "n": "bg",
+                        "or": "bg",
+                        "r": false,
+                        "t": "`$STRING`"
                       },
                       {
-                        "active": true,
-                        "example": "M",
-                        "kind": "query",
-                        "name": "ec_level",
-                        "orig": "ec_level",
-                        "reqd": false,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "M",
+                        "k": "query",
+                        "n": "ec_level",
+                        "or": "ec_level",
+                        "r": false,
+                        "t": "`$STRING`"
                       },
                       {
-                        "active": true,
-                        "example": "#000000",
-                        "kind": "query",
-                        "name": "fg",
-                        "orig": "fg",
-                        "reqd": false,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "#000000",
+                        "k": "query",
+                        "n": "fg",
+                        "or": "fg",
+                        "r": false,
+                        "t": "`$STRING`"
                       },
                       {
-                        "active": true,
-                        "example": "png",
-                        "kind": "query",
-                        "name": "format",
-                        "orig": "format",
-                        "reqd": false,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "png",
+                        "k": "query",
+                        "n": "format",
+                        "or": "format",
+                        "r": false,
+                        "t": "`$STRING`"
                       },
                       {
-                        "active": true,
-                        "example": 512,
-                        "kind": "query",
-                        "name": "size",
-                        "orig": "size",
-                        "reqd": false,
-                        "type": "`$INTEGER`"
+                        "a": true,
+                        "ex": 512,
+                        "k": "query",
+                        "n": "size",
+                        "or": "size",
+                        "r": false,
+                        "t": "`$INTEGER`"
                       },
                       {
-                        "active": true,
-                        "example": "https://example.com",
-                        "kind": "query",
-                        "name": "url",
-                        "orig": "url",
-                        "reqd": true,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "https://example.com",
+                        "k": "query",
+                        "n": "url",
+                        "or": "url",
+                        "r": true,
+                        "t": "`$STRING`"
                       }
                     ]
                   },
-                  "contract": {
-                    "id": "GET /qr",
-                    "json": "{\"operationId\":\"qrGenerate\",\"parameters\":[{\"description\":\"Text or URL to encode\",\"in\":\"query\",\"name\":\"url\",\"required\":true,\"schema\":{\"example\":\"https://example.com\",\"type\":\"string\"}},{\"description\":\"Output size in pixels (PNG) or viewBox units (SVG)\",\"in\":\"query\",\"name\":\"size\",\"required\":false,\"schema\":{\"default\":512,\"maximum\":2048,\"minimum\":128,\"type\":\"integer\"}},{\"description\":\"Output format\",\"in\":\"query\",\"name\":\"format\",\"required\":false,\"schema\":{\"default\":\"png\",\"enum\":[\"png\",\"svg\"],\"type\":\"string\"}},{\"description\":\"Error correction level\",\"in\":\"query\",\"name\":\"ec_level\",\"required\":false,\"schema\":{\"default\":\"M\",\"enum\":[\"L\",\"M\",\"Q\",\"H\"],\"type\":\"string\"}},{\"description\":\"Foreground colour (hex)\",\"in\":\"query\",\"name\":\"fg\",\"required\":false,\"schema\":{\"default\":\"#000000\",\"example\":\"#000000\",\"type\":\"string\"}},{\"description\":\"Background colour (hex)\",\"in\":\"query\",\"name\":\"bg\",\"required\":false,\"schema\":{\"default\":\"#ffffff\",\"example\":\"#ffffff\",\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"image/png\":{\"schema\":{\"format\":\"binary\",\"type\":\"string\"}},\"image/svg+xml\":{\"schema\":{\"type\":\"string\"}}},\"description\":\"QR code image\"},\"400\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Invalid request parameters\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"operation\"}",
-                    "source": "openapi3",
-                    "version": 1
-                  },
-                  "kind": "http",
-                  "method": "GET",
-                  "orig": "/qr",
-                  "segments": [
-                    {
-                      "lit": "qr"
-                    }
-                  ],
-                  "select": {
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/qr",
+                  "q": {
                     "exist": [
                       "bg",
                       "ec_level",
@@ -395,77 +469,77 @@
                       "url"
                     ]
                   },
-                  "transform": {
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "qr"
+                    }
+                  ],
+                  "t": {
                     "req": "`reqdata`",
                     "res": "`body`"
                   }
                 },
                 {
-                  "active": true,
-                  "args": {
+                  "a": true,
+                  "co": {
+                    "id": "GET /barcode",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
                     "query": [
                       {
-                        "active": true,
-                        "example": "HELLO123",
-                        "kind": "query",
-                        "name": "data",
-                        "orig": "data",
-                        "reqd": true,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "HELLO123",
+                        "k": "query",
+                        "n": "data",
+                        "or": "data",
+                        "r": true,
+                        "t": "`$STRING`"
                       },
                       {
-                        "active": true,
-                        "example": "code128",
-                        "kind": "query",
-                        "name": "format",
-                        "orig": "format",
-                        "reqd": false,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "code128",
+                        "k": "query",
+                        "n": "format",
+                        "or": "format",
+                        "r": false,
+                        "t": "`$STRING`"
                       },
                       {
-                        "active": true,
-                        "example": 120,
-                        "kind": "query",
-                        "name": "height",
-                        "orig": "height",
-                        "reqd": false,
-                        "type": "`$INTEGER`"
+                        "a": true,
+                        "ex": 120,
+                        "k": "query",
+                        "n": "height",
+                        "or": "height",
+                        "r": false,
+                        "t": "`$INTEGER`"
                       },
                       {
-                        "active": true,
-                        "example": "svg",
-                        "kind": "query",
-                        "name": "output",
-                        "orig": "output",
-                        "reqd": false,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "svg",
+                        "k": "query",
+                        "n": "output",
+                        "or": "output",
+                        "r": false,
+                        "t": "`$STRING`"
                       },
                       {
-                        "active": true,
-                        "example": 400,
-                        "kind": "query",
-                        "name": "width",
-                        "orig": "width",
-                        "reqd": false,
-                        "type": "`$INTEGER`"
+                        "a": true,
+                        "ex": 400,
+                        "k": "query",
+                        "n": "width",
+                        "or": "width",
+                        "r": false,
+                        "t": "`$INTEGER`"
                       }
                     ]
                   },
-                  "contract": {
-                    "id": "GET /barcode",
-                    "json": "{\"operationId\":\"barcodeGenerate\",\"parameters\":[{\"description\":\"Data to encode\",\"in\":\"query\",\"name\":\"data\",\"required\":true,\"schema\":{\"example\":\"HELLO123\",\"type\":\"string\"}},{\"description\":\"Barcode symbology\",\"in\":\"query\",\"name\":\"format\",\"required\":false,\"schema\":{\"default\":\"code128\",\"enum\":[\"code128\",\"ean13\",\"ean8\",\"upca\",\"code39\",\"itf\"],\"type\":\"string\"}},{\"description\":\"Output format\",\"in\":\"query\",\"name\":\"output\",\"required\":false,\"schema\":{\"default\":\"svg\",\"enum\":[\"svg\",\"png\"],\"type\":\"string\"}},{\"description\":\"Output width in pixels\",\"in\":\"query\",\"name\":\"width\",\"required\":false,\"schema\":{\"default\":400,\"type\":\"integer\"}},{\"description\":\"Output height in pixels\",\"in\":\"query\",\"name\":\"height\",\"required\":false,\"schema\":{\"default\":120,\"type\":\"integer\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"image/png\":{\"schema\":{\"format\":\"binary\",\"type\":\"string\"}},\"image/svg+xml\":{\"schema\":{\"type\":\"string\"}}},\"description\":\"Barcode image\"},\"400\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Invalid request parameters\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"operation\"}",
-                    "source": "openapi3",
-                    "version": 1
-                  },
-                  "kind": "http",
-                  "method": "GET",
-                  "orig": "/barcode",
-                  "segments": [
-                    {
-                      "lit": "barcode"
-                    }
-                  ],
-                  "select": {
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/barcode",
+                  "q": {
                     "exist": [
                       "data",
                       "format",
@@ -474,66 +548,72 @@
                       "width"
                     ]
                   },
-                  "transform": {
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "barcode"
+                    }
+                  ],
+                  "t": {
                     "req": "`reqdata`",
                     "res": "`body`"
                   }
                 },
                 {
-                  "active": true,
-                  "args": {
+                  "a": true,
+                  "co": {
+                    "id": "GET /screenshot",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
                     "query": [
                       {
-                        "active": true,
-                        "example": true,
-                        "kind": "query",
-                        "name": "full_page",
-                        "orig": "full_page",
-                        "reqd": false,
-                        "type": "`$BOOLEAN`"
+                        "a": true,
+                        "ex": true,
+                        "k": "query",
+                        "n": "full_page",
+                        "or": "full_page",
+                        "r": false,
+                        "t": "`$BOOLEAN`"
                       },
                       {
-                        "active": true,
-                        "example": "https://example.com",
-                        "kind": "query",
-                        "name": "url",
-                        "orig": "url",
-                        "reqd": true,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "https://example.com",
+                        "k": "query",
+                        "n": "url",
+                        "or": "url",
+                        "r": true,
+                        "t": "`$STRING`"
                       },
                       {
-                        "active": true,
-                        "example": 1280,
-                        "kind": "query",
-                        "name": "width",
-                        "orig": "width",
-                        "reqd": false,
-                        "type": "`$INTEGER`"
+                        "a": true,
+                        "ex": 1280,
+                        "k": "query",
+                        "n": "width",
+                        "or": "width",
+                        "r": false,
+                        "t": "`$INTEGER`"
                       }
                     ]
                   },
-                  "contract": {
-                    "id": "GET /screenshot",
-                    "json": "{\"operationId\":\"screenshotCapture\",\"parameters\":[{\"description\":\"URL to screenshot\",\"in\":\"query\",\"name\":\"url\",\"required\":true,\"schema\":{\"example\":\"https://example.com\",\"format\":\"uri\",\"type\":\"string\"}},{\"description\":\"Viewport width in pixels\",\"in\":\"query\",\"name\":\"width\",\"required\":false,\"schema\":{\"default\":1280,\"type\":\"integer\"}},{\"description\":\"Capture full scrollable page\",\"in\":\"query\",\"name\":\"full_page\",\"required\":false,\"schema\":{\"default\":true,\"type\":\"boolean\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"image/png\":{\"schema\":{\"format\":\"binary\",\"type\":\"string\"}}},\"description\":\"PNG screenshot\"},\"400\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Invalid request parameters\"},\"401\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"X-API-Key header required\",\"signup_url\":\"https://kiprio.com/signup\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Missing or invalid API key\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[{\"ApiKeyHeader\":[]}],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
-                    "source": "openapi3",
-                    "version": 1
-                  },
-                  "kind": "http",
-                  "method": "GET",
-                  "orig": "/screenshot",
-                  "segments": [
-                    {
-                      "lit": "screenshot"
-                    }
-                  ],
-                  "select": {
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/screenshot",
+                  "q": {
                     "exist": [
                       "full_page",
                       "url",
                       "width"
                     ]
                   },
-                  "transform": {
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "screenshot"
+                    }
+                  ],
+                  "t": {
                     "req": "`reqdata`",
                     "res": "`body`"
                   }
@@ -550,40 +630,44 @@
           "alias": {
             "field": {}
           },
-          "fields": [
-            {
-              "active": true,
-              "name": "correction_count",
-              "req": false,
-              "type": "`$INTEGER`"
+          "fields": {
+            "correction_count": {
+              "a": true,
+              "h": "Correction Count",
+              "n": "correction_count",
+              "r": false,
+              "t": "`$INTEGER`"
             },
-            {
-              "active": true,
-              "name": "corrections",
-              "req": false,
-              "type": "`$ARRAY`"
+            "corrections": {
+              "a": true,
+              "h": "Corrections",
+              "n": "corrections",
+              "r": false,
+              "t": "`$ARRAY`"
             },
-            {
-              "active": true,
-              "name": "language",
-              "req": false,
-              "short": "BCP 47 language tag",
-              "type": "`$STRING`"
+            "language": {
+              "a": true,
+              "h": "Language",
+              "n": "language",
+              "r": false,
+              "sh": "BCP 47 language tag",
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "text",
+            "text": {
+              "a": true,
+              "h": "Text",
+              "n": "text",
               "op": {
                 "create": {
                   "req": true,
                   "type": "`$STRING`"
                 }
               },
-              "req": false,
-              "short": "Text to check",
-              "type": "`$STRING`"
+              "r": false,
+              "sh": "Text to check",
+              "t": "`$STRING`"
             }
-          ],
+          },
           "name": "grammar",
           "op": {
             "create": {
@@ -591,24 +675,24 @@
               "name": "create",
               "points": [
                 {
-                  "active": true,
-                  "args": {},
-                  "contract": {
+                  "a": true,
+                  "co": {
                     "id": "POST /grammar",
-                    "json": "{\"operationId\":\"grammarCheck\",\"parameters\":[],\"protocol\":\"http\",\"requestBody\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"language\":{\"default\":\"en-US\",\"description\":\"BCP 47 language tag\",\"example\":\"en-GB\",\"type\":\"string\"},\"text\":{\"description\":\"Text to check\",\"example\":\"Teh cat sat on teh mat.\",\"type\":\"string\"}},\"required\":[\"text\"],\"type\":\"object\"}},\"application/x-www-form-urlencoded\":{\"schema\":{\"properties\":{\"text\":{\"type\":\"string\"}},\"required\":[\"text\"],\"type\":\"object\"}}},\"required\":true},\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"correction_count\":{\"type\":\"integer\"},\"corrections\":{\"items\":{\"properties\":{\"category\":{\"type\":\"string\"},\"context\":{\"properties\":{\"length\":{\"type\":\"integer\"},\"offset\":{\"type\":\"integer\"},\"text\":{\"type\":\"string\"}},\"type\":\"object\"},\"message\":{\"type\":\"string\"},\"replacements\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"rule_desc\":{\"type\":\"string\"},\"rule_id\":{\"type\":\"string\"},\"short_message\":{\"type\":\"string\"}},\"type\":\"object\"},\"type\":\"array\"},\"language\":{\"type\":\"string\"},\"text\":{\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Grammar check results\"},\"400\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Invalid request parameters\"},\"401\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"X-API-Key header required\",\"signup_url\":\"https://kiprio.com/signup\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Missing or invalid API key\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[{\"ApiKeyHeader\":[]}],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
                     "source": "openapi3",
-                    "version": 1
+                    "version": 2
                   },
-                  "kind": "http",
-                  "method": "POST",
-                  "orig": "/grammar",
-                  "segments": [
+                  "g": {},
+                  "k": "http",
+                  "m": "POST",
+                  "o": "/grammar",
+                  "q": {},
+                  "r": {},
+                  "s": [
                     {
                       "lit": "grammar"
                     }
                   ],
-                  "select": {},
-                  "transform": {
+                  "t": {
                     "req": "`reqdata`",
                     "res": "`body`"
                   }
@@ -625,64 +709,73 @@
           "alias": {
             "field": {}
           },
-          "fields": [
-            {
-              "active": true,
-              "name": "asn",
-              "req": false,
-              "type": "`$STRING`"
+          "fields": {
+            "asn": {
+              "a": true,
+              "h": "Asn",
+              "n": "asn",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "city",
-              "req": false,
-              "type": "`$STRING`"
+            "city": {
+              "a": true,
+              "h": "City",
+              "n": "city",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "country",
-              "req": false,
-              "type": "`$STRING`"
+            "country": {
+              "a": true,
+              "h": "Country",
+              "n": "country",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "country_code",
-              "req": false,
-              "type": "`$STRING`"
+            "country_code": {
+              "a": true,
+              "h": "Country Code",
+              "n": "country_code",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "ip",
-              "req": false,
-              "type": "`$STRING`"
+            "ip": {
+              "a": true,
+              "h": "Ip",
+              "n": "ip",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "format": "double",
-              "name": "latitude",
-              "req": false,
-              "type": "`$NUMBER`"
+            "latitude": {
+              "a": true,
+              "fo": "double",
+              "h": "Latitude",
+              "n": "latitude",
+              "r": false,
+              "t": "`$NUMBER`"
             },
-            {
-              "active": true,
-              "format": "double",
-              "name": "longitude",
-              "req": false,
-              "type": "`$NUMBER`"
+            "longitude": {
+              "a": true,
+              "fo": "double",
+              "h": "Longitude",
+              "n": "longitude",
+              "r": false,
+              "t": "`$NUMBER`"
             },
-            {
-              "active": true,
-              "name": "org",
-              "req": false,
-              "type": "`$STRING`"
+            "org": {
+              "a": true,
+              "h": "Org",
+              "n": "org",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "timezone",
-              "req": false,
-              "type": "`$STRING`"
+            "timezone": {
+              "a": true,
+              "h": "Timezone",
+              "n": "timezone",
+              "r": false,
+              "t": "`$STRING`"
             }
-          ],
+          },
           "name": "ipn",
           "op": {
             "load": {
@@ -690,40 +783,40 @@
               "name": "load",
               "points": [
                 {
-                  "active": true,
-                  "args": {
+                  "a": true,
+                  "co": {
+                    "id": "GET /ip",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
                     "query": [
                       {
-                        "active": true,
-                        "example": "8.8.8.8",
-                        "kind": "query",
-                        "name": "ip",
-                        "orig": "ip",
-                        "reqd": false,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "8.8.8.8",
+                        "k": "query",
+                        "n": "ip",
+                        "or": "ip",
+                        "r": false,
+                        "t": "`$STRING`"
                       }
                     ]
                   },
-                  "contract": {
-                    "id": "GET /ip",
-                    "json": "{\"operationId\":\"ipLookup\",\"parameters\":[{\"description\":\"IP address to look up. Omit for caller's IP.\",\"in\":\"query\",\"name\":\"ip\",\"required\":false,\"schema\":{\"example\":\"8.8.8.8\",\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"example\":{\"asn\":\"AS15169\",\"city\":\"Mountain View\",\"country\":\"United States\",\"country_code\":\"US\",\"ip\":\"8.8.8.8\",\"latitude\":37.386,\"longitude\":-122.0838,\"org\":\"AS15169 Google LLC\",\"timezone\":\"America/Los_Angeles\"},\"schema\":{\"properties\":{\"asn\":{\"nullable\":true,\"type\":\"string\"},\"city\":{\"nullable\":true,\"type\":\"string\"},\"country\":{\"nullable\":true,\"type\":\"string\"},\"country_code\":{\"example\":\"US\",\"nullable\":true,\"type\":\"string\"},\"ip\":{\"example\":\"8.8.8.8\",\"type\":\"string\"},\"latitude\":{\"format\":\"double\",\"nullable\":true,\"type\":\"number\"},\"longitude\":{\"format\":\"double\",\"nullable\":true,\"type\":\"number\"},\"org\":{\"nullable\":true,\"type\":\"string\"},\"timezone\":{\"nullable\":true,\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"IP geolocation data\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"operation\"}",
-                    "source": "openapi3",
-                    "version": 1
-                  },
-                  "kind": "http",
-                  "method": "GET",
-                  "orig": "/ip",
-                  "segments": [
-                    {
-                      "lit": "ip"
-                    }
-                  ],
-                  "select": {
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/ip",
+                  "q": {
                     "exist": [
                       "ip"
                     ]
                   },
-                  "transform": {
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "ip"
+                    }
+                  ],
+                  "t": {
                     "req": "`reqdata`",
                     "res": "`body`"
                   }
@@ -740,47 +833,53 @@
           "alias": {
             "field": {}
           },
-          "fields": [
-            {
-              "active": true,
-              "name": "counts",
-              "req": false,
-              "type": "`$OBJECT`"
+          "fields": {
+            "counts": {
+              "a": true,
+              "h": "Counts",
+              "n": "counts",
+              "r": false,
+              "t": "`$OBJECT`"
             },
-            {
-              "active": true,
-              "name": "entities",
-              "req": false,
-              "short": "Include detected entity positions in response",
-              "type": "`$ARRAY`"
+            "entities": {
+              "a": true,
+              "h": "Entities",
+              "n": "entities",
+              "r": false,
+              "sh": "Include detected entity positions in response",
+              "t": "`$ARRAY`"
             },
-            {
-              "active": true,
-              "name": "original_length",
-              "req": false,
-              "type": "`$INTEGER`"
+            "original_length": {
+              "a": true,
+              "h": "Original Length",
+              "n": "original_length",
+              "r": false,
+              "t": "`$INTEGER`"
             },
-            {
-              "active": true,
-              "name": "redact",
-              "req": false,
-              "short": "Comma-separated PII types to redact.",
-              "type": "`$STRING`"
+            "redact": {
+              "a": true,
+              "h": "Redact",
+              "n": "redact",
+              "r": false,
+              "sh": "Comma-separated PII types to redact.",
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "redacted",
-              "req": false,
-              "type": "`$STRING`"
+            "redacted": {
+              "a": true,
+              "h": "Redacted",
+              "n": "redacted",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "text",
-              "req": true,
-              "short": "Text to redact",
-              "type": "`$STRING`"
+            "text": {
+              "a": true,
+              "h": "Text",
+              "n": "text",
+              "r": true,
+              "sh": "Text to redact",
+              "t": "`$STRING`"
             }
-          ],
+          },
           "name": "redact",
           "op": {
             "create": {
@@ -788,24 +887,24 @@
               "name": "create",
               "points": [
                 {
-                  "active": true,
-                  "args": {},
-                  "contract": {
+                  "a": true,
+                  "co": {
                     "id": "POST /redact",
-                    "json": "{\"operationId\":\"redactPii\",\"parameters\":[],\"protocol\":\"http\",\"requestBody\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"entities\":{\"default\":false,\"description\":\"Include detected entity positions in response\",\"type\":\"boolean\"},\"redact\":{\"description\":\"Comma-separated PII types to redact. Omit for all types.\",\"example\":\"phone,email\",\"type\":\"string\"},\"text\":{\"description\":\"Text to redact\",\"example\":\"Call John on 07911 123456 or email john@example.com\",\"type\":\"string\"}},\"required\":[\"text\"],\"type\":\"object\"}}},\"required\":true},\"responses\":{\"200\":{\"content\":{\"application/json\":{\"example\":{\"counts\":{\"email\":1,\"phone\":1},\"entities\":[{\"offset\":15,\"type\":\"phone\",\"value\":\"07911 123456\"}],\"original_length\":50,\"redacted\":\"Call [NAME] on [PHONE] or email [EMAIL]\"},\"schema\":{\"properties\":{\"counts\":{\"additionalProperties\":{\"type\":\"integer\"},\"example\":{\"email\":2,\"phone\":1},\"type\":\"object\"},\"entities\":{\"items\":{\"properties\":{\"offset\":{\"type\":\"integer\"},\"type\":{\"example\":\"phone\",\"type\":\"string\"},\"value\":{\"type\":\"string\"}},\"type\":\"object\"},\"type\":\"array\"},\"original_length\":{\"type\":\"integer\"},\"redacted\":{\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Redacted text\"},\"400\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Invalid request parameters\"},\"401\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"X-API-Key header required\",\"signup_url\":\"https://kiprio.com/signup\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Missing or invalid API key\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[{\"ApiKeyHeader\":[]}],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
                     "source": "openapi3",
-                    "version": 1
+                    "version": 2
                   },
-                  "kind": "http",
-                  "method": "POST",
-                  "orig": "/redact",
-                  "segments": [
+                  "g": {},
+                  "k": "http",
+                  "m": "POST",
+                  "o": "/redact",
+                  "q": {},
+                  "r": {},
+                  "s": [
                     {
                       "lit": "redact"
                     }
                   ],
-                  "select": {},
-                  "transform": {
+                  "t": {
                     "req": {
                       "redact": "`reqdata`"
                     },
@@ -824,69 +923,79 @@
           "alias": {
             "field": {}
           },
-          "fields": [
-            {
-              "active": true,
-              "name": "cipher",
-              "req": false,
-              "type": "`$STRING`"
+          "fields": {
+            "cipher": {
+              "a": true,
+              "h": "Cipher",
+              "n": "cipher",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "days_remaining",
-              "req": false,
-              "type": "`$INTEGER`"
+            "days_remaining": {
+              "a": true,
+              "h": "Days Remaining",
+              "n": "days_remaining",
+              "r": false,
+              "t": "`$INTEGER`"
             },
-            {
-              "active": true,
-              "name": "domain",
-              "req": false,
-              "type": "`$STRING`"
+            "domain": {
+              "a": true,
+              "h": "Domain",
+              "n": "domain",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "format": "date-time",
-              "name": "expires_at",
-              "req": false,
-              "type": "`$STRING`"
+            "expires_at": {
+              "a": true,
+              "fo": "date-time",
+              "h": "Expires At",
+              "n": "expires_at",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "grade",
-              "req": false,
-              "type": "`$STRING`"
+            "grade": {
+              "a": true,
+              "h": "Grade",
+              "n": "grade",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "issuer",
-              "req": false,
-              "type": "`$STRING`"
+            "issuer": {
+              "a": true,
+              "h": "Issuer",
+              "n": "issuer",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "protocol",
-              "req": false,
-              "type": "`$STRING`"
+            "protocol": {
+              "a": true,
+              "h": "Protocol",
+              "n": "protocol",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "sans",
-              "req": false,
-              "type": "`$ARRAY`"
+            "sans": {
+              "a": true,
+              "h": "Sans",
+              "n": "sans",
+              "r": false,
+              "t": "`$ARRAY`"
             },
-            {
-              "active": true,
-              "name": "subject",
-              "req": false,
-              "type": "`$STRING`"
+            "subject": {
+              "a": true,
+              "h": "Subject",
+              "n": "subject",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "valid",
-              "req": false,
-              "type": "`$BOOLEAN`"
+            "valid": {
+              "a": true,
+              "h": "Valid",
+              "n": "valid",
+              "r": false,
+              "t": "`$BOOLEAN`"
             }
-          ],
+          },
           "name": "ssl",
           "op": {
             "list": {
@@ -894,50 +1003,50 @@
               "name": "list",
               "points": [
                 {
-                  "active": true,
-                  "args": {
+                  "a": true,
+                  "co": {
+                    "id": "GET /ssl",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
                     "query": [
                       {
-                        "active": true,
-                        "example": "example.com",
-                        "kind": "query",
-                        "name": "domain",
-                        "orig": "domain",
-                        "reqd": true,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "example.com",
+                        "k": "query",
+                        "n": "domain",
+                        "or": "domain",
+                        "r": true,
+                        "t": "`$STRING`"
                       },
                       {
-                        "active": true,
-                        "example": 443,
-                        "kind": "query",
-                        "name": "port",
-                        "orig": "port",
-                        "reqd": false,
-                        "type": "`$INTEGER`"
+                        "a": true,
+                        "ex": 443,
+                        "k": "query",
+                        "n": "port",
+                        "or": "port",
+                        "r": false,
+                        "t": "`$INTEGER`"
                       }
                     ]
                   },
-                  "contract": {
-                    "id": "GET /ssl",
-                    "json": "{\"operationId\":\"sslCheck\",\"parameters\":[{\"description\":\"Domain to inspect\",\"in\":\"query\",\"name\":\"domain\",\"required\":true,\"schema\":{\"example\":\"example.com\",\"type\":\"string\"}},{\"description\":\"Port to connect on\",\"in\":\"query\",\"name\":\"port\",\"required\":false,\"schema\":{\"default\":443,\"example\":443,\"type\":\"integer\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"example\":{\"cipher\":\"TLS_AES_256_GCM_SHA384\",\"days_remaining\":180,\"domain\":\"example.com\",\"expires_at\":\"2025-01-15T12:00:00Z\",\"grade\":\"A\",\"issuer\":\"DigiCert Inc\",\"protocol\":\"TLSv1.3\",\"sans\":[\"example.com\",\"www.example.com\"],\"subject\":\"example.com\",\"valid\":true},\"schema\":{\"properties\":{\"cipher\":{\"nullable\":true,\"type\":\"string\"},\"days_remaining\":{\"type\":\"integer\"},\"domain\":{\"type\":\"string\"},\"expires_at\":{\"format\":\"date-time\",\"nullable\":true,\"type\":\"string\"},\"grade\":{\"example\":\"A\",\"type\":\"string\"},\"issuer\":{\"nullable\":true,\"type\":\"string\"},\"protocol\":{\"example\":\"TLSv1.3\",\"nullable\":true,\"type\":\"string\"},\"sans\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"subject\":{\"nullable\":true,\"type\":\"string\"},\"valid\":{\"type\":\"boolean\"}},\"type\":\"object\"}}},\"description\":\"SSL certificate data\"},\"401\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"X-API-Key header required\",\"signup_url\":\"https://kiprio.com/signup\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Missing or invalid API key\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[{\"ApiKeyHeader\":[]}],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
-                    "source": "openapi3",
-                    "version": 1
-                  },
-                  "kind": "http",
-                  "method": "GET",
-                  "orig": "/ssl",
-                  "segments": [
-                    {
-                      "lit": "ssl"
-                    }
-                  ],
-                  "select": {
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/ssl",
+                  "q": {
                     "exist": [
                       "domain",
                       "port"
                     ]
                   },
-                  "transform": {
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "ssl"
+                    }
+                  ],
+                  "t": {
                     "req": "`reqdata`",
                     "res": "`body.sans`"
                   }
@@ -954,32 +1063,36 @@
           "alias": {
             "field": {}
           },
-          "fields": [
-            {
-              "active": true,
-              "name": "algo",
-              "req": false,
-              "type": "`$STRING`"
+          "fields": {
+            "algo": {
+              "a": true,
+              "h": "Algo",
+              "n": "algo",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "hash",
-              "req": false,
-              "type": "`$STRING`"
+            "hash": {
+              "a": true,
+              "h": "Hash",
+              "n": "hash",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "input",
-              "req": false,
-              "type": "`$STRING`"
+            "input": {
+              "a": true,
+              "h": "Input",
+              "n": "input",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "length",
-              "req": false,
-              "type": "`$INTEGER`"
+            "length": {
+              "a": true,
+              "h": "Length",
+              "n": "length",
+              "r": false,
+              "t": "`$INTEGER`"
             }
-          ],
+          },
           "name": "utility",
           "op": {
             "load": {
@@ -987,50 +1100,50 @@
               "name": "load",
               "points": [
                 {
-                  "active": true,
-                  "args": {
+                  "a": true,
+                  "co": {
+                    "id": "GET /hash",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
                     "query": [
                       {
-                        "active": true,
-                        "example": "sha256",
-                        "kind": "query",
-                        "name": "algo",
-                        "orig": "algo",
-                        "reqd": false,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "sha256",
+                        "k": "query",
+                        "n": "algo",
+                        "or": "algo",
+                        "r": false,
+                        "t": "`$STRING`"
                       },
                       {
-                        "active": true,
-                        "example": "hello world",
-                        "kind": "query",
-                        "name": "input",
-                        "orig": "input",
-                        "reqd": true,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "hello world",
+                        "k": "query",
+                        "n": "input",
+                        "or": "input",
+                        "r": true,
+                        "t": "`$STRING`"
                       }
                     ]
                   },
-                  "contract": {
-                    "id": "GET /hash",
-                    "json": "{\"operationId\":\"hashGet\",\"parameters\":[{\"description\":\"String to hash\",\"in\":\"query\",\"name\":\"input\",\"required\":true,\"schema\":{\"example\":\"hello world\",\"type\":\"string\"}},{\"description\":\"Hash algorithm\",\"in\":\"query\",\"name\":\"algo\",\"required\":false,\"schema\":{\"default\":\"sha256\",\"enum\":[\"md5\",\"sha1\",\"sha256\",\"sha384\",\"sha512\",\"sha3-256\",\"sha3-512\"],\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"algo\":{\"type\":\"string\"},\"hash\":{\"type\":\"string\"},\"input\":{\"type\":\"string\"},\"length\":{\"type\":\"integer\"}},\"type\":\"object\"}}},\"description\":\"Hash result\"}},\"security\":[],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"operation\"}",
-                    "source": "openapi3",
-                    "version": 1
-                  },
-                  "kind": "http",
-                  "method": "GET",
-                  "orig": "/hash",
-                  "segments": [
-                    {
-                      "lit": "hash"
-                    }
-                  ],
-                  "select": {
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/hash",
+                  "q": {
                     "exist": [
                       "algo",
                       "input"
                     ]
                   },
-                  "transform": {
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "hash"
+                    }
+                  ],
+                  "t": {
                     "req": "`reqdata`",
                     "res": "`body`"
                   }
@@ -1047,59 +1160,67 @@
           "alias": {
             "field": {}
           },
-          "fields": [
-            {
-              "active": true,
-              "format": "date-time",
-              "name": "created",
-              "req": false,
-              "type": "`$STRING`"
+          "fields": {
+            "created": {
+              "a": true,
+              "fo": "date-time",
+              "h": "Created",
+              "n": "created",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "domain",
-              "req": false,
-              "type": "`$STRING`"
+            "domain": {
+              "a": true,
+              "h": "Domain",
+              "n": "domain",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "format": "date-time",
-              "name": "expires",
-              "req": false,
-              "type": "`$STRING`"
+            "expires": {
+              "a": true,
+              "fo": "date-time",
+              "h": "Expires",
+              "n": "expires",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "nameservers",
-              "req": false,
-              "type": "`$ARRAY`"
+            "nameservers": {
+              "a": true,
+              "h": "Nameservers",
+              "n": "nameservers",
+              "r": false,
+              "t": "`$ARRAY`"
             },
-            {
-              "active": true,
-              "name": "registered",
-              "req": false,
-              "type": "`$BOOLEAN`"
+            "registered": {
+              "a": true,
+              "h": "Registered",
+              "n": "registered",
+              "r": false,
+              "t": "`$BOOLEAN`"
             },
-            {
-              "active": true,
-              "name": "registrar",
-              "req": false,
-              "type": "`$STRING`"
+            "registrar": {
+              "a": true,
+              "h": "Registrar",
+              "n": "registrar",
+              "r": false,
+              "t": "`$STRING`"
             },
-            {
-              "active": true,
-              "name": "status",
-              "req": false,
-              "type": "`$ARRAY`"
+            "status": {
+              "a": true,
+              "h": "Status",
+              "n": "status",
+              "r": false,
+              "t": "`$ARRAY`"
             },
-            {
-              "active": true,
-              "format": "date-time",
-              "name": "updated",
-              "req": false,
-              "type": "`$STRING`"
+            "updated": {
+              "a": true,
+              "fo": "date-time",
+              "h": "Updated",
+              "n": "updated",
+              "r": false,
+              "t": "`$STRING`"
             }
-          ],
+          },
           "name": "whoi",
           "op": {
             "list": {
@@ -1107,40 +1228,40 @@
               "name": "list",
               "points": [
                 {
-                  "active": true,
-                  "args": {
+                  "a": true,
+                  "co": {
+                    "id": "GET /whois",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
                     "query": [
                       {
-                        "active": true,
-                        "example": "example.com",
-                        "kind": "query",
-                        "name": "domain",
-                        "orig": "domain",
-                        "reqd": true,
-                        "type": "`$STRING`"
+                        "a": true,
+                        "ex": "example.com",
+                        "k": "query",
+                        "n": "domain",
+                        "or": "domain",
+                        "r": true,
+                        "t": "`$STRING`"
                       }
                     ]
                   },
-                  "contract": {
-                    "id": "GET /whois",
-                    "json": "{\"operationId\":\"whoisLookup\",\"parameters\":[{\"description\":\"Domain name to look up\",\"in\":\"query\",\"name\":\"domain\",\"required\":true,\"schema\":{\"example\":\"example.com\",\"type\":\"string\"}}],\"protocol\":\"http\",\"responses\":{\"200\":{\"content\":{\"application/json\":{\"example\":{\"created\":\"1995-08-14T04:00:00Z\",\"domain\":\"example.com\",\"expires\":\"2024-08-13T04:00:00Z\",\"nameservers\":[\"a.iana-servers.net\",\"b.iana-servers.net\"],\"registered\":true,\"registrar\":\"RESERVED-Internet Assigned Numbers Authority\",\"status\":[\"client delete prohibited\"],\"updated\":\"2023-08-14T07:01:34Z\"},\"schema\":{\"properties\":{\"created\":{\"format\":\"date-time\",\"nullable\":true,\"type\":\"string\"},\"domain\":{\"example\":\"example.com\",\"type\":\"string\"},\"expires\":{\"format\":\"date-time\",\"nullable\":true,\"type\":\"string\"},\"nameservers\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"registered\":{\"nullable\":true,\"type\":\"boolean\"},\"registrar\":{\"nullable\":true,\"type\":\"string\"},\"status\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"updated\":{\"format\":\"date-time\",\"nullable\":true,\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"WHOIS data\"},\"401\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"X-API-Key header required\",\"signup_url\":\"https://kiprio.com/signup\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Missing or invalid API key\"},\"404\":{\"content\":{\"application/json\":{\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Resource not found\"},\"429\":{\"content\":{\"application/json\":{\"example\":{\"error\":\"rate limit: 30 req/min exceeded\"},\"schema\":{\"properties\":{\"error\":{\"type\":\"string\"},\"signup_url\":{\"format\":\"uri\",\"type\":\"string\"}},\"type\":\"object\"}}},\"description\":\"Rate limit exceeded\",\"headers\":{\"Retry-After\":{\"description\":\"Seconds until the rate limit resets\",\"schema\":{\"type\":\"integer\"}}}}},\"security\":[{\"ApiKeyHeader\":[]}],\"securitySchemes\":{\"ApiKeyHeader\":{\"description\":\"Get your free API key at https://kiprio.com/signup\",\"in\":\"header\",\"name\":\"X-API-Key\",\"type\":\"apiKey\"},\"ApiKeyQuery\":{\"in\":\"query\",\"name\":\"api_key\",\"type\":\"apiKey\"}},\"securitySource\":\"definition\"}",
-                    "source": "openapi3",
-                    "version": 1
-                  },
-                  "kind": "http",
-                  "method": "GET",
-                  "orig": "/whois",
-                  "segments": [
-                    {
-                      "lit": "whois"
-                    }
-                  ],
-                  "select": {
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/whois",
+                  "q": {
                     "exist": [
                       "domain"
                     ]
                   },
-                  "transform": {
+                  "r": {},
+                  "s": [
+                    {
+                      "lit": "whois"
+                    }
+                  ],
+                  "t": {
                     "req": "`reqdata`",
                     "res": "`body`"
                   }
@@ -1569,17 +1690,17 @@
           "param": {},
           "step": [
             {
-              "active": true,
-              "data": {},
-              "input": {
+              "a": true,
+              "d": {},
+              "i": {
                 "ref": "dns_result_ref01",
                 "srcdatavar": "dns_result_ref01_data",
                 "suffix": "_dt0"
               },
-              "match": {},
-              "op": "load",
-              "spec": [],
-              "valid": [
+              "m": {},
+              "o": "load",
+              "s": [],
+              "v": [
                 {
                   "apply": "TextFieldMark",
                   "def": {
@@ -1599,13 +1720,13 @@
           "param": {},
           "step": [
             {
-              "active": true,
-              "data": {},
-              "input": {},
-              "match": {},
-              "op": "list",
-              "spec": [],
-              "valid": [
+              "a": true,
+              "d": {},
+              "i": {},
+              "m": {},
+              "o": "list",
+              "s": [],
+              "v": [
                 {
                   "apply": "ItemExists",
                   "def": {
@@ -1625,17 +1746,17 @@
           "param": {},
           "step": [
             {
-              "active": true,
-              "data": {},
-              "input": {
+              "a": true,
+              "d": {},
+              "i": {
                 "ref": "email_validate_ref01",
                 "srcdatavar": "email_validate_ref01_data",
                 "suffix": "_dt0"
               },
-              "match": {},
-              "op": "load",
-              "spec": [],
-              "valid": [
+              "m": {},
+              "o": "load",
+              "s": [],
+              "v": [
                 {
                   "apply": "TextFieldMark",
                   "def": {
@@ -1655,17 +1776,17 @@
           "param": {},
           "step": [
             {
-              "active": true,
-              "data": {},
-              "input": {
+              "a": true,
+              "d": {},
+              "i": {
                 "ref": "generate_ref01",
                 "srcdatavar": "generate_ref01_data",
                 "suffix": "_dt0"
               },
-              "match": {},
-              "op": "load",
-              "spec": [],
-              "valid": [
+              "m": {},
+              "o": "load",
+              "s": [],
+              "v": [
                 {
                   "apply": "TextFieldMark",
                   "def": {
@@ -1685,15 +1806,15 @@
           "param": {},
           "step": [
             {
-              "active": true,
-              "data": {},
-              "input": {
+              "a": true,
+              "d": {},
+              "i": {
                 "ref": "grammar_ref01"
               },
-              "match": {},
-              "op": "create",
-              "spec": [],
-              "valid": []
+              "m": {},
+              "o": "create",
+              "s": [],
+              "v": []
             }
           ]
         },
@@ -1706,17 +1827,17 @@
           "param": {},
           "step": [
             {
-              "active": true,
-              "data": {},
-              "input": {
+              "a": true,
+              "d": {},
+              "i": {
                 "ref": "ipn_ref01",
                 "srcdatavar": "ipn_ref01_data",
                 "suffix": "_dt0"
               },
-              "match": {},
-              "op": "load",
-              "spec": [],
-              "valid": [
+              "m": {},
+              "o": "load",
+              "s": [],
+              "v": [
                 {
                   "apply": "TextFieldMark",
                   "def": {
@@ -1736,15 +1857,15 @@
           "param": {},
           "step": [
             {
-              "active": true,
-              "data": {},
-              "input": {
+              "a": true,
+              "d": {},
+              "i": {
                 "ref": "redact_ref01"
               },
-              "match": {},
-              "op": "create",
-              "spec": [],
-              "valid": []
+              "m": {},
+              "o": "create",
+              "s": [],
+              "v": []
             }
           ]
         },
@@ -1757,13 +1878,13 @@
           "param": {},
           "step": [
             {
-              "active": true,
-              "data": {},
-              "input": {},
-              "match": {},
-              "op": "list",
-              "spec": [],
-              "valid": [
+              "a": true,
+              "d": {},
+              "i": {},
+              "m": {},
+              "o": "list",
+              "s": [],
+              "v": [
                 {
                   "apply": "ItemExists",
                   "def": {
@@ -1783,17 +1904,17 @@
           "param": {},
           "step": [
             {
-              "active": true,
-              "data": {},
-              "input": {
+              "a": true,
+              "d": {},
+              "i": {
                 "ref": "utility_ref01",
                 "srcdatavar": "utility_ref01_data",
                 "suffix": "_dt0"
               },
-              "match": {},
-              "op": "load",
-              "spec": [],
-              "valid": [
+              "m": {},
+              "o": "load",
+              "s": [],
+              "v": [
                 {
                   "apply": "TextFieldMark",
                   "def": {
@@ -1813,13 +1934,13 @@
           "param": {},
           "step": [
             {
-              "active": true,
-              "data": {},
-              "input": {},
-              "match": {},
-              "op": "list",
-              "spec": [],
-              "valid": [
+              "a": true,
+              "d": {},
+              "i": {},
+              "m": {},
+              "o": "list",
+              "s": [],
+              "v": [
                 {
                   "apply": "ItemExists",
                   "def": {

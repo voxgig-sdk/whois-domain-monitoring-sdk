@@ -1,0 +1,126 @@
+# Entity: ssl
+
+main: kit: entity: ssl: {
+
+  alias: field: {}
+
+  fields: {
+    cipher: {
+      h: "Cipher"
+      n: "cipher"
+      r: false
+      t: "`$STRING`"
+    }
+    days_remaining: {
+      h: "Days Remaining"
+      n: "days_remaining"
+      r: false
+      t: "`$INTEGER`"
+    }
+    domain: {
+      h: "Domain"
+      n: "domain"
+      r: false
+      t: "`$STRING`"
+    }
+    expires_at: {
+      fo: "date-time"
+      h: "Expires At"
+      n: "expires_at"
+      r: false
+      t: "`$STRING`"
+    }
+    grade: {
+      h: "Grade"
+      n: "grade"
+      r: false
+      t: "`$STRING`"
+    }
+    issuer: {
+      h: "Issuer"
+      n: "issuer"
+      r: false
+      t: "`$STRING`"
+    }
+    protocol: {
+      h: "Protocol"
+      n: "protocol"
+      r: false
+      t: "`$STRING`"
+    }
+    sans: {
+      h: "Sans"
+      n: "sans"
+      r: false
+      t: "`$ARRAY`"
+    }
+    subject: {
+      h: "Subject"
+      n: "subject"
+      r: false
+      t: "`$STRING`"
+    }
+    valid: {
+      h: "Valid"
+      n: "valid"
+      r: false
+      t: "`$BOOLEAN`"
+    }
+  }
+
+  name: "ssl"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /ssl"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "example.com"
+                k: "query"
+                n: "domain"
+                or: "domain"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: 443
+                k: "query"
+                n: "port"
+                or: "port"
+                r: false
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/ssl"
+          q: {
+            exist: [
+              "domain"
+              "port"
+            ]
+          }
+          s: [
+            {
+              lit: "ssl"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.sans`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

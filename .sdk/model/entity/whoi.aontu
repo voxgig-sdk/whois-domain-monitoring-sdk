@@ -1,0 +1,107 @@
+# Entity: whoi
+
+main: kit: entity: whoi: {
+
+  alias: field: {}
+
+  fields: {
+    created: {
+      fo: "date-time"
+      h: "Created"
+      n: "created"
+      r: false
+      t: "`$STRING`"
+    }
+    domain: {
+      h: "Domain"
+      n: "domain"
+      r: false
+      t: "`$STRING`"
+    }
+    expires: {
+      fo: "date-time"
+      h: "Expires"
+      n: "expires"
+      r: false
+      t: "`$STRING`"
+    }
+    nameservers: {
+      h: "Nameservers"
+      n: "nameservers"
+      r: false
+      t: "`$ARRAY`"
+    }
+    registered: {
+      h: "Registered"
+      n: "registered"
+      r: false
+      t: "`$BOOLEAN`"
+    }
+    registrar: {
+      h: "Registrar"
+      n: "registrar"
+      r: false
+      t: "`$STRING`"
+    }
+    status: {
+      h: "Status"
+      n: "status"
+      r: false
+      t: "`$ARRAY`"
+    }
+    updated: {
+      fo: "date-time"
+      h: "Updated"
+      n: "updated"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  name: "whoi"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /whois"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "example.com"
+                k: "query"
+                n: "domain"
+                or: "domain"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/whois"
+          q: {
+            exist: [
+              "domain"
+            ]
+          }
+          s: [
+            {
+              lit: "whois"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

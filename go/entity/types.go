@@ -1,7 +1,7 @@
 // Typed models for the WhoisDomainMonitoring SDK.
 //
-// GENERATED from the API model: main.kit.entity.<e>.fields[] and per-op
-// params (op.<name>.points[].args.params[]). Field/param types come from the
+// GENERATED from the API model: main.kit.entity.<e>.fields{} and per-op
+// params (op.<name>.points[].g.params[]). Field/param types come from the
 // canonical type sentinels via @voxgig/sdkgen canonToType (source of truth:
 // @voxgig/apidef VALID_CANON). Do not edit by hand.
 package entity
@@ -14,8 +14,6 @@ import (
 
 // DnsResult is the typed data model for the dns_result entity.
 type DnsResult struct {
-	Domain *string `json:"domain,omitempty"`
-	Records *map[string]any `json:"records,omitempty"`
 }
 
 // DnsResultLoadMatch is the typed request payload for DnsResult.LoadTyped.
@@ -26,9 +24,6 @@ type DnsResultLoadMatch struct {
 
 // Domain is the typed data model for the domain entity.
 type Domain struct {
-	Agents *map[string]any `json:"agents,omitempty"`
-	Sitemaps *[]any `json:"sitemaps,omitempty"`
-	Url *string `json:"url,omitempty"`
 }
 
 // DomainListMatch is the typed request payload for Domain.ListTyped.
@@ -38,15 +33,6 @@ type DomainListMatch struct {
 
 // EmailValidate is the typed data model for the email_validate entity.
 type EmailValidate struct {
-	Confidence *float64 `json:"confidence,omitempty"`
-	Disposable *bool `json:"disposable,omitempty"`
-	Email *string `json:"email,omitempty"`
-	FreeProvider *bool `json:"free_provider,omitempty"`
-	MxFound *bool `json:"mx_found,omitempty"`
-	RoleBased *bool `json:"role_based,omitempty"`
-	Suggest *string `json:"suggest,omitempty"`
-	SyntaxOk *bool `json:"syntax_ok,omitempty"`
-	Valid *bool `json:"valid,omitempty"`
 }
 
 // EmailValidateLoadMatch is the typed request payload for EmailValidate.LoadTyped.
@@ -70,10 +56,6 @@ type GenerateLoadMatch struct {
 
 // Grammar is the typed data model for the grammar entity.
 type Grammar struct {
-	CorrectionCount *int `json:"correction_count,omitempty"`
-	Corrections *[]any `json:"corrections,omitempty"`
-	Language *string `json:"language,omitempty"`
-	Text *string `json:"text,omitempty"`
 }
 
 // GrammarCreateData is the typed request payload for Grammar.CreateTyped.
@@ -86,15 +68,6 @@ type GrammarCreateData struct {
 
 // Ipn is the typed data model for the ipn entity.
 type Ipn struct {
-	Asn *string `json:"asn,omitempty"`
-	City *string `json:"city,omitempty"`
-	Country *string `json:"country,omitempty"`
-	CountryCode *string `json:"country_code,omitempty"`
-	Ip *string `json:"ip,omitempty"`
-	Latitude *float64 `json:"latitude,omitempty"`
-	Longitude *float64 `json:"longitude,omitempty"`
-	Org *string `json:"org,omitempty"`
-	Timezone *string `json:"timezone,omitempty"`
 }
 
 // IpnLoadMatch is the typed request payload for Ipn.LoadTyped.
@@ -104,12 +77,6 @@ type IpnLoadMatch struct {
 
 // Redact is the typed data model for the redact entity.
 type Redact struct {
-	Counts *map[string]any `json:"counts,omitempty"`
-	Entities *[]any `json:"entities,omitempty"`
-	OriginalLength *int `json:"original_length,omitempty"`
-	Redact *string `json:"redact,omitempty"`
-	Redacted *string `json:"redacted,omitempty"`
-	Text string `json:"text"`
 }
 
 // RedactCreateData is the typed request payload for Redact.CreateTyped.
@@ -124,16 +91,6 @@ type RedactCreateData struct {
 
 // Ssl is the typed data model for the ssl entity.
 type Ssl struct {
-	Cipher *string `json:"cipher,omitempty"`
-	DaysRemaining *int `json:"days_remaining,omitempty"`
-	Domain *string `json:"domain,omitempty"`
-	ExpiresAt *string `json:"expires_at,omitempty"`
-	Grade *string `json:"grade,omitempty"`
-	Issuer *string `json:"issuer,omitempty"`
-	Protocol *string `json:"protocol,omitempty"`
-	Sans *[]any `json:"sans,omitempty"`
-	Subject *string `json:"subject,omitempty"`
-	Valid *bool `json:"valid,omitempty"`
 }
 
 // SslListMatch is the typed request payload for Ssl.ListTyped.
@@ -144,10 +101,6 @@ type SslListMatch struct {
 
 // Utility is the typed data model for the utility entity.
 type Utility struct {
-	Algo *string `json:"algo,omitempty"`
-	Hash *string `json:"hash,omitempty"`
-	Input *string `json:"input,omitempty"`
-	Length *int `json:"length,omitempty"`
 }
 
 // UtilityLoadMatch is the typed request payload for Utility.LoadTyped.
@@ -158,14 +111,6 @@ type UtilityLoadMatch struct {
 
 // Whoi is the typed data model for the whoi entity.
 type Whoi struct {
-	Created *string `json:"created,omitempty"`
-	Domain *string `json:"domain,omitempty"`
-	Expires *string `json:"expires,omitempty"`
-	Nameservers *[]any `json:"nameservers,omitempty"`
-	Registered *bool `json:"registered,omitempty"`
-	Registrar *string `json:"registrar,omitempty"`
-	Status *[]any `json:"status,omitempty"`
-	Updated *string `json:"updated,omitempty"`
 }
 
 // WhoiListMatch is the typed request payload for Whoi.ListTyped.

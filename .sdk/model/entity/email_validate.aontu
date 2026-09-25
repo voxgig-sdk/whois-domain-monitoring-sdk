@@ -1,0 +1,113 @@
+# Entity: email_validate
+
+main: kit: entity: email_validate: {
+
+  alias: field: {}
+
+  fields: {
+    confidence: {
+      fo: "float"
+      h: "Confidence"
+      n: "confidence"
+      r: false
+      t: "`$NUMBER`"
+    }
+    disposable: {
+      h: "Disposable"
+      n: "disposable"
+      r: false
+      t: "`$BOOLEAN`"
+    }
+    email: {
+      fo: "email"
+      h: "Email"
+      n: "email"
+      r: false
+      t: "`$STRING`"
+    }
+    free_provider: {
+      h: "Free Provider"
+      n: "free_provider"
+      r: false
+      t: "`$BOOLEAN`"
+    }
+    mx_found: {
+      h: "Mx Found"
+      n: "mx_found"
+      r: false
+      t: "`$BOOLEAN`"
+    }
+    role_based: {
+      h: "Role Based"
+      n: "role_based"
+      r: false
+      t: "`$BOOLEAN`"
+    }
+    suggest: {
+      h: "Suggest"
+      n: "suggest"
+      r: false
+      sh: "Suggested correction for typos"
+      t: "`$STRING`"
+    }
+    syntax_ok: {
+      h: "Syntax Ok"
+      n: "syntax_ok"
+      r: false
+      t: "`$BOOLEAN`"
+    }
+    valid: {
+      h: "Valid"
+      n: "valid"
+      r: false
+      t: "`$BOOLEAN`"
+    }
+  }
+
+  name: "email_validate"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /email-validate"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "user@example.com"
+                k: "query"
+                n: "email"
+                or: "email"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/email-validate"
+          q: {
+            exist: [
+              "email"
+            ]
+          }
+          s: [
+            {
+              lit: "email-validate"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

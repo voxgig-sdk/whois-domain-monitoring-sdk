@@ -19,7 +19,6 @@ import type {
   SslListMatch,
 } from '../WhoisDomainMonitoringTypes'
 
-// TODO: needs Entity superclass
 class SslEntity extends WhoisDomainMonitoringEntityBase<Ssl> {
 
   constructor(client: WhoisDomainMonitoringSDK, entopts: any) {
