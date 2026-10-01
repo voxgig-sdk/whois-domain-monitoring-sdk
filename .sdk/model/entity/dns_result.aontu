@@ -44,7 +44,7 @@ main: kit: entity: dns_result: {
                 ex: "A,MX,TXT"
                 k: "query"
                 n: "type"
-                or: "type"
+                or: "types"
                 r: false
                 t: "`$STRING`"
               }
@@ -65,7 +65,7 @@ main: kit: entity: dns_result: {
           ]
           t: {
             req: "`reqdata`"
-            res: "`body.records`"
+            res: "`body`"
           }
         }
       ]

@@ -33,6 +33,8 @@ require_relative 'transform_response'
 
 WhoisDomainMonitoringUtility.registrar = ->(u) {
   u.clean = WhoisDomainMonitoringUtilities::Clean
+  u.clean_add = WhoisDomainMonitoringUtilities::CleanAdd
+  u.clean_explain = WhoisDomainMonitoringUtilities::CleanExplain
   u.done = WhoisDomainMonitoringUtilities::Done
   u.make_error = WhoisDomainMonitoringUtilities::MakeError
   u.feature_add = WhoisDomainMonitoringUtilities::FeatureAdd

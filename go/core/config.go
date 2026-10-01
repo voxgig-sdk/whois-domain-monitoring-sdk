@@ -134,7 +134,7 @@ func MakeConfig() map[string]any {
 								"rename": map[string]any{},
 								"transform": map[string]any{
 									"req": "`reqdata`",
-									"res": "`body.records`",
+									"res": "`body`",
 								},
 								"args": map[string]any{
 									"query": []any{
@@ -148,7 +148,7 @@ func MakeConfig() map[string]any {
 										},
 										map[string]any{
 											"name": "type",
-											"orig": "type",
+											"orig": "types",
 											"type": "`$STRING`",
 											"kind": "query",
 											"example": "A,MX,TXT",
@@ -760,9 +760,7 @@ func MakeConfig() map[string]any {
 								},
 								"rename": map[string]any{},
 								"transform": map[string]any{
-									"req": map[string]any{
-										"redact": "`reqdata`",
-									},
+									"req": "`reqdata`",
 									"res": "`body`",
 								},
 								"args": map[string]any{},

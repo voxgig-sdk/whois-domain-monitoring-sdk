@@ -37,6 +37,8 @@ require_once __DIR__ . '/TransformResponse.php';
 
 WhoisDomainMonitoringUtility::setRegistrar(function (WhoisDomainMonitoringUtility $u): void {
     $u->clean = [WhoisDomainMonitoringClean::class, 'call'];
+    $u->clean_add = [WhoisDomainMonitoringClean::class, 'add'];
+    $u->clean_explain = [WhoisDomainMonitoringDone::class, 'clean_explain'];
     $u->done = [WhoisDomainMonitoringDone::class, 'call'];
     $u->make_error = [WhoisDomainMonitoringMakeError::class, 'call'];
     $u->feature_add = [WhoisDomainMonitoringFeatureAdd::class, 'call'];

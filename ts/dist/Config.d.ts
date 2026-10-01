@@ -469,9 +469,7 @@ declare class Config {
                         parts: string[];
                         rename: {};
                         transform: {
-                            req: {
-                                redact: string;
-                            };
+                            req: string;
                             res: string;
                         };
                         args: {};

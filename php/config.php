@@ -156,7 +156,7 @@ class WhoisDomainMonitoringConfig
                   'rename' => [],
                   'transform' => [
                     'req' => '`reqdata`',
-                    'res' => '`body.records`',
+                    'res' => '`body`',
                   ],
                   'args' => [
                     'query' => [
@@ -170,7 +170,7 @@ class WhoisDomainMonitoringConfig
                       ],
                       [
                         'name' => 'type',
-                        'orig' => 'type',
+                        'orig' => 'types',
                         'type' => '`$STRING`',
                         'kind' => 'query',
                         'example' => 'A,MX,TXT',
@@ -782,9 +782,7 @@ class WhoisDomainMonitoringConfig
                   ],
                   'rename' => [],
                   'transform' => [
-                    'req' => [
-                      'redact' => '`reqdata`',
-                    ],
+                    'req' => '`reqdata`',
                     'res' => '`body`',
                   ],
                   'args' => [],

@@ -150,7 +150,7 @@ class Config {
                             "rename": {},
                             "transform": {
                                 "req": "`reqdata`",
-                                "res": "`body.records`"
+                                "res": "`body`"
                             },
                             "args": {
                                 "query": [
@@ -164,7 +164,7 @@ class Config {
                                     },
                                     {
                                         "name": "type",
-                                        "orig": "type",
+                                        "orig": "types",
                                         "type": "`$STRING`",
                                         "kind": "query",
                                         "example": "A,MX,TXT"
@@ -776,9 +776,7 @@ class Config {
                             ],
                             "rename": {},
                             "transform": {
-                                "req": {
-                                    "redact": "`reqdata`"
-                                },
+                                "req": "`reqdata`",
                                 "res": "`body`"
                             },
                             "args": {},

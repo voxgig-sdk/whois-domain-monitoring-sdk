@@ -65,9 +65,7 @@ main: kit: entity: redact: {
             }
           ]
           t: {
-            req: {
-              redact: "`reqdata`"
-            }
+            req: "`reqdata`"
             res: "`body`"
           }
         }

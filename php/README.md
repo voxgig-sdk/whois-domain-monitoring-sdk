@@ -12,9 +12,14 @@ The SDK exposes the API as capitalised, semantic **Entities** — for example `$
 
 ## Install
 This package is not yet published to Packagist. Install it from the
-GitHub release tag (`php/vX.Y.Z`):
+GitHub release tag (`php/vX.Y.Z`, see [Releases](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases)), or
+from a clone as a Composer path repository:
 
-- Releases: [https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases)
+```bash
+git clone https://github.com/voxgig-sdk/whois-domain-monitoring-sdk
+composer config repositories.whois-domain-monitoring-sdk path ./whois-domain-monitoring-sdk/php
+composer require voxgig-sdk/whois-domain-monitoring-sdk:@dev
+```
 
 
 ## Tutorial: your first API call
