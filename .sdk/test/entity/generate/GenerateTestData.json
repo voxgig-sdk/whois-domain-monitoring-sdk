@@ -18,12 +18,12 @@
     }
   },
   "requests": {
-    "GET /qr": {
+    "GET /barcode": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"
     },
-    "GET /barcode": {
+    "GET /qr": {
       "provenance": "operation-contract",
       "version": 2,
       "source": "openapi3"

@@ -17,12 +17,26 @@ const PLAN: any[] = [
     "args": [],
     "select": {
       "domain": "example.com",
-      "type": "v1"
+      "type": "A,MX,TXT"
     },
     "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/json"
+    ],
     "query": [
       "domain",
       "types"
+    ],
+    "queryArgs": [
+      {
+        "name": "domain",
+        "wire": "domain"
+      },
+      {
+        "name": "type",
+        "wire": "types"
+      }
     ],
     "auth": [
       [
@@ -64,8 +78,18 @@ const PLAN: any[] = [
       "url": "https://example.com"
     },
     "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/json"
+    ],
     "query": [
       "url"
+    ],
+    "queryArgs": [
+      {
+        "name": "url",
+        "wire": "url"
+      }
     ],
     "auth": [
       [
@@ -96,8 +120,18 @@ const PLAN: any[] = [
       "email": "user@example.com"
     },
     "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/json"
+    ],
     "query": [
       "email"
+    ],
+    "queryArgs": [
+      {
+        "name": "email",
+        "wire": "email"
+      }
     ],
     "auth": [
       [
@@ -126,45 +160,21 @@ const PLAN: any[] = [
     "accessor": "Generate",
     "op": "load",
     "method": "GET",
-    "path": "/qr",
-    "args": [],
-    "select": {
-      "bg": "#ffffff",
-      "ec_level": "v1",
-      "fg": "#000000",
-      "format": "v1",
-      "size": "v1",
-      "url": "https://example.com"
-    },
-    "headers": [],
-    "query": [
-      "url",
-      "size",
-      "format",
-      "ec_level",
-      "fg",
-      "bg"
-    ],
-    "auth": [],
-    "status": 200,
-    "sample": null,
-    "idField": "id"
-  },
-  {
-    "entity": "generate",
-    "accessor": "Generate",
-    "op": "load",
-    "method": "GET",
     "path": "/barcode",
     "args": [],
     "select": {
       "data": "HELLO123",
-      "format": "v1",
-      "height": "v1",
-      "output": "v1",
-      "width": "v1"
+      "format": "code128",
+      "height": 120,
+      "output": "svg",
+      "width": 400
     },
     "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "image/svg+xml",
+      "image/png"
+    ],
     "query": [
       "data",
       "format",
@@ -172,37 +182,29 @@ const PLAN: any[] = [
       "width",
       "height"
     ],
+    "queryArgs": [
+      {
+        "name": "data",
+        "wire": "data"
+      },
+      {
+        "name": "format",
+        "wire": "format"
+      },
+      {
+        "name": "height",
+        "wire": "height"
+      },
+      {
+        "name": "output",
+        "wire": "output"
+      },
+      {
+        "name": "width",
+        "wire": "width"
+      }
+    ],
     "auth": [],
-    "status": 200,
-    "sample": null,
-    "idField": "id"
-  },
-  {
-    "entity": "generate",
-    "accessor": "Generate",
-    "op": "load",
-    "method": "GET",
-    "path": "/screenshot",
-    "args": [],
-    "select": {
-      "full_page": "v1",
-      "url": "https://example.com",
-      "width": "v1"
-    },
-    "headers": [],
-    "query": [
-      "url",
-      "width",
-      "full_page"
-    ],
-    "auth": [
-      [
-        {
-          "in": "header",
-          "name": "x-api-key"
-        }
-      ]
-    ],
     "status": 200,
     "sample": null,
     "idField": "id"
@@ -216,7 +218,12 @@ const PLAN: any[] = [
     "args": [],
     "select": {},
     "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/json"
+    ],
     "query": [],
+    "queryArgs": [],
     "auth": [
       [
         {
@@ -261,8 +268,18 @@ const PLAN: any[] = [
       "ip": "8.8.8.8"
     },
     "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/json"
+    ],
     "query": [
       "ip"
+    ],
+    "queryArgs": [
+      {
+        "name": "ip",
+        "wire": "ip"
+      }
     ],
     "auth": [],
     "status": 200,
@@ -288,7 +305,12 @@ const PLAN: any[] = [
     "args": [],
     "select": {},
     "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/json"
+    ],
     "query": [],
+    "queryArgs": [],
     "auth": [
       [
         {
@@ -327,9 +349,23 @@ const PLAN: any[] = [
       "port": 443
     },
     "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/json"
+    ],
     "query": [
       "domain",
       "port"
+    ],
+    "queryArgs": [
+      {
+        "name": "domain",
+        "wire": "domain"
+      },
+      {
+        "name": "port",
+        "wire": "port"
+      }
     ],
     "auth": [
       [
@@ -365,13 +401,27 @@ const PLAN: any[] = [
     "path": "/hash",
     "args": [],
     "select": {
-      "algo": "v1",
-      "input": "hello world"
+      "input": "hello world",
+      "algo": "sha256"
     },
     "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/json"
+    ],
     "query": [
       "input",
       "algo"
+    ],
+    "queryArgs": [
+      {
+        "name": "algo",
+        "wire": "algo"
+      },
+      {
+        "name": "input",
+        "wire": "input"
+      }
     ],
     "auth": [],
     "status": 200,
@@ -394,8 +444,18 @@ const PLAN: any[] = [
       "domain": "example.com"
     },
     "headers": [],
+    "cookies": [],
+    "responseMedia": [
+      "application/json"
+    ],
     "query": [
       "domain"
+    ],
+    "queryArgs": [
+      {
+        "name": "domain",
+        "wire": "domain"
+      }
     ],
     "auth": [
       [

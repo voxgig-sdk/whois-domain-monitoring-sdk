@@ -54,6 +54,14 @@ const utility_1 = require("../../utility");
         const ent = testsdk.Grammar();
         (0, node_assert_1.default)(null != ent);
     });
+    (0, node_test_1.test)('validate', async (t) => {
+        if (null == __1.config.feature?.validate) {
+            t.skip('feature not present in this SDK: validate');
+            return;
+        }
+        const client = __1.WhoisDomainMonitoringSDK.test(undefined, { feature: { validate: { active: true } } });
+        await node_assert_1.default.rejects(client.Grammar().create({ "language": 1, "text": "x" }), (err) => 'validate_failed' === err.code);
+    });
     (0, node_test_1.test)('basic', async (t) => {
         const live = 'TRUE' === process.env.WHOIS_DOMAIN_MONITORING_TEST_LIVE;
         for (const op of ['create']) {
@@ -62,7 +70,7 @@ const utility_1 = require("../../utility");
         }
         const setup = basicSetup();
         if (setup.live) {
-            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": { "correction_count": { "a": true, "h": "Correction Count", "n": "correction_count", "r": false, "t": "`$INTEGER`", "key$": "correction_count", "index$": 0 }, "corrections": { "a": true, "h": "Corrections", "n": "corrections", "r": false, "t": "`$ARRAY`", "key$": "corrections", "index$": 1 }, "language": { "a": true, "h": "Language", "n": "language", "r": false, "sh": "BCP 47 language tag", "t": "`$STRING`", "key$": "language", "index$": 2 }, "text": { "a": true, "h": "Text", "n": "text", "op": { "create": { "req": true, "type": "`$STRING`" } }, "r": false, "sh": "Text to check", "t": "`$STRING`", "key$": "text", "index$": 3 } }, "name": "grammar", "op": { "create": { "input": "data", "name": "create", "points": [{ "a": true, "co": { "id": "POST /grammar", "source": "openapi3", "version": 2 }, "g": {}, "k": "http", "m": "POST", "o": "/grammar", "q": {}, "r": {}, "s": [{ "lit": "grammar" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "create" } }, "relations": { "ancestors": [] }, "key$": "grammar", "name__orig": "grammar", "Name": "Grammar", "name_": "grammar", "name-": "grammar", "NAME": "GRAMMAR", "index$": 4 }, { "active": true, "entity": "grammar", "key$": "BasicGrammarFlow", "kind": "basic", "name": "BasicGrammarFlow", "param": {}, "step": [{ "a": true, "d": {}, "i": { "ref": "grammar_ref01" }, "m": {}, "o": "create", "s": [], "v": [], "index$": 0 }] }, 'Grammar', { "POST /grammar": { "protocol": "http", "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "required": ["text"], "properties": { "text": { "type": "string", "example": "Teh cat sat on teh mat.", "description": "Text to check", "key$": "text" }, "language": { "type": "string", "default": "en-US", "example": "en-GB", "description": "BCP 47 language tag", "key$": "language" } }, "index$": 1 } }, "application/x-www-form-urlencoded": { "schema": { "type": "object", "required": ["text"], "properties": { "text": { "type": "string" } } } } } }, "parameters": [] } });
+            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": { "correction_count": { "a": true, "h": "Correction Count", "n": "correction_count", "r": false, "t": "`$INTEGER`", "key$": "correction_count", "index$": 0 }, "corrections": { "a": true, "h": "Corrections", "n": "corrections", "r": false, "t": "`$ARRAY`", "key$": "corrections", "index$": 1 }, "language": { "a": true, "h": "Language", "n": "language", "r": false, "sh": "BCP 47 language tag", "t": "`$STRING`", "key$": "language", "index$": 2 }, "text": { "a": true, "h": "Text", "n": "text", "op": { "create": { "req": true, "type": "`$STRING`" } }, "r": false, "sh": "Text to check", "t": "`$STRING`", "key$": "text", "index$": 3 } }, "name": "grammar", "op": { "create": { "input": "data", "name": "create", "points": [{ "a": true, "bf": ["language", "text"], "co": { "id": "POST /grammar", "source": "openapi3", "version": 2 }, "g": {}, "k": "http", "m": "POST", "o": "/grammar", "q": {}, "r": {}, "rb": { "alternatives": [{ "fields": [{ "name": "text" }], "kind": "form", "media": "application/x-www-form-urlencoded" }], "kind": "json", "media": "application/json" }, "rs": { "kind": "json", "media": "application/json" }, "s": [{ "lit": "grammar" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "create" } }, "relations": { "ancestors": [] }, "key$": "grammar", "name__orig": "grammar", "Name": "Grammar", "name_": "grammar", "name-": "grammar", "NAME": "GRAMMAR", "index$": 4 }, { "active": true, "entity": "grammar", "key$": "BasicGrammarFlow", "kind": "basic", "name": "BasicGrammarFlow", "param": {}, "step": [{ "a": true, "d": {}, "i": { "ref": "grammar_ref01" }, "m": {}, "o": "create", "s": [], "v": [], "index$": 0 }] }, 'Grammar', { "POST /grammar": { "protocol": "http", "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "required": ["text"], "properties": { "text": { "type": "string", "example": "Teh cat sat on teh mat.", "description": "Text to check", "key$": "text" }, "language": { "type": "string", "default": "en-US", "example": "en-GB", "description": "BCP 47 language tag", "key$": "language" } }, "index$": 1 } }, "application/x-www-form-urlencoded": { "schema": { "type": "object", "required": ["text"], "properties": { "text": { "type": "string" } } } } } }, "parameters": [] } }, { strict: LIVE_STRICT, t });
         }
         const client = setup.client;
         const struct = setup.struct;
@@ -75,6 +83,11 @@ const utility_1 = require("../../utility");
         (0, node_assert_1.default)(null != grammar_ref01_data);
     });
 });
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true;
 function basicSetup(extra) {
     // TODO: fix test def options
     const options = {}; // null

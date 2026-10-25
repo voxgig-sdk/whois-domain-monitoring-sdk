@@ -136,7 +136,7 @@ $dns_result = $client->DnsResult();
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
 $result = $client->DnsResult()->load(["domain" => "domain"]);
@@ -190,10 +190,10 @@ $domain = $client->Domain();
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
 
 ```php
-$results = $client->Domain()->list();
+$results = $client->Domain()->list(["url" => "example"]);
 ```
 
 ### Common Methods
@@ -250,7 +250,7 @@ $email_validate = $client->EmailValidate();
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
 $result = $client->EmailValidate()->load(["email" => "email"]);
@@ -296,10 +296,10 @@ $generate = $client->Generate();
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
-$result = $client->Generate()->load(["url" => "url"]);
+$result = $client->Generate()->load(["data" => "data"]);
 ```
 
 ### Common Methods
@@ -360,10 +360,11 @@ $grammar = $client->Grammar();
 
 #### `create(array $reqdata, ?array $ctrl = null): mixed`
 
-Create a new entity with the given data. Throws on error.
+Create a new entity with the given data. Returns the created entity and throws on error.
 
 ```php
 $result = $client->Grammar()->create([
+  "text" => null, // string
 ]);
 ```
 
@@ -421,7 +422,7 @@ $ipn = $client->Ipn();
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
 $result = $client->Ipn()->load();
@@ -478,7 +479,7 @@ $redact = $client->Redact();
 
 #### `create(array $reqdata, ?array $ctrl = null): mixed`
 
-Create a new entity with the given data. Throws on error.
+Create a new entity with the given data. Returns the created entity and throws on error.
 
 ```php
 $result = $client->Redact()->create([
@@ -541,10 +542,10 @@ $ssl = $client->Ssl();
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
 
 ```php
-$results = $client->Ssl()->list();
+$results = $client->Ssl()->list(["domain" => "example"]);
 ```
 
 ### Common Methods
@@ -596,7 +597,7 @@ $utility = $client->Utility();
 
 #### `load(array $reqmatch, ?array $ctrl = null): mixed`
 
-Load a single entity matching the given criteria. Throws on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, and throws on error.
 
 ```php
 $result = $client->Utility()->load(["input" => "input"]);
@@ -655,10 +656,10 @@ $whoi = $client->Whoi();
 
 #### `list(?array $reqmatch = null, ?array $ctrl = null): mixed`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Throws on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record, and throws on error.
 
 ```php
-$results = $client->Whoi()->list();
+$results = $client->Whoi()->list(["domain" => "example"]);
 ```
 
 ### Common Methods
@@ -848,6 +849,7 @@ Timeout.
 | Option | Type |
 |---|---|
 | `clearTimer` | function |
+| `now` | function |
 | `setTimer` | function |
 
 These take no default: the feature behaves one way when you supply them and

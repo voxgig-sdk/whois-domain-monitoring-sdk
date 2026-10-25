@@ -15,7 +15,7 @@ predictable and low-friction for both humans and AI agents.
 
 ## Install
 This package is not yet published to npm. Install it from the GitHub
-release tag (`ts/vX.Y.Z`, see [Releases](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases)), or from a
+release tag (`ts/vX.Y.Z`, see [Tags](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/tags)), or from a
 clone, which carries the compiled `dist/`:
 
 ```bash
@@ -27,7 +27,7 @@ npm install ./whois-domain-monitoring-sdk/ts
 ## Tutorial: your first API call
 
 This tutorial walks through creating a client, listing entities, and
-loading a specific record.
+loading a specific record. The client sends the API key in the `X-API-Key` header.
 
 ### 1. Create a client
 
@@ -41,12 +41,12 @@ const client = new WhoisDomainMonitoringSDK({
 
 ### 3. Load a dnsresult
 
-`load()` returns the entity directly and throws on failure:
+`load()` returns the entity and throws on failure; `.data()` reads its record:
 
 ```ts
 try {
   const dnsresult = await client.DnsResult().load({ domain: 'example_domain' })
-  console.log(dnsresult)
+  console.log(dnsresult.data())
 } catch (err) {
   console.error('load failed:', err)
 }
@@ -60,14 +60,15 @@ Entity operations reject on failure, so wrap them in `try` / `catch`:
 ```ts
 try {
   const utility = await client.Utility().load({ input: "example" })
-  console.log(utility)
+  console.log(utility.data())
 } catch (err) {
   console.error('load failed:', err)
 }
 ```
 
 The low-level `direct()` method does **not** throw — it returns the
-value or an `Error`, so check the result before using it:
+result envelope. Branch on `ok`; on failure `status` holds the HTTP status
+(for error responses) and `err` holds the error:
 
 ```ts
 const result = await client.direct({
@@ -76,8 +77,8 @@ const result = await client.direct({
   params: { id: 'example_id' },
 })
 
-if (result instanceof Error) {
-  throw result
+if (!result.ok) {
+  console.error('request failed:', result.status, result.err)
 }
 ```
 
@@ -95,9 +96,6 @@ const result = await client.direct({
   params: { id: 'example' },
 })
 
-if (result instanceof Error) {
-  throw result
-}
 if (result.ok) {
   console.log(result.status)  // 200
   console.log(result.data)    // response body
@@ -127,9 +125,8 @@ Create a mock client for unit testing — no server required:
 const client = WhoisDomainMonitoringSDK.test()
 
 const utility = await client.Utility().load({ input: 'example_input' })
-// utility is the entity, populated with mock response data
-// — call utility.data() for the record itself
-console.log(utility)
+// utility is the Utility entity; .data() reads its mock record
+console.log(utility.data())
 ```
 
 You can also use the instance method:
@@ -257,9 +254,9 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `load(reqmatch?, ctrl?): Promise<Entity>` | Load a single entity by match criteria. |
-| `list` | `list(reqmatch?, ctrl?): Promise<Entity[]>` | List entities matching the criteria. |
-| `create` | `create(reqdata?, ctrl?): Promise<Entity>` | Create a new entity. |
+| `load` | `load(reqmatch?, ctrl?): Promise<Entity>` | Load a single entity by match criteria, and return it. |
+| `list` | `list(reqmatch?, ctrl?): Promise<Entity[]>` | List entities matching the criteria, one per record. |
+| `create` | `create(reqdata?, ctrl?): Promise<Entity>` | Create a new entity, and return it. |
 | `data` | `data(data?: Partial<Entity>): Entity` | Get or set entity data. |
 | `match` | `match(match?: Partial<Entity>): Partial<Entity>` | Get or set entity match criteria. |
 | `make` | `make(): Entity` | Create a new instance with the same options. |
@@ -268,8 +265,8 @@ All entities share the same interface.
 
 #### Return values
 
-Entity operations resolve to the entity data directly — there is no
-result envelope:
+Entity operations resolve to the entity itself — there is no result
+envelope, and an entity's `data()` reads its record:
 
 - `load` and `create` resolve to a single entity object.
 - `list` resolves to an **array** of entity objects (iterate it directly;
@@ -357,7 +354,7 @@ API path: `/email-validate`
 
 Operations: load.
 
-API path: `/qr`
+API path: `/barcode`
 
 #### Grammar
 
@@ -552,7 +549,7 @@ Create an instance: `const generate = client.Generate()`
 #### Example: Load
 
 ```ts
-const generate = await client.Generate().load({ url: 'url' })
+const generate = await client.Generate().load({ data: 'data' })
 ```
 
 
@@ -579,6 +576,7 @@ Create an instance: `const grammar = client.Grammar()`
 
 ```ts
 const grammar = await client.Grammar().create({
+  text: 'example_text',
 })
 ```
 

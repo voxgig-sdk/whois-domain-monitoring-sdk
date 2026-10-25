@@ -3,5 +3,30 @@
     "SUMMARY.md"
   ],
   "config": ".sdk/doc/qa/vale.ini",
-  "routes": {}
+  "routes": {},
+  "quoted": {
+    "SUMMARY.md": [
+      "> 30+ utility APIs for domain intelligence, email validation, SSL inspection, image generation, content processing, and more. Free tier included, no credit card required.\n>\n> Base URL: `https://kiprio.com/v1`\n>\n> Authentication: Pass your API key in the `X-API-Key` header. Get a free key at https://kiprio.com/signup",
+      "BCP 47 language tag",
+      "Barcode image",
+      "Comma-separated PII types to redact.",
+      "DNS records",
+      "Get your free API key at https://kiprio.com/signup",
+      "Grammar check results",
+      "Hash result",
+      "IP geolocation data",
+      "Include detected entity positions in response",
+      "PNG screenshot",
+      "Parsed robots.txt",
+      "Production",
+      "QR code image",
+      "Redacted text",
+      "SSL certificate data",
+      "Suggested correction for typos",
+      "Text to check",
+      "Text to redact",
+      "Validation result",
+      "WHOIS data"
+    ]
+  }
 }

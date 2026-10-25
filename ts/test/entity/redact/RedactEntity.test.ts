@@ -9,7 +9,7 @@ import { createLiveTransport } from '../../live-runner'
 import { runLiveEntity } from '../../live-entity'
 
 
-import { WhoisDomainMonitoringSDK, BaseFeature, stdutil } from '../../..'
+import { WhoisDomainMonitoringSDK, BaseFeature, config, stdutil } from '../../..'
 
 import {
   envOverride,
@@ -41,6 +41,18 @@ describe('RedactEntity', async () => {
   })
 
 
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = WhoisDomainMonitoringSDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.Redact().create({"redact":1,"text":"x"} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.WHOIS_DOMAIN_MONITORING_TEST_LIVE
@@ -51,7 +63,7 @@ describe('RedactEntity', async () => {
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"counts":{"a":true,"h":"Counts","n":"counts","r":false,"t":"`$OBJECT`","key$":"counts","index$":0},"entities":{"a":true,"h":"Entities","n":"entities","r":false,"sh":"Include detected entity positions in response","t":"`$ARRAY`","key$":"entities","index$":1},"original_length":{"a":true,"h":"Original Length","n":"original_length","r":false,"t":"`$INTEGER`","key$":"original_length","index$":2},"redact":{"a":true,"h":"Redact","n":"redact","r":false,"sh":"Comma-separated PII types to redact.","t":"`$STRING`","key$":"redact","index$":3},"redacted":{"a":true,"h":"Redacted","n":"redacted","r":false,"t":"`$STRING`","key$":"redacted","index$":4},"text":{"a":true,"h":"Text","n":"text","r":true,"sh":"Text to redact","t":"`$STRING`","key$":"text","index$":5}},"name":"redact","op":{"create":{"input":"data","name":"create","points":[{"a":true,"co":{"id":"POST /redact","source":"openapi3","version":2},"g":{},"k":"http","m":"POST","o":"/redact","q":{},"r":{},"s":[{"lit":"redact"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"create"}},"relations":{"ancestors":[]},"key$":"redact","name__orig":"redact","Name":"Redact","name_":"redact","name-":"redact","NAME":"REDACT","index$":6}, {"active":true,"entity":"redact","key$":"BasicRedactFlow","kind":"basic","name":"BasicRedactFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"redact_ref01"},"m":{},"o":"create","s":[],"v":[],"index$":0}]}, 'Redact', {"POST /redact":{"protocol":"http","requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["text"],"properties":{"text":{"type":"string","example":"Call John on 07911 123456 or email john@example.com","description":"Text to redact","key$":"text"},"redact":{"type":"string","example":"phone,email","description":"Comma-separated PII types to redact. Omit for all types.","key$":"redact"},"entities":{"type":"boolean","default":false,"description":"Include detected entity positions in response","key$":"entities"}},"index$":1}}}},"parameters":[]}})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"counts":{"a":true,"h":"Counts","n":"counts","r":false,"t":"`$OBJECT`","key$":"counts","index$":0},"entities":{"a":true,"h":"Entities","n":"entities","r":false,"sh":"Include detected entity positions in response","t":"`$ARRAY`","key$":"entities","index$":1},"original_length":{"a":true,"h":"Original Length","n":"original_length","r":false,"t":"`$INTEGER`","key$":"original_length","index$":2},"redact":{"a":true,"h":"Redact","n":"redact","r":false,"sh":"Comma-separated PII types to redact.","t":"`$STRING`","key$":"redact","index$":3},"redacted":{"a":true,"h":"Redacted","n":"redacted","r":false,"t":"`$STRING`","key$":"redacted","index$":4},"text":{"a":true,"h":"Text","n":"text","r":true,"sh":"Text to redact","t":"`$STRING`","key$":"text","index$":5}},"name":"redact","op":{"create":{"input":"data","name":"create","points":[{"a":true,"bf":["entities","redact","text"],"co":{"id":"POST /redact","source":"openapi3","version":2},"g":{},"k":"http","m":"POST","o":"/redact","q":{},"r":{},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"redact"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"create"}},"relations":{"ancestors":[]},"key$":"redact","name__orig":"redact","Name":"Redact","name_":"redact","name-":"redact","NAME":"REDACT","index$":6}, {"active":true,"entity":"redact","key$":"BasicRedactFlow","kind":"basic","name":"BasicRedactFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"redact_ref01"},"m":{},"o":"create","s":[],"v":[],"index$":0}]}, 'Redact', {"POST /redact":{"protocol":"http","requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["text"],"properties":{"text":{"type":"string","example":"Call John on 07911 123456 or email john@example.com","description":"Text to redact","key$":"text"},"redact":{"type":"string","example":"phone,email","description":"Comma-separated PII types to redact. Omit for all types.","key$":"redact"},"entities":{"type":"boolean","default":false,"description":"Include detected entity positions in response","key$":"entities"}},"index$":1}}}},"parameters":[]}}, { strict: LIVE_STRICT, t })
     }
     const client = setup.client
     const struct = setup.struct
@@ -72,6 +84,12 @@ describe('RedactEntity', async () => {
 })
 
 
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
 
 function basicSetup(extra?: any) {
   // TODO: fix test def options

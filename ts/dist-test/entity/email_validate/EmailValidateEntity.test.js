@@ -54,6 +54,14 @@ const utility_1 = require("../../utility");
         const ent = testsdk.EmailValidate();
         (0, node_assert_1.default)(null != ent);
     });
+    (0, node_test_1.test)('validate', async (t) => {
+        if (null == __1.config.feature?.validate) {
+            t.skip('feature not present in this SDK: validate');
+            return;
+        }
+        const client = __1.WhoisDomainMonitoringSDK.test(undefined, { feature: { validate: { active: true } } });
+        await node_assert_1.default.rejects(client.EmailValidate().load({ "email": 1 }), (err) => 'validate_failed' === err.code);
+    });
     (0, node_test_1.test)('basic', async (t) => {
         const live = 'TRUE' === process.env.WHOIS_DOMAIN_MONITORING_TEST_LIVE;
         for (const op of ['load']) {
@@ -62,7 +70,7 @@ const utility_1 = require("../../utility");
         }
         const setup = basicSetup();
         if (setup.live) {
-            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": { "confidence": { "a": true, "fo": "float", "h": "Confidence", "n": "confidence", "r": false, "t": "`$NUMBER`", "key$": "confidence", "index$": 0 }, "disposable": { "a": true, "h": "Disposable", "n": "disposable", "r": false, "t": "`$BOOLEAN`", "key$": "disposable", "index$": 1 }, "email": { "a": true, "fo": "email", "h": "Email", "n": "email", "r": false, "t": "`$STRING`", "key$": "email", "index$": 2 }, "free_provider": { "a": true, "h": "Free Provider", "n": "free_provider", "r": false, "t": "`$BOOLEAN`", "key$": "free_provider", "index$": 3 }, "mx_found": { "a": true, "h": "Mx Found", "n": "mx_found", "r": false, "t": "`$BOOLEAN`", "key$": "mx_found", "index$": 4 }, "role_based": { "a": true, "h": "Role Based", "n": "role_based", "r": false, "t": "`$BOOLEAN`", "key$": "role_based", "index$": 5 }, "suggest": { "a": true, "h": "Suggest", "n": "suggest", "r": false, "sh": "Suggested correction for typos", "t": "`$STRING`", "key$": "suggest", "index$": 6 }, "syntax_ok": { "a": true, "h": "Syntax Ok", "n": "syntax_ok", "r": false, "t": "`$BOOLEAN`", "key$": "syntax_ok", "index$": 7 }, "valid": { "a": true, "h": "Valid", "n": "valid", "r": false, "t": "`$BOOLEAN`", "key$": "valid", "index$": 8 } }, "name": "email_validate", "op": { "load": { "input": "data", "name": "load", "points": [{ "a": true, "co": { "id": "GET /email-validate", "source": "openapi3", "version": 2 }, "g": { "query": [{ "a": true, "ex": "user@example.com", "k": "query", "n": "email", "or": "email", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "GET", "o": "/email-validate", "q": { "exist": ["email"] }, "r": {}, "s": [{ "lit": "email-validate" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "load" } }, "relations": { "ancestors": [] }, "key$": "email_validate", "name__orig": "email_validate", "Name": "EmailValidate", "name_": "email_validate", "name-": "email-validate", "NAME": "EMAIL_VALIDATE", "index$": 2 }, { "active": true, "entity": "email_validate", "key$": "BasicEmailValidateFlow", "kind": "basic", "name": "BasicEmailValidateFlow", "param": {}, "step": [{ "a": true, "d": {}, "i": { "ref": "email_validate_ref01", "srcdatavar": "email_validate_ref01_data", "suffix": "_dt0" }, "m": {}, "o": "load", "s": [], "v": [{ "apply": "TextFieldMark", "def": { "mark": "Mark01-email_validate_ref01" } }], "index$": 0 }] }, 'EmailValidate', { "GET /email-validate": { "protocol": "http", "parameters": [{ "name": "email", "in": "query", "required": true, "schema": { "type": "string", "format": "email", "example": "user@example.com" }, "description": "Email address to validate", "index$": 0 }] } });
+            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": { "confidence": { "a": true, "fo": "float", "h": "Confidence", "n": "confidence", "r": false, "t": "`$NUMBER`", "key$": "confidence", "index$": 0 }, "disposable": { "a": true, "h": "Disposable", "n": "disposable", "r": false, "t": "`$BOOLEAN`", "key$": "disposable", "index$": 1 }, "email": { "a": true, "fo": "email", "h": "Email", "n": "email", "r": false, "t": "`$STRING`", "key$": "email", "index$": 2 }, "free_provider": { "a": true, "h": "Free Provider", "n": "free_provider", "r": false, "t": "`$BOOLEAN`", "key$": "free_provider", "index$": 3 }, "mx_found": { "a": true, "h": "Mx Found", "n": "mx_found", "r": false, "t": "`$BOOLEAN`", "key$": "mx_found", "index$": 4 }, "role_based": { "a": true, "h": "Role Based", "n": "role_based", "r": false, "t": "`$BOOLEAN`", "key$": "role_based", "index$": 5 }, "suggest": { "a": true, "h": "Suggest", "n": "suggest", "r": false, "sh": "Suggested correction for typos", "t": "`$STRING`", "key$": "suggest", "index$": 6 }, "syntax_ok": { "a": true, "h": "Syntax Ok", "n": "syntax_ok", "r": false, "t": "`$BOOLEAN`", "key$": "syntax_ok", "index$": 7 }, "valid": { "a": true, "h": "Valid", "n": "valid", "r": false, "t": "`$BOOLEAN`", "key$": "valid", "index$": 8 } }, "name": "email_validate", "op": { "load": { "input": "data", "name": "load", "points": [{ "a": true, "co": { "id": "GET /email-validate", "source": "openapi3", "version": 2 }, "g": { "query": [{ "a": true, "ex": "user@example.com", "k": "query", "n": "email", "or": "email", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "GET", "o": "/email-validate", "q": { "exist": ["email"] }, "r": {}, "rs": { "kind": "json", "media": "application/json" }, "s": [{ "lit": "email-validate" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "load" } }, "relations": { "ancestors": [] }, "key$": "email_validate", "name__orig": "email_validate", "Name": "EmailValidate", "name_": "email_validate", "name-": "email-validate", "NAME": "EMAIL_VALIDATE", "index$": 2 }, { "active": true, "entity": "email_validate", "key$": "BasicEmailValidateFlow", "kind": "basic", "name": "BasicEmailValidateFlow", "param": {}, "step": [{ "a": true, "d": {}, "i": { "ref": "email_validate_ref01", "srcdatavar": "email_validate_ref01_data", "suffix": "_dt0" }, "m": {}, "o": "load", "s": [], "v": [{ "apply": "TextFieldMark", "def": { "mark": "Mark01-email_validate_ref01" } }], "index$": 0 }] }, 'EmailValidate', { "GET /email-validate": { "protocol": "http", "parameters": [{ "name": "email", "in": "query", "required": true, "schema": { "type": "string", "format": "email", "example": "user@example.com" }, "description": "Email address to validate", "index$": 0 }] } }, { strict: LIVE_STRICT, t });
         }
         const client = setup.client;
         const struct = setup.struct;
@@ -76,6 +84,11 @@ const utility_1 = require("../../utility");
         (0, node_assert_1.default)(null != email_validate_ref01_data_dt0);
     });
 });
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true;
 function basicSetup(extra) {
     // TODO: fix test def options
     const options = {}; // null

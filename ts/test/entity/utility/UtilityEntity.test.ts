@@ -9,7 +9,7 @@ import { createLiveTransport } from '../../live-runner'
 import { runLiveEntity } from '../../live-entity'
 
 
-import { WhoisDomainMonitoringSDK, BaseFeature, stdutil } from '../../..'
+import { WhoisDomainMonitoringSDK, BaseFeature, config, stdutil } from '../../..'
 
 import {
   envOverride,
@@ -41,6 +41,18 @@ describe('UtilityEntity', async () => {
   })
 
 
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = WhoisDomainMonitoringSDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.Utility().load({"algo":1,"input":"x"} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.WHOIS_DOMAIN_MONITORING_TEST_LIVE
@@ -51,7 +63,7 @@ describe('UtilityEntity', async () => {
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"algo":{"a":true,"h":"Algo","n":"algo","r":false,"t":"`$STRING`","key$":"algo","index$":0},"hash":{"a":true,"h":"Hash","n":"hash","r":false,"t":"`$STRING`","key$":"hash","index$":1},"input":{"a":true,"h":"Input","n":"input","r":false,"t":"`$STRING`","key$":"input","index$":2},"length":{"a":true,"h":"Length","n":"length","r":false,"t":"`$INTEGER`","key$":"length","index$":3}},"name":"utility","op":{"load":{"input":"data","name":"load","points":[{"a":true,"co":{"id":"GET /hash","source":"openapi3","version":2},"g":{"query":[{"a":true,"ex":"sha256","k":"query","n":"algo","or":"algo","r":false,"t":"`$STRING`","index$":0},{"a":true,"ex":"hello world","k":"query","n":"input","or":"input","r":true,"t":"`$STRING`","index$":1}]},"k":"http","m":"GET","o":"/hash","q":{"exist":["algo","input"]},"r":{},"s":[{"lit":"hash"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"load"}},"relations":{"ancestors":[]},"key$":"utility","name__orig":"utility","Name":"Utility","name_":"utility","name-":"utility","NAME":"UTILITY","index$":8}, {"active":true,"entity":"utility","key$":"BasicUtilityFlow","kind":"basic","name":"BasicUtilityFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"utility_ref01","srcdatavar":"utility_ref01_data","suffix":"_dt0"},"m":{},"o":"load","s":[],"v":[{"apply":"TextFieldMark","def":{"mark":"Mark01-utility_ref01"}}],"index$":0}]}, 'Utility', {"GET /hash":{"protocol":"http","parameters":[{"name":"input","in":"query","required":true,"schema":{"type":"string","example":"hello world"},"description":"String to hash","index$":0},{"name":"algo","in":"query","required":false,"schema":{"type":"string","enum":["md5","sha1","sha256","sha384","sha512","sha3-256","sha3-512"],"default":"sha256"},"description":"Hash algorithm","index$":1}]}})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"algo":{"a":true,"h":"Algo","n":"algo","r":false,"t":"`$STRING`","key$":"algo","index$":0},"hash":{"a":true,"h":"Hash","n":"hash","r":false,"t":"`$STRING`","key$":"hash","index$":1},"input":{"a":true,"h":"Input","n":"input","r":false,"t":"`$STRING`","key$":"input","index$":2},"length":{"a":true,"h":"Length","n":"length","r":false,"t":"`$INTEGER`","key$":"length","index$":3}},"name":"utility","op":{"load":{"input":"data","name":"load","points":[{"a":true,"co":{"id":"GET /hash","source":"openapi3","version":2},"g":{"query":[{"a":true,"ex":"sha256","k":"query","n":"algo","or":"algo","r":false,"t":"`$STRING`","index$":0},{"a":true,"ex":"hello world","k":"query","n":"input","or":"input","r":true,"t":"`$STRING`","index$":1}]},"k":"http","m":"GET","o":"/hash","q":{"exist":["input"]},"r":{},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"hash"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"load"}},"relations":{"ancestors":[]},"key$":"utility","name__orig":"utility","Name":"Utility","name_":"utility","name-":"utility","NAME":"UTILITY","index$":8}, {"active":true,"entity":"utility","key$":"BasicUtilityFlow","kind":"basic","name":"BasicUtilityFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"utility_ref01","srcdatavar":"utility_ref01_data","suffix":"_dt0"},"m":{},"o":"load","s":[],"v":[{"apply":"TextFieldMark","def":{"mark":"Mark01-utility_ref01"}}],"index$":0}]}, 'Utility', {"GET /hash":{"protocol":"http","parameters":[{"name":"input","in":"query","required":true,"schema":{"type":"string","example":"hello world"},"description":"String to hash","index$":0},{"name":"algo","in":"query","required":false,"schema":{"type":"string","enum":["md5","sha1","sha256","sha384","sha512","sha3-256","sha3-512"],"default":"sha256"},"description":"Hash algorithm","index$":1}]}}, { strict: LIVE_STRICT, t })
     }
     const client = setup.client
     const struct = setup.struct
@@ -72,6 +84,12 @@ describe('UtilityEntity', async () => {
 })
 
 
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
 
 function basicSetup(extra?: any) {
   // TODO: fix test def options

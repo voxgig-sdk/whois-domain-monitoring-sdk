@@ -81,9 +81,12 @@ class GrammarEntity extends WhoisDomainMonitoringEntityBase_1.WhoisDomainMonitor
         catch (err) {
             // What a hook throws here must not escape the cleaning below.
             try {
-                fres = featureHook(ctx, 'PreUnexpected');
-                if (fres instanceof Promise) {
-                    await fres;
+                // Once per operation: makeError fires it for its own error.
+                if (!ctx.unexpectedFired) {
+                    fres = featureHook(ctx, 'PreUnexpected');
+                    if (fres instanceof Promise) {
+                        await fres;
+                    }
                 }
             }
             catch (hookerr) {
@@ -95,7 +98,7 @@ class GrammarEntity extends WhoisDomainMonitoringEntityBase_1.WhoisDomainMonitor
             }
             else {
                 // Off-happy-path (throw disabled): typed as any so the method's
-                // Promise<Grammar> return stays clean under strict null checks.
+                // Promise<GrammarEntity> return stays clean under strict null checks.
                 return undefined;
             }
         }

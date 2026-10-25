@@ -104,8 +104,11 @@ main: kit: entity: ssl: {
           q: {
             exist: [
               "domain"
-              "port"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

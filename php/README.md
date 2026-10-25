@@ -12,7 +12,7 @@ The SDK exposes the API as capitalised, semantic **Entities** — for example `$
 
 ## Install
 This package is not yet published to Packagist. Install it from the
-GitHub release tag (`php/vX.Y.Z`, see [Releases](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases)), or
+GitHub release tag (`php/vX.Y.Z`, see [Tags](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/tags)), or
 from a clone as a Composer path repository:
 
 ```bash
@@ -25,7 +25,7 @@ composer require voxgig-sdk/whois-domain-monitoring-sdk:@dev
 ## Tutorial: your first API call
 
 This tutorial walks through creating a client, listing entities, and
-loading a specific record.
+loading a specific record. The client sends the API key in the `X-API-Key` header.
 
 ### 1. Create a client
 
@@ -231,9 +231,9 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `($reqmatch, $ctrl): array` | Load a single entity by match criteria. |
-| `list` | `(?array $reqmatch = null, $ctrl): array` | List entities matching the criteria (call with no argument to list all). |
-| `create` | `($reqdata, $ctrl): array` | Create a new entity. |
+| `load` | `($reqmatch, $ctrl): mixed` | Load a single entity by match criteria, and return it. |
+| `list` | `(?array $reqmatch = null, $ctrl): mixed` | List entities matching the criteria (call with no argument to list all), one per record. |
+| `create` | `($reqdata, $ctrl): mixed` | Create a new entity, and return it. |
 | `data_get` | `(): array` | Get entity data. |
 | `data_set` | `($data): void` | Set entity data. |
 | `match_get` | `(): array` | Get entity match criteria. |
@@ -243,9 +243,9 @@ All entities share the same interface.
 
 ### Result shape
 
-Entity operations return the ENTITY (call data_get() for the record) (an `array` for single-entity
-ops, a `list` for `list`) and throw on error. Wrap calls in
-`try`/`catch` to handle failures.
+Entity operations return the entity, and `list` an `array` of entities, one
+per record; an entity's `data_get()` reads its record (an `array`). They
+throw on error, so wrap calls in `try`/`catch` to handle failures.
 
 The `direct()` escape hatch never throws — it returns a result `array`
 you branch on via `$result["ok"]`:
@@ -309,7 +309,7 @@ API path: `/email-validate`
 
 Operations: Load.
 
-API path: `/qr`
+API path: `/barcode`
 
 #### Grammar
 
@@ -457,8 +457,8 @@ Create an instance: `$domain = $client->Domain();`
 #### Example: List
 
 ```php
-// list() returns an array of Domain records (throws on error).
-$domains = $client->Domain()->list();
+// list() returns an array of Domain entities, one per record (throws on error).
+$domains = $client->Domain()->list(["url" => "example"]);
 ```
 
 
@@ -508,7 +508,7 @@ Create an instance: `$generate = $client->Generate();`
 
 ```php
 // load() returns the ENTITY — call data_get() for the Generate record (throws on error).
-$generate = $client->Generate()->load(["url" => "url"]);
+$generate = $client->Generate()->load(["data" => "data"]);
 ```
 
 
@@ -535,6 +535,7 @@ Create an instance: `$grammar = $client->Grammar();`
 
 ```php
 $grammar = $client->Grammar()->create([
+    "text" => null, // string
 ]);
 ```
 
@@ -629,8 +630,8 @@ Create an instance: `$ssl = $client->Ssl();`
 #### Example: List
 
 ```php
-// list() returns an array of Ssl records (throws on error).
-$ssls = $client->Ssl()->list();
+// list() returns an array of Ssl entities, one per record (throws on error).
+$ssls = $client->Ssl()->list(["domain" => "example"]);
 ```
 
 
@@ -687,8 +688,8 @@ Create an instance: `$whoi = $client->Whoi();`
 #### Example: List
 
 ```php
-// list() returns an array of Whoi records (throws on error).
-$whois = $client->Whoi()->list();
+// list() returns an array of Whoi entities, one per record (throws on error).
+$whois = $client->Whoi()->list(["domain" => "example"]);
 ```
 
 ## Features

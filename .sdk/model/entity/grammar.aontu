@@ -45,6 +45,10 @@ main: kit: entity: grammar: {
       name: "create"
       points: [
         {
+          bf: [
+            "language"
+            "text"
+          ]
           co: {
             id: "POST /grammar"
             source: "openapi3"
@@ -52,6 +56,25 @@ main: kit: entity: grammar: {
           }
           m: "POST"
           o: "/grammar"
+          rb: {
+            alternatives: [
+              {
+                fields: [
+                  {
+                    name: "text"
+                  }
+                ]
+                kind: "form"
+                media: "application/x-www-form-urlencoded"
+              }
+            ]
+            kind: "json"
+            media: "application/json"
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "grammar"

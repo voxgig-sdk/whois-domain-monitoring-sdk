@@ -12,7 +12,7 @@ The SDK exposes the API as capitalised, semantic **Entities** — for example `c
 
 ## Install
 This package is not yet published to RubyGems. Install it from the
-GitHub release tag (`rb/vX.Y.Z`, see [Releases](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases)), or
+GitHub release tag (`rb/vX.Y.Z`, see [Tags](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/tags)), or
 from a clone:
 
 ```bash
@@ -29,7 +29,7 @@ gem "voxgig-sdk-whois-domain-monitoring-sdk", path: "./whois-domain-monitoring-s
 ## Tutorial: your first API call
 
 This tutorial walks through creating a client, listing entities, and
-loading a specific record.
+loading a specific record. The client sends the API key in the `X-API-Key` header.
 
 ### 1. Create a client
 
@@ -47,7 +47,7 @@ client = WhoisDomainMonitoringSDK.new({
 begin
   # load returns the ENTITY — call data_get for the DnsResult record (raises on error).
   dnsresult = client.DnsResult.load({ "domain" => "example_domain" })
-  puts dnsresult
+  puts dnsresult.data_get
 rescue => err
   warn "load failed: #{err}"
 end
@@ -129,9 +129,9 @@ Create a mock client for unit testing — no server required:
 client = WhoisDomainMonitoringSDK.test
 
 # Entity ops return the ENTITY (raises on error);
-# call data_get for the mock record.
+# data_get reads its mock record.
 utility = client.Utility.load({ "input" => "example" })
-puts utility
+puts utility.data_get
 ```
 
 ### Use a custom fetch function
@@ -226,9 +226,9 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `(reqmatch, ctrl) -> any` | Load a single entity by match criteria. Raises on error. |
-| `list` | `(reqmatch = nil, ctrl) -> Array` | List entities matching the criteria (call with no argument to list all). Raises on error. |
-| `create` | `(reqdata, ctrl) -> any` | Create a new entity. Raises on error. |
+| `load` | `(reqmatch, ctrl) -> any` | Load a single entity by match criteria, and return it. Raises on error. |
+| `list` | `(reqmatch = nil, ctrl) -> Array` | List entities matching the criteria (call with no argument to list all), one per record. Raises on error. |
+| `create` | `(reqdata, ctrl) -> any` | Create a new entity, and return it. Raises on error. |
 | `data_get` | `() -> Hash` | Get entity data. |
 | `data_set` | `(data)` | Set entity data. |
 | `match_get` | `() -> Hash` | Get entity match criteria. |
@@ -238,9 +238,10 @@ All entities share the same interface.
 
 ### Result shape
 
-Entity operations return the result data directly. On failure they
-raise a `WhoisDomainMonitoringError` (a `StandardError` subclass), so wrap
-calls in `begin`/`rescue` where you need to handle errors.
+Entity operations return the entity, and `list` an `Array` of entities, one
+per record; an entity's `data_get` reads its record. On failure they raise a
+`WhoisDomainMonitoringError` (a `StandardError` subclass), so wrap calls in
+`begin`/`rescue` where you need to handle errors.
 
 The `direct` escape hatch is the exception: it never raises and instead
 returns a result `Hash` with these keys:
@@ -303,7 +304,7 @@ API path: `/email-validate`
 
 Operations: Load.
 
-API path: `/qr`
+API path: `/barcode`
 
 #### Grammar
 
@@ -451,8 +452,9 @@ Create an instance: `domain = client.Domain`
 #### Example: List
 
 ```ruby
-# list returns an Array of Domain records (raises on error).
-domains = client.Domain.list
+# list returns an Array of Domain entities, one per record (raises on error).
+domains = client.Domain.list({ "url" => "example" })
+domains.each { |item| puts item.data_get }
 ```
 
 
@@ -502,7 +504,7 @@ Create an instance: `generate = client.Generate`
 
 ```ruby
 # load returns the ENTITY — call data_get for the Generate record (raises on error).
-generate = client.Generate.load({ "url" => "url" })
+generate = client.Generate.load({ "data" => "data" })
 ```
 
 
@@ -529,6 +531,7 @@ Create an instance: `grammar = client.Grammar`
 
 ```ruby
 grammar = client.Grammar.create({
+  "text" => "example_text", # String
 })
 ```
 
@@ -623,8 +626,9 @@ Create an instance: `ssl = client.Ssl`
 #### Example: List
 
 ```ruby
-# list returns an Array of Ssl records (raises on error).
-ssls = client.Ssl.list
+# list returns an Array of Ssl entities, one per record (raises on error).
+ssls = client.Ssl.list({ "domain" => "example" })
+ssls.each { |item| puts item.data_get }
 ```
 
 
@@ -681,8 +685,9 @@ Create an instance: `whoi = client.Whoi`
 #### Example: List
 
 ```ruby
-# list returns an Array of Whoi records (raises on error).
-whois = client.Whoi.list
+# list returns an Array of Whoi entities, one per record (raises on error).
+whois = client.Whoi.list({ "domain" => "example" })
+whois.each { |item| puts item.data_get }
 ```
 
 ## Features

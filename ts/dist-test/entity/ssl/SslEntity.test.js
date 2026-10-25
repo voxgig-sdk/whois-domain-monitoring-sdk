@@ -54,6 +54,53 @@ const utility_1 = require("../../utility");
         const ent = testsdk.Ssl();
         (0, node_assert_1.default)(null != ent);
     });
+    class FailHook extends __1.BaseFeature {
+        name = 'failhook';
+        version = '0.0.1';
+        active = true;
+        unexpected = 0;
+        init() { }
+        PreSpec() { throw new Error('ssl hook failed'); }
+        PreUnexpected() { this.unexpected++; }
+    }
+    (0, node_test_1.test)('stream-error', async () => {
+        const offline = { net: { offline: true } };
+        await node_assert_1.default.rejects(async () => {
+            for await (const _item of __1.WhoisDomainMonitoringSDK.test(offline).Ssl().stream('list')) { }
+        }, /offline/);
+        for await (const _item of __1.WhoisDomainMonitoringSDK.test(offline).Ssl()
+            .stream('list', undefined, { ctrl: { throw: false } })) { }
+        if (null != __1.config.feature?.rbac) {
+            const denied = __1.WhoisDomainMonitoringSDK.test(undefined, { feature: { rbac: { active: true, deny: true } } });
+            await node_assert_1.default.rejects(async () => {
+                for await (const _item of denied.Ssl().stream('list')) { }
+            }, (err) => 'rbac_denied' === err.code);
+        }
+    });
+    (0, node_test_1.test)('stream-ctrl', async () => {
+        const explain = {};
+        const ctrl = { explain };
+        for await (const _item of __1.WhoisDomainMonitoringSDK.test().Ssl().stream('list', undefined, { ctrl })) { }
+        node_assert_1.default.deepStrictEqual(Object.keys(ctrl), ['explain']);
+        (0, node_assert_1.default)(explain === ctrl.explain && 0 < Object.keys(explain).length);
+    });
+    (0, node_test_1.test)('unexpected', async () => {
+        const hook = new FailHook();
+        const client = new __1.WhoisDomainMonitoringSDK({ feature: { test: { active: true } }, extend: [hook] });
+        await node_assert_1.default.rejects(client.Ssl().list(), /hook failed/);
+        (0, node_assert_1.default)(0 < hook.unexpected);
+        const fired = hook.unexpected;
+        node_assert_1.default.strictEqual(await client.Ssl().list(undefined, { throw: false }), undefined);
+        (0, node_assert_1.default)(fired < hook.unexpected);
+    });
+    (0, node_test_1.test)('validate', async (t) => {
+        if (null == __1.config.feature?.validate) {
+            t.skip('feature not present in this SDK: validate');
+            return;
+        }
+        const client = __1.WhoisDomainMonitoringSDK.test(undefined, { feature: { validate: { active: true } } });
+        await node_assert_1.default.rejects(client.Ssl().list({ "domain": 1 }), (err) => 'validate_failed' === err.code);
+    });
     (0, node_test_1.test)('basic', async (t) => {
         const live = 'TRUE' === process.env.WHOIS_DOMAIN_MONITORING_TEST_LIVE;
         for (const op of ['list']) {
@@ -62,7 +109,7 @@ const utility_1 = require("../../utility");
         }
         const setup = basicSetup();
         if (setup.live) {
-            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": { "cipher": { "a": true, "h": "Cipher", "n": "cipher", "r": false, "t": "`$STRING`", "key$": "cipher", "index$": 0 }, "days_remaining": { "a": true, "h": "Days Remaining", "n": "days_remaining", "r": false, "t": "`$INTEGER`", "key$": "days_remaining", "index$": 1 }, "domain": { "a": true, "h": "Domain", "n": "domain", "r": false, "t": "`$STRING`", "key$": "domain", "index$": 2 }, "expires_at": { "a": true, "fo": "date-time", "h": "Expires At", "n": "expires_at", "r": false, "t": "`$STRING`", "key$": "expires_at", "index$": 3 }, "grade": { "a": true, "h": "Grade", "n": "grade", "r": false, "t": "`$STRING`", "key$": "grade", "index$": 4 }, "issuer": { "a": true, "h": "Issuer", "n": "issuer", "r": false, "t": "`$STRING`", "key$": "issuer", "index$": 5 }, "protocol": { "a": true, "h": "Protocol", "n": "protocol", "r": false, "t": "`$STRING`", "key$": "protocol", "index$": 6 }, "sans": { "a": true, "h": "Sans", "n": "sans", "r": false, "t": "`$ARRAY`", "key$": "sans", "index$": 7 }, "subject": { "a": true, "h": "Subject", "n": "subject", "r": false, "t": "`$STRING`", "key$": "subject", "index$": 8 }, "valid": { "a": true, "h": "Valid", "n": "valid", "r": false, "t": "`$BOOLEAN`", "key$": "valid", "index$": 9 } }, "name": "ssl", "op": { "list": { "input": "data", "name": "list", "points": [{ "a": true, "co": { "id": "GET /ssl", "source": "openapi3", "version": 2 }, "g": { "query": [{ "a": true, "ex": "example.com", "k": "query", "n": "domain", "or": "domain", "r": true, "t": "`$STRING`", "index$": 0 }, { "a": true, "ex": 443, "k": "query", "n": "port", "or": "port", "r": false, "t": "`$INTEGER`", "index$": 1 }] }, "k": "http", "m": "GET", "o": "/ssl", "q": { "exist": ["domain", "port"] }, "r": {}, "s": [{ "lit": "ssl" }], "t": { "req": "`reqdata`", "res": "`body.sans`" }, "index$": 0 }], "key$": "list" } }, "relations": { "ancestors": [] }, "key$": "ssl", "name__orig": "ssl", "Name": "Ssl", "name_": "ssl", "name-": "ssl", "NAME": "SSL", "index$": 7 }, { "active": true, "entity": "ssl", "key$": "BasicSslFlow", "kind": "basic", "name": "BasicSslFlow", "param": {}, "step": [{ "a": true, "d": {}, "i": {}, "m": {}, "o": "list", "s": [], "v": [{ "apply": "ItemExists", "def": { "ref": "ssl_ref01" } }], "index$": 0 }] }, 'Ssl', { "GET /ssl": { "protocol": "http", "parameters": [{ "name": "domain", "in": "query", "required": true, "schema": { "type": "string", "example": "example.com" }, "description": "Domain to inspect", "index$": 0 }, { "name": "port", "in": "query", "required": false, "schema": { "type": "integer", "default": 443, "example": 443 }, "description": "Port to connect on", "index$": 1 }] } });
+            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": { "cipher": { "a": true, "h": "Cipher", "n": "cipher", "r": false, "t": "`$STRING`", "key$": "cipher", "index$": 0 }, "days_remaining": { "a": true, "h": "Days Remaining", "n": "days_remaining", "r": false, "t": "`$INTEGER`", "key$": "days_remaining", "index$": 1 }, "domain": { "a": true, "h": "Domain", "n": "domain", "r": false, "t": "`$STRING`", "key$": "domain", "index$": 2 }, "expires_at": { "a": true, "fo": "date-time", "h": "Expires At", "n": "expires_at", "r": false, "t": "`$STRING`", "key$": "expires_at", "index$": 3 }, "grade": { "a": true, "h": "Grade", "n": "grade", "r": false, "t": "`$STRING`", "key$": "grade", "index$": 4 }, "issuer": { "a": true, "h": "Issuer", "n": "issuer", "r": false, "t": "`$STRING`", "key$": "issuer", "index$": 5 }, "protocol": { "a": true, "h": "Protocol", "n": "protocol", "r": false, "t": "`$STRING`", "key$": "protocol", "index$": 6 }, "sans": { "a": true, "h": "Sans", "n": "sans", "r": false, "t": "`$ARRAY`", "key$": "sans", "index$": 7 }, "subject": { "a": true, "h": "Subject", "n": "subject", "r": false, "t": "`$STRING`", "key$": "subject", "index$": 8 }, "valid": { "a": true, "h": "Valid", "n": "valid", "r": false, "t": "`$BOOLEAN`", "key$": "valid", "index$": 9 } }, "name": "ssl", "op": { "list": { "input": "data", "name": "list", "points": [{ "a": true, "co": { "id": "GET /ssl", "source": "openapi3", "version": 2 }, "g": { "query": [{ "a": true, "ex": "example.com", "k": "query", "n": "domain", "or": "domain", "r": true, "t": "`$STRING`", "index$": 0 }, { "a": true, "ex": 443, "k": "query", "n": "port", "or": "port", "r": false, "t": "`$INTEGER`", "index$": 1 }] }, "k": "http", "m": "GET", "o": "/ssl", "q": { "exist": ["domain"] }, "r": {}, "rs": { "kind": "json", "media": "application/json" }, "s": [{ "lit": "ssl" }], "t": { "req": "`reqdata`", "res": "`body.sans`" }, "index$": 0 }], "key$": "list" } }, "relations": { "ancestors": [] }, "key$": "ssl", "name__orig": "ssl", "Name": "Ssl", "name_": "ssl", "name-": "ssl", "NAME": "SSL", "index$": 7 }, { "active": true, "entity": "ssl", "key$": "BasicSslFlow", "kind": "basic", "name": "BasicSslFlow", "param": {}, "step": [{ "a": true, "d": {}, "i": {}, "m": {}, "o": "list", "s": [], "v": [{ "apply": "ItemExists", "def": { "ref": "ssl_ref01" } }], "index$": 0 }] }, 'Ssl', { "GET /ssl": { "protocol": "http", "parameters": [{ "name": "domain", "in": "query", "required": true, "schema": { "type": "string", "example": "example.com" }, "description": "Domain to inspect", "index$": 0 }, { "name": "port", "in": "query", "required": false, "schema": { "type": "integer", "default": 443, "example": 443 }, "description": "Port to connect on", "index$": 1 }] } }, { strict: LIVE_STRICT, t });
         }
         const client = setup.client;
         const struct = setup.struct;
@@ -75,6 +122,11 @@ const utility_1 = require("../../utility");
         const ssl_ref01_list = (await ssl_ref01_ent.list(ssl_ref01_match)).map((e) => e.data());
     });
 });
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true;
 function basicSetup(extra) {
     // TODO: fix test def options
     const options = {}; // null

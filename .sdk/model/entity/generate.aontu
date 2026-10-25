@@ -11,6 +11,84 @@ main: kit: entity: generate: {
       points: [
         {
           co: {
+            id: "GET /barcode"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "HELLO123"
+                k: "query"
+                n: "data"
+                or: "data"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: "code128"
+                k: "query"
+                n: "format"
+                or: "format"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 120
+                k: "query"
+                n: "height"
+                or: "height"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                ex: "svg"
+                k: "query"
+                n: "output"
+                or: "output"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 400
+                k: "query"
+                n: "width"
+                or: "width"
+                r: false
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/barcode"
+          q: {
+            exist: [
+              "data"
+            ]
+          }
+          rs: {
+            alternatives: [
+              {
+                kind: "raw"
+                media: "image/svg+xml"
+              }
+            ]
+            binary: true
+            kind: "raw"
+            media: "image/png"
+          }
+          s: [
+            {
+              lit: "barcode"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          co: {
             id: "GET /qr"
             source: "openapi3"
             version: 2
@@ -71,88 +149,23 @@ main: kit: entity: generate: {
           o: "/qr"
           q: {
             exist: [
-              "bg"
-              "ec_level"
-              "fg"
-              "format"
-              "size"
               "url"
             ]
+          }
+          rs: {
+            alternatives: [
+              {
+                kind: "raw"
+                media: "image/svg+xml"
+              }
+            ]
+            binary: true
+            kind: "raw"
+            media: "image/png"
           }
           s: [
             {
               lit: "qr"
-            }
-          ]
-          t: {
-            req: "`reqdata`"
-            res: "`body`"
-          }
-        }
-        {
-          co: {
-            id: "GET /barcode"
-            source: "openapi3"
-            version: 2
-          }
-          g: {
-            query: [
-              {
-                ex: "HELLO123"
-                k: "query"
-                n: "data"
-                or: "data"
-                r: true
-                t: "`$STRING`"
-              }
-              {
-                ex: "code128"
-                k: "query"
-                n: "format"
-                or: "format"
-                r: false
-                t: "`$STRING`"
-              }
-              {
-                ex: 120
-                k: "query"
-                n: "height"
-                or: "height"
-                r: false
-                t: "`$INTEGER`"
-              }
-              {
-                ex: "svg"
-                k: "query"
-                n: "output"
-                or: "output"
-                r: false
-                t: "`$STRING`"
-              }
-              {
-                ex: 400
-                k: "query"
-                n: "width"
-                or: "width"
-                r: false
-                t: "`$INTEGER`"
-              }
-            ]
-          }
-          m: "GET"
-          o: "/barcode"
-          q: {
-            exist: [
-              "data"
-              "format"
-              "height"
-              "output"
-              "width"
-            ]
-          }
-          s: [
-            {
-              lit: "barcode"
             }
           ]
           t: {
@@ -198,10 +211,13 @@ main: kit: entity: generate: {
           o: "/screenshot"
           q: {
             exist: [
-              "full_page"
               "url"
-              "width"
             ]
+          }
+          rs: {
+            binary: true
+            kind: "raw"
+            media: "image/png"
           }
           s: [
             {

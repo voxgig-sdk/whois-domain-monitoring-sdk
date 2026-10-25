@@ -67,6 +67,7 @@ local function make_config()
         },
         ["optspec"] = {
           ["clearTimer"] = "`$FUNCTION`",
+          ["now"] = "`$FUNCTION`",
           ["setTimer"] = "`$FUNCTION`",
         },
         ["strict"] = false,
@@ -141,6 +142,7 @@ local function make_config()
                       ["kind"] = "query",
                       ["reqd"] = true,
                       ["example"] = "example.com",
+                      ["field"] = true,
                     },
                     {
                       ["name"] = "type",
@@ -154,8 +156,11 @@ local function make_config()
                 ["select"] = {
                   ["exist"] = {
                     "domain",
-                    "type",
                   },
+                },
+                ["response"] = {
+                  ["kind"] = "json",
+                  ["media"] = "application/json",
                 },
               },
             },
@@ -215,6 +220,7 @@ local function make_config()
                       ["kind"] = "query",
                       ["reqd"] = true,
                       ["example"] = "https://example.com",
+                      ["field"] = true,
                     },
                   },
                 },
@@ -222,6 +228,10 @@ local function make_config()
                   ["exist"] = {
                     "url",
                   },
+                },
+                ["response"] = {
+                  ["kind"] = "json",
+                  ["media"] = "application/json",
                 },
               },
             },
@@ -314,6 +324,7 @@ local function make_config()
                       ["kind"] = "query",
                       ["reqd"] = true,
                       ["example"] = "user@example.com",
+                      ["field"] = true,
                     },
                   },
                 },
@@ -321,6 +332,10 @@ local function make_config()
                   ["exist"] = {
                     "email",
                   },
+                },
+                ["response"] = {
+                  ["kind"] = "json",
+                  ["media"] = "application/json",
                 },
               },
             },
@@ -338,6 +353,80 @@ local function make_config()
             ["input"] = "data",
             ["name"] = "load",
             ["points"] = {
+              {
+                ["kind"] = "http",
+                ["method"] = "GET",
+                ["orig"] = "/barcode",
+                ["segments"] = {
+                  {
+                    ["lit"] = "barcode",
+                  },
+                },
+                ["parts"] = {
+                  "barcode",
+                },
+                ["rename"] = {},
+                ["transform"] = {
+                  ["req"] = "`reqdata`",
+                  ["res"] = "`body`",
+                },
+                ["args"] = {
+                  ["query"] = {
+                    {
+                      ["name"] = "data",
+                      ["orig"] = "data",
+                      ["type"] = "`$STRING`",
+                      ["kind"] = "query",
+                      ["reqd"] = true,
+                      ["example"] = "HELLO123",
+                    },
+                    {
+                      ["name"] = "format",
+                      ["orig"] = "format",
+                      ["type"] = "`$STRING`",
+                      ["kind"] = "query",
+                      ["example"] = "code128",
+                    },
+                    {
+                      ["name"] = "height",
+                      ["orig"] = "height",
+                      ["type"] = "`$INTEGER`",
+                      ["kind"] = "query",
+                      ["example"] = 120,
+                    },
+                    {
+                      ["name"] = "output",
+                      ["orig"] = "output",
+                      ["type"] = "`$STRING`",
+                      ["kind"] = "query",
+                      ["example"] = "svg",
+                    },
+                    {
+                      ["name"] = "width",
+                      ["orig"] = "width",
+                      ["type"] = "`$INTEGER`",
+                      ["kind"] = "query",
+                      ["example"] = 400,
+                    },
+                  },
+                },
+                ["select"] = {
+                  ["exist"] = {
+                    "data",
+                  },
+                },
+                ["response"] = {
+                  ["alternatives"] = {
+                    {
+                      ["kind"] = "raw",
+                      ["media"] = "image/svg+xml",
+                    },
+                  },
+                  ["binary"] = true,
+                  ["kind"] = "raw",
+                  ["media"] = "image/png",
+                },
+              },
               {
                 ["kind"] = "http",
                 ["method"] = "GET",
@@ -404,80 +493,19 @@ local function make_config()
                 },
                 ["select"] = {
                   ["exist"] = {
-                    "bg",
-                    "ec_level",
-                    "fg",
-                    "format",
-                    "size",
                     "url",
                   },
                 },
-              },
-              {
-                ["kind"] = "http",
-                ["method"] = "GET",
-                ["orig"] = "/barcode",
-                ["segments"] = {
-                  {
-                    ["lit"] = "barcode",
-                  },
-                },
-                ["parts"] = {
-                  "barcode",
-                },
-                ["rename"] = {},
-                ["transform"] = {
-                  ["req"] = "`reqdata`",
-                  ["res"] = "`body`",
-                },
-                ["args"] = {
-                  ["query"] = {
+                ["response"] = {
+                  ["alternatives"] = {
                     {
-                      ["name"] = "data",
-                      ["orig"] = "data",
-                      ["type"] = "`$STRING`",
-                      ["kind"] = "query",
-                      ["reqd"] = true,
-                      ["example"] = "HELLO123",
-                    },
-                    {
-                      ["name"] = "format",
-                      ["orig"] = "format",
-                      ["type"] = "`$STRING`",
-                      ["kind"] = "query",
-                      ["example"] = "code128",
-                    },
-                    {
-                      ["name"] = "height",
-                      ["orig"] = "height",
-                      ["type"] = "`$INTEGER`",
-                      ["kind"] = "query",
-                      ["example"] = 120,
-                    },
-                    {
-                      ["name"] = "output",
-                      ["orig"] = "output",
-                      ["type"] = "`$STRING`",
-                      ["kind"] = "query",
-                      ["example"] = "svg",
-                    },
-                    {
-                      ["name"] = "width",
-                      ["orig"] = "width",
-                      ["type"] = "`$INTEGER`",
-                      ["kind"] = "query",
-                      ["example"] = 400,
+                      ["kind"] = "raw",
+                      ["media"] = "image/svg+xml",
                     },
                   },
-                },
-                ["select"] = {
-                  ["exist"] = {
-                    "data",
-                    "format",
-                    "height",
-                    "output",
-                    "width",
-                  },
+                  ["binary"] = true,
+                  ["kind"] = "raw",
+                  ["media"] = "image/png",
                 },
               },
               {
@@ -525,10 +553,13 @@ local function make_config()
                 },
                 ["select"] = {
                   ["exist"] = {
-                    "full_page",
                     "url",
-                    "width",
                   },
+                },
+                ["response"] = {
+                  ["binary"] = true,
+                  ["kind"] = "raw",
+                  ["media"] = "image/png",
                 },
               },
             },
@@ -594,6 +625,25 @@ local function make_config()
                 },
                 ["args"] = {},
                 ["select"] = {},
+                ["body"] = {
+                  ["alternatives"] = {
+                    {
+                      ["fields"] = {
+                        {
+                          ["name"] = "text",
+                        },
+                      },
+                      ["kind"] = "form",
+                      ["media"] = "application/x-www-form-urlencoded",
+                    },
+                  },
+                  ["kind"] = "json",
+                  ["media"] = "application/json",
+                },
+                ["response"] = {
+                  ["kind"] = "json",
+                  ["media"] = "application/json",
+                },
               },
             },
           },
@@ -683,13 +733,14 @@ local function make_config()
                       ["type"] = "`$STRING`",
                       ["kind"] = "query",
                       ["example"] = "8.8.8.8",
+                      ["field"] = true,
                     },
                   },
                 },
-                ["select"] = {
-                  ["exist"] = {
-                    "ip",
-                  },
+                ["select"] = {},
+                ["response"] = {
+                  ["kind"] = "json",
+                  ["media"] = "application/json",
                 },
               },
             },
@@ -761,6 +812,10 @@ local function make_config()
                 },
                 ["args"] = {},
                 ["select"] = {},
+                ["response"] = {
+                  ["kind"] = "json",
+                  ["media"] = "application/json",
+                },
               },
             },
           },
@@ -855,6 +910,7 @@ local function make_config()
                       ["kind"] = "query",
                       ["reqd"] = true,
                       ["example"] = "example.com",
+                      ["field"] = true,
                     },
                     {
                       ["name"] = "port",
@@ -868,8 +924,11 @@ local function make_config()
                 ["select"] = {
                   ["exist"] = {
                     "domain",
-                    "port",
                   },
+                },
+                ["response"] = {
+                  ["kind"] = "json",
+                  ["media"] = "application/json",
                 },
               },
             },
@@ -933,6 +992,7 @@ local function make_config()
                       ["type"] = "`$STRING`",
                       ["kind"] = "query",
                       ["example"] = "sha256",
+                      ["field"] = true,
                     },
                     {
                       ["name"] = "input",
@@ -941,14 +1001,18 @@ local function make_config()
                       ["kind"] = "query",
                       ["reqd"] = true,
                       ["example"] = "hello world",
+                      ["field"] = true,
                     },
                   },
                 },
                 ["select"] = {
                   ["exist"] = {
-                    "algo",
                     "input",
                   },
+                },
+                ["response"] = {
+                  ["kind"] = "json",
+                  ["media"] = "application/json",
                 },
               },
             },
@@ -1036,6 +1100,7 @@ local function make_config()
                       ["kind"] = "query",
                       ["reqd"] = true,
                       ["example"] = "example.com",
+                      ["field"] = true,
                     },
                   },
                 },
@@ -1043,6 +1108,10 @@ local function make_config()
                   ["exist"] = {
                     "domain",
                   },
+                },
+                ["response"] = {
+                  ["kind"] = "json",
+                  ["media"] = "application/json",
                 },
               },
             },

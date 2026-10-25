@@ -152,11 +152,14 @@
                   "o": "/dns-lookup",
                   "q": {
                     "exist": [
-                      "domain",
-                      "type"
+                      "domain"
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "dns-lookup"
@@ -237,6 +240,10 @@
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "robots-txt"
@@ -362,6 +369,10 @@
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "email-validate"
@@ -391,6 +402,92 @@
               "input": "data",
               "name": "load",
               "points": [
+                {
+                  "a": true,
+                  "co": {
+                    "id": "GET /barcode",
+                    "source": "openapi3",
+                    "version": 2
+                  },
+                  "g": {
+                    "query": [
+                      {
+                        "a": true,
+                        "ex": "HELLO123",
+                        "k": "query",
+                        "n": "data",
+                        "or": "data",
+                        "r": true,
+                        "t": "`$STRING`"
+                      },
+                      {
+                        "a": true,
+                        "ex": "code128",
+                        "k": "query",
+                        "n": "format",
+                        "or": "format",
+                        "r": false,
+                        "t": "`$STRING`"
+                      },
+                      {
+                        "a": true,
+                        "ex": 120,
+                        "k": "query",
+                        "n": "height",
+                        "or": "height",
+                        "r": false,
+                        "t": "`$INTEGER`"
+                      },
+                      {
+                        "a": true,
+                        "ex": "svg",
+                        "k": "query",
+                        "n": "output",
+                        "or": "output",
+                        "r": false,
+                        "t": "`$STRING`"
+                      },
+                      {
+                        "a": true,
+                        "ex": 400,
+                        "k": "query",
+                        "n": "width",
+                        "or": "width",
+                        "r": false,
+                        "t": "`$INTEGER`"
+                      }
+                    ]
+                  },
+                  "k": "http",
+                  "m": "GET",
+                  "o": "/barcode",
+                  "q": {
+                    "exist": [
+                      "data"
+                    ]
+                  },
+                  "r": {},
+                  "rs": {
+                    "alternatives": [
+                      {
+                        "kind": "raw",
+                        "media": "image/svg+xml"
+                      }
+                    ],
+                    "binary": true,
+                    "kind": "raw",
+                    "media": "image/png"
+                  },
+                  "s": [
+                    {
+                      "lit": "barcode"
+                    }
+                  ],
+                  "t": {
+                    "req": "`reqdata`",
+                    "res": "`body`"
+                  }
+                },
                 {
                   "a": true,
                   "co": {
@@ -461,97 +558,24 @@
                   "o": "/qr",
                   "q": {
                     "exist": [
-                      "bg",
-                      "ec_level",
-                      "fg",
-                      "format",
-                      "size",
                       "url"
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "alternatives": [
+                      {
+                        "kind": "raw",
+                        "media": "image/svg+xml"
+                      }
+                    ],
+                    "binary": true,
+                    "kind": "raw",
+                    "media": "image/png"
+                  },
                   "s": [
                     {
                       "lit": "qr"
-                    }
-                  ],
-                  "t": {
-                    "req": "`reqdata`",
-                    "res": "`body`"
-                  }
-                },
-                {
-                  "a": true,
-                  "co": {
-                    "id": "GET /barcode",
-                    "source": "openapi3",
-                    "version": 2
-                  },
-                  "g": {
-                    "query": [
-                      {
-                        "a": true,
-                        "ex": "HELLO123",
-                        "k": "query",
-                        "n": "data",
-                        "or": "data",
-                        "r": true,
-                        "t": "`$STRING`"
-                      },
-                      {
-                        "a": true,
-                        "ex": "code128",
-                        "k": "query",
-                        "n": "format",
-                        "or": "format",
-                        "r": false,
-                        "t": "`$STRING`"
-                      },
-                      {
-                        "a": true,
-                        "ex": 120,
-                        "k": "query",
-                        "n": "height",
-                        "or": "height",
-                        "r": false,
-                        "t": "`$INTEGER`"
-                      },
-                      {
-                        "a": true,
-                        "ex": "svg",
-                        "k": "query",
-                        "n": "output",
-                        "or": "output",
-                        "r": false,
-                        "t": "`$STRING`"
-                      },
-                      {
-                        "a": true,
-                        "ex": 400,
-                        "k": "query",
-                        "n": "width",
-                        "or": "width",
-                        "r": false,
-                        "t": "`$INTEGER`"
-                      }
-                    ]
-                  },
-                  "k": "http",
-                  "m": "GET",
-                  "o": "/barcode",
-                  "q": {
-                    "exist": [
-                      "data",
-                      "format",
-                      "height",
-                      "output",
-                      "width"
-                    ]
-                  },
-                  "r": {},
-                  "s": [
-                    {
-                      "lit": "barcode"
                     }
                   ],
                   "t": {
@@ -602,12 +626,15 @@
                   "o": "/screenshot",
                   "q": {
                     "exist": [
-                      "full_page",
-                      "url",
-                      "width"
+                      "url"
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "binary": true,
+                    "kind": "raw",
+                    "media": "image/png"
+                  },
                   "s": [
                     {
                       "lit": "screenshot"
@@ -676,6 +703,10 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "language",
+                    "text"
+                  ],
                   "co": {
                     "id": "POST /grammar",
                     "source": "openapi3",
@@ -687,6 +718,25 @@
                   "o": "/grammar",
                   "q": {},
                   "r": {},
+                  "rb": {
+                    "alternatives": [
+                      {
+                        "fields": [
+                          {
+                            "name": "text"
+                          }
+                        ],
+                        "kind": "form",
+                        "media": "application/x-www-form-urlencoded"
+                      }
+                    ],
+                    "kind": "json",
+                    "media": "application/json"
+                  },
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "grammar"
@@ -805,12 +855,12 @@
                   "k": "http",
                   "m": "GET",
                   "o": "/ip",
-                  "q": {
-                    "exist": [
-                      "ip"
-                    ]
-                  },
+                  "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "ip"
@@ -888,6 +938,11 @@
               "points": [
                 {
                   "a": true,
+                  "bf": [
+                    "entities",
+                    "redact",
+                    "text"
+                  ],
                   "co": {
                     "id": "POST /redact",
                     "source": "openapi3",
@@ -899,6 +954,10 @@
                   "o": "/redact",
                   "q": {},
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "redact"
@@ -1034,11 +1093,14 @@
                   "o": "/ssl",
                   "q": {
                     "exist": [
-                      "domain",
-                      "port"
+                      "domain"
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "ssl"
@@ -1131,11 +1193,14 @@
                   "o": "/hash",
                   "q": {
                     "exist": [
-                      "algo",
                       "input"
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "hash"
@@ -1254,6 +1319,10 @@
                     ]
                   },
                   "r": {},
+                  "rs": {
+                    "kind": "json",
+                    "media": "application/json"
+                  },
                   "s": [
                     {
                       "lit": "whois"
@@ -1594,6 +1663,7 @@
             },
             "optspec": {
               "clearTimer": "`$FUNCTION`",
+              "now": "`$FUNCTION`",
               "setTimer": "`$FUNCTION`"
             },
             "strict": false
@@ -1991,7 +2061,7 @@
       "optspec": {
         "allow": {
           "method": "GET,PUT,POST,PATCH,DELETE,OPTIONS",
-          "op": "create,update,load,list,remove,command,direct,graphql"
+          "op": "create,update,patch,load,list,remove,command,direct,graphql"
         },
         "apikey": "",
         "auth": {
@@ -2044,6 +2114,11 @@
         "top": {
           "active": true
         }
+      },
+      "publisher": {
+        "name": "",
+        "security": "",
+        "url": ""
       },
       "repo": {
         "host": "github.com",
@@ -2274,7 +2349,10 @@
             "version": "0.0.1"
           },
           "superseded": [],
-          "title": "Go MCP server"
+          "title": "Go MCP server",
+          "tool": {
+            "write": false
+          }
         },
         "lua": {
           "active": true,
@@ -2651,6 +2729,17 @@
           "base": "",
           "strict": true
         }
+      },
+      "text": {
+        "about_md": "",
+        "docs_url": "",
+        "entity_desc": {},
+        "homepage": "",
+        "meta_source": "",
+        "summary": "",
+        "tagline": "",
+        "title": "",
+        "website": ""
       }
     }
   },

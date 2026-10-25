@@ -88,6 +88,10 @@ main: kit: entity: whoi: {
               "domain"
             ]
           }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "whois"

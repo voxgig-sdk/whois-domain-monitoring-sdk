@@ -55,8 +55,11 @@ main: kit: entity: dns_result: {
           q: {
             exist: [
               "domain"
-              "type"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

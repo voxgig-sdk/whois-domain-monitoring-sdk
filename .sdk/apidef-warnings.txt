@@ -1,0 +1,11 @@
+{
+  point: "warning"
+  note: "Points GET /qr and GET /screenshot on entity=generate op=load have the same selector (exist: url), so only GET /qr is ever chosen. An action or another entity in guide.aontu tells them apart."
+  entity: "generate"
+  op: "load"
+  points: [
+    "GET /qr"
+    "GET /screenshot"
+  ]
+
+}

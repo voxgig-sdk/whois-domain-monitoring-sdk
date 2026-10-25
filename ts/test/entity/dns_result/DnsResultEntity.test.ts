@@ -9,7 +9,7 @@ import { createLiveTransport } from '../../live-runner'
 import { runLiveEntity } from '../../live-entity'
 
 
-import { WhoisDomainMonitoringSDK, BaseFeature, stdutil } from '../../..'
+import { WhoisDomainMonitoringSDK, BaseFeature, config, stdutil } from '../../..'
 
 import {
   envOverride,
@@ -41,6 +41,18 @@ describe('DnsResultEntity', async () => {
   })
 
 
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = WhoisDomainMonitoringSDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.DnsResult().load({"domain":1} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.WHOIS_DOMAIN_MONITORING_TEST_LIVE
@@ -51,7 +63,7 @@ describe('DnsResultEntity', async () => {
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"domain":{"a":true,"h":"Domain","n":"domain","r":false,"t":"`$STRING`","key$":"domain","index$":0},"records":{"a":true,"h":"Records","n":"records","r":false,"t":"`$OBJECT`","key$":"records","index$":1}},"name":"dns_result","op":{"load":{"input":"data","name":"load","points":[{"a":true,"co":{"id":"GET /dns-lookup","source":"openapi3","version":2},"g":{"query":[{"a":true,"ex":"example.com","k":"query","n":"domain","or":"domain","r":true,"t":"`$STRING`","index$":0},{"a":true,"ex":"A,MX,TXT","k":"query","n":"type","or":"types","r":false,"t":"`$STRING`","index$":1}]},"k":"http","m":"GET","o":"/dns-lookup","q":{"exist":["domain","type"]},"r":{},"s":[{"lit":"dns-lookup"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"load"}},"relations":{"ancestors":[]},"key$":"dns_result","name__orig":"dns_result","Name":"DnsResult","name_":"dns_result","name-":"dns-result","NAME":"DNS_RESULT","index$":0}, {"active":true,"entity":"dns_result","key$":"BasicDnsResultFlow","kind":"basic","name":"BasicDnsResultFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"dns_result_ref01","srcdatavar":"dns_result_ref01_data","suffix":"_dt0"},"m":{},"o":"load","s":[],"v":[{"apply":"TextFieldMark","def":{"mark":"Mark01-dns_result_ref01"}}],"index$":0}]}, 'DnsResult', {"GET /dns-lookup":{"protocol":"http","parameters":[{"name":"domain","in":"query","required":true,"schema":{"type":"string","example":"example.com"},"description":"Domain to look up","index$":0},{"name":"types","in":"query","required":false,"schema":{"type":"string","example":"A,MX,TXT","default":"A,AAAA,MX,TXT,CNAME,NS"},"description":"Comma-separated list of record types to fetch","index$":1}]}})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"domain":{"a":true,"h":"Domain","n":"domain","r":false,"t":"`$STRING`","key$":"domain","index$":0},"records":{"a":true,"h":"Records","n":"records","r":false,"t":"`$OBJECT`","key$":"records","index$":1}},"name":"dns_result","op":{"load":{"input":"data","name":"load","points":[{"a":true,"co":{"id":"GET /dns-lookup","source":"openapi3","version":2},"g":{"query":[{"a":true,"ex":"example.com","k":"query","n":"domain","or":"domain","r":true,"t":"`$STRING`","index$":0},{"a":true,"ex":"A,MX,TXT","k":"query","n":"type","or":"types","r":false,"t":"`$STRING`","index$":1}]},"k":"http","m":"GET","o":"/dns-lookup","q":{"exist":["domain"]},"r":{},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"dns-lookup"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"load"}},"relations":{"ancestors":[]},"key$":"dns_result","name__orig":"dns_result","Name":"DnsResult","name_":"dns_result","name-":"dns-result","NAME":"DNS_RESULT","index$":0}, {"active":true,"entity":"dns_result","key$":"BasicDnsResultFlow","kind":"basic","name":"BasicDnsResultFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"dns_result_ref01","srcdatavar":"dns_result_ref01_data","suffix":"_dt0"},"m":{},"o":"load","s":[],"v":[{"apply":"TextFieldMark","def":{"mark":"Mark01-dns_result_ref01"}}],"index$":0}]}, 'DnsResult', {"GET /dns-lookup":{"protocol":"http","parameters":[{"name":"domain","in":"query","required":true,"schema":{"type":"string","example":"example.com"},"description":"Domain to look up","index$":0},{"name":"types","in":"query","required":false,"schema":{"type":"string","example":"A,MX,TXT","default":"A,AAAA,MX,TXT,CNAME,NS"},"description":"Comma-separated list of record types to fetch","index$":1}]}}, { strict: LIVE_STRICT, t })
     }
     const client = setup.client
     const struct = setup.struct
@@ -72,6 +84,12 @@ describe('DnsResultEntity', async () => {
 })
 
 
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
 
 function basicSetup(extra?: any) {
   // TODO: fix test def options

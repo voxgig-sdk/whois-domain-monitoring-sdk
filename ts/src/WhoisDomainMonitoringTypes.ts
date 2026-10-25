@@ -45,12 +45,11 @@ export interface Generate {
 }
 
 export interface GenerateLoadMatch {
-  bg?: string
-  ec_level?: string
-  fg?: string
+  data: string
   format?: string
-  size?: number
-  url: string
+  height?: number
+  output?: string
+  width?: number
 }
 
 export interface Grammar {
@@ -61,10 +60,8 @@ export interface Grammar {
 }
 
 export interface GrammarCreateData {
-  correction_count?: number
-  corrections?: any[]
   language?: string
-  text?: string
+  text: string
 }
 
 export interface Ipn {
@@ -93,11 +90,8 @@ export interface Redact {
 }
 
 export interface RedactCreateData {
-  counts?: Record<string, any>
   entities?: any[]
-  original_length?: number
   redact?: string
-  redacted?: string
   text: string
 }
 

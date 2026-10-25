@@ -88,10 +88,9 @@ main: kit: entity: ipn: {
           }
           m: "GET"
           o: "/ip"
-          q: {
-            exist: [
-              "ip"
-            ]
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

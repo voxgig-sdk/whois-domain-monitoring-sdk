@@ -9,7 +9,7 @@ import { createLiveTransport } from '../../live-runner'
 import { runLiveEntity } from '../../live-entity'
 
 
-import { WhoisDomainMonitoringSDK, BaseFeature, stdutil } from '../../..'
+import { WhoisDomainMonitoringSDK, BaseFeature, config, stdutil } from '../../..'
 
 import {
   envOverride,
@@ -41,6 +41,64 @@ describe('WhoiEntity', async () => {
   })
 
 
+  class FailHook extends BaseFeature {
+    name = 'failhook'
+    version = '0.0.1'
+    active = true
+    unexpected = 0
+    init() { }
+    PreSpec() { throw new Error('whoi hook failed') }
+    PreUnexpected() { this.unexpected++ }
+  }
+
+  test('stream-error', async () => {
+    const offline = { net: { offline: true } }
+    await assert.rejects(async () => {
+      for await (const _item of WhoisDomainMonitoringSDK.test(offline).Whoi().stream('list')) { }
+    }, /offline/)
+
+    for await (const _item of WhoisDomainMonitoringSDK.test(offline).Whoi()
+      .stream('list', undefined, { ctrl: { throw: false } })) { }
+
+    if (null != (config as any).feature?.rbac) {
+      const denied = WhoisDomainMonitoringSDK.test(undefined, { feature: { rbac: { active: true, deny: true } } })
+      await assert.rejects(async () => {
+        for await (const _item of denied.Whoi().stream('list')) { }
+      }, (err: any) => 'rbac_denied' === err.code)
+    }
+  })
+
+  test('stream-ctrl', async () => {
+    const explain: any = {}
+    const ctrl: any = { explain }
+    for await (const _item of WhoisDomainMonitoringSDK.test().Whoi().stream('list', undefined, { ctrl })) { }
+    assert.deepStrictEqual(Object.keys(ctrl), ['explain'])
+    assert(explain === ctrl.explain && 0 < Object.keys(explain).length)
+  })
+
+  test('unexpected', async () => {
+    const hook = new FailHook()
+    const client = new WhoisDomainMonitoringSDK({ feature: { test: { active: true } }, extend: [hook] })
+    await assert.rejects(client.Whoi().list(), /hook failed/)
+    assert(0 < hook.unexpected)
+
+    const fired = hook.unexpected
+    assert.strictEqual(await client.Whoi().list(undefined, { throw: false }), undefined)
+    assert(fired < hook.unexpected)
+  })
+
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = WhoisDomainMonitoringSDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.Whoi().list({"domain":1} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.WHOIS_DOMAIN_MONITORING_TEST_LIVE
@@ -51,7 +109,7 @@ describe('WhoiEntity', async () => {
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"created":{"a":true,"fo":"date-time","h":"Created","n":"created","r":false,"t":"`$STRING`","key$":"created","index$":0},"domain":{"a":true,"h":"Domain","n":"domain","r":false,"t":"`$STRING`","key$":"domain","index$":1},"expires":{"a":true,"fo":"date-time","h":"Expires","n":"expires","r":false,"t":"`$STRING`","key$":"expires","index$":2},"nameservers":{"a":true,"h":"Nameservers","n":"nameservers","r":false,"t":"`$ARRAY`","key$":"nameservers","index$":3},"registered":{"a":true,"h":"Registered","n":"registered","r":false,"t":"`$BOOLEAN`","key$":"registered","index$":4},"registrar":{"a":true,"h":"Registrar","n":"registrar","r":false,"t":"`$STRING`","key$":"registrar","index$":5},"status":{"a":true,"h":"Status","n":"status","r":false,"t":"`$ARRAY`","key$":"status","index$":6},"updated":{"a":true,"fo":"date-time","h":"Updated","n":"updated","r":false,"t":"`$STRING`","key$":"updated","index$":7}},"name":"whoi","op":{"list":{"input":"data","name":"list","points":[{"a":true,"co":{"id":"GET /whois","source":"openapi3","version":2},"g":{"query":[{"a":true,"ex":"example.com","k":"query","n":"domain","or":"domain","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"GET","o":"/whois","q":{"exist":["domain"]},"r":{},"s":[{"lit":"whois"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"list"}},"relations":{"ancestors":[]},"key$":"whoi","name__orig":"whoi","Name":"Whoi","name_":"whoi","name-":"whoi","NAME":"WHOI","index$":9}, {"active":true,"entity":"whoi","key$":"BasicWhoiFlow","kind":"basic","name":"BasicWhoiFlow","param":{},"step":[{"a":true,"d":{},"i":{},"m":{},"o":"list","s":[],"v":[{"apply":"ItemExists","def":{"ref":"whoi_ref01"}}],"index$":0}]}, 'Whoi', {"GET /whois":{"protocol":"http","parameters":[{"name":"domain","in":"query","required":true,"schema":{"type":"string","example":"example.com"},"description":"Domain name to look up","index$":0}]}})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"created":{"a":true,"fo":"date-time","h":"Created","n":"created","r":false,"t":"`$STRING`","key$":"created","index$":0},"domain":{"a":true,"h":"Domain","n":"domain","r":false,"t":"`$STRING`","key$":"domain","index$":1},"expires":{"a":true,"fo":"date-time","h":"Expires","n":"expires","r":false,"t":"`$STRING`","key$":"expires","index$":2},"nameservers":{"a":true,"h":"Nameservers","n":"nameservers","r":false,"t":"`$ARRAY`","key$":"nameservers","index$":3},"registered":{"a":true,"h":"Registered","n":"registered","r":false,"t":"`$BOOLEAN`","key$":"registered","index$":4},"registrar":{"a":true,"h":"Registrar","n":"registrar","r":false,"t":"`$STRING`","key$":"registrar","index$":5},"status":{"a":true,"h":"Status","n":"status","r":false,"t":"`$ARRAY`","key$":"status","index$":6},"updated":{"a":true,"fo":"date-time","h":"Updated","n":"updated","r":false,"t":"`$STRING`","key$":"updated","index$":7}},"name":"whoi","op":{"list":{"input":"data","name":"list","points":[{"a":true,"co":{"id":"GET /whois","source":"openapi3","version":2},"g":{"query":[{"a":true,"ex":"example.com","k":"query","n":"domain","or":"domain","r":true,"t":"`$STRING`","index$":0}]},"k":"http","m":"GET","o":"/whois","q":{"exist":["domain"]},"r":{},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"whois"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"list"}},"relations":{"ancestors":[]},"key$":"whoi","name__orig":"whoi","Name":"Whoi","name_":"whoi","name-":"whoi","NAME":"WHOI","index$":9}, {"active":true,"entity":"whoi","key$":"BasicWhoiFlow","kind":"basic","name":"BasicWhoiFlow","param":{},"step":[{"a":true,"d":{},"i":{},"m":{},"o":"list","s":[],"v":[{"apply":"ItemExists","def":{"ref":"whoi_ref01"}}],"index$":0}]}, 'Whoi', {"GET /whois":{"protocol":"http","parameters":[{"name":"domain","in":"query","required":true,"schema":{"type":"string","example":"example.com"},"description":"Domain name to look up","index$":0}]}}, { strict: LIVE_STRICT, t })
     }
     const client = setup.client
     const struct = setup.struct
@@ -72,6 +130,12 @@ describe('WhoiEntity', async () => {
 })
 
 
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
 
 function basicSetup(extra?: any) {
   // TODO: fix test def options

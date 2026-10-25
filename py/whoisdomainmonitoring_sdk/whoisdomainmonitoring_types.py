@@ -60,15 +60,14 @@ class Generate(TypedDict):
 
 
 class GenerateLoadMatchRequired(TypedDict):
-    url: str
+    data: str
 
 
 class GenerateLoadMatch(GenerateLoadMatchRequired, total=False):
-    bg: str
-    ec_level: str
-    fg: str
     format: str
-    size: int
+    height: int
+    output: str
+    width: int
 
 
 class Grammar(TypedDict, total=False):
@@ -78,11 +77,12 @@ class Grammar(TypedDict, total=False):
     text: str
 
 
-class GrammarCreateData(TypedDict, total=False):
-    correction_count: int
-    corrections: list
-    language: str
+class GrammarCreateDataRequired(TypedDict):
     text: str
+
+
+class GrammarCreateData(GrammarCreateDataRequired, total=False):
+    language: str
 
 
 class Ipn(TypedDict, total=False):
@@ -118,11 +118,8 @@ class RedactCreateDataRequired(TypedDict):
 
 
 class RedactCreateData(RedactCreateDataRequired, total=False):
-    counts: dict
     entities: list
-    original_length: int
     redact: str
-    redacted: str
 
 
 class Ssl(TypedDict, total=False):

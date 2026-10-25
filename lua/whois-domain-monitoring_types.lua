@@ -39,12 +39,11 @@
 ---@class Generate
 
 ---@class GenerateLoadMatch
----@field bg? string
----@field ec_level? string
----@field fg? string
+---@field data string
 ---@field format? string
----@field size? number
----@field url string
+---@field height? number
+---@field output? string
+---@field width? number
 
 ---@class Grammar
 ---@field correction_count? number
@@ -53,10 +52,8 @@
 ---@field text? string
 
 ---@class GrammarCreateData
----@field correction_count? number
----@field corrections? table
 ---@field language? string
----@field text? string
+---@field text string
 
 ---@class Ipn
 ---@field asn? string
@@ -81,11 +78,8 @@
 ---@field text string
 
 ---@class RedactCreateData
----@field counts? table
 ---@field entities? table
----@field original_length? number
 ---@field redact? string
----@field redacted? string
 ---@field text string
 
 ---@class Ssl

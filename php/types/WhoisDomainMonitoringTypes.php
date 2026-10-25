@@ -68,12 +68,11 @@ class Generate
 /** Request payload for Generate#load. */
 class GenerateLoadMatch
 {
-    public ?string $bg = null;
-    public ?string $ec_level = null;
-    public ?string $fg = null;
+    public string $data;
     public ?string $format = null;
-    public ?int $size = null;
-    public string $url;
+    public ?int $height = null;
+    public ?string $output = null;
+    public ?int $width = null;
 }
 
 /** Grammar entity data model. */
@@ -88,10 +87,8 @@ class Grammar
 /** Request payload for Grammar#create. */
 class GrammarCreateData
 {
-    public ?int $correction_count = null;
-    public ?array $corrections = null;
     public ?string $language = null;
-    public ?string $text = null;
+    public string $text;
 }
 
 /** Ipn entity data model. */
@@ -128,11 +125,8 @@ class Redact
 /** Request payload for Redact#create. */
 class RedactCreateData
 {
-    public ?array $counts = null;
     public ?array $entities = null;
-    public ?int $original_length = null;
     public ?string $redact = null;
-    public ?string $redacted = null;
     public string $text;
 }
 

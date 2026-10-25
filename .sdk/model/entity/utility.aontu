@@ -66,9 +66,12 @@ main: kit: entity: utility: {
           o: "/hash"
           q: {
             exist: [
-              "algo"
               "input"
             ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
           }
           s: [
             {

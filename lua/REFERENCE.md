@@ -134,7 +134,7 @@ local dns_result = client:DnsResult(nil)
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:DnsResult():load({ domain = "domain" })
@@ -188,10 +188,10 @@ local domain = client:Domain(nil)
 
 #### `list(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
 
 ```lua
-local results, err = client:Domain():list()
+local results, err = client:Domain():list({ url = "example" })
 ```
 
 ### Common Methods
@@ -248,7 +248,7 @@ local email_validate = client:EmailValidate(nil)
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:EmailValidate():load({ email = "email" })
@@ -294,10 +294,10 @@ local generate = client:Generate(nil)
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
-local result, err = client:Generate():load({ url = "url" })
+local result, err = client:Generate():load({ data = "data" })
 ```
 
 ### Common Methods
@@ -358,10 +358,11 @@ local grammar = client:Grammar(nil)
 
 #### `create(reqdata, ctrl) -> any, err`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Returns the created entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Grammar():create({
+  text = --[[ string ]],
 })
 ```
 
@@ -419,7 +420,7 @@ local ipn = client:Ipn(nil)
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Ipn():load()
@@ -476,7 +477,7 @@ local redact = client:Redact(nil)
 
 #### `create(reqdata, ctrl) -> any, err`
 
-Create a new entity with the given data.
+Create a new entity with the given data. Returns the created entity, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Redact():create({
@@ -539,10 +540,10 @@ local ssl = client:Ssl(nil)
 
 #### `list(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
 
 ```lua
-local results, err = client:Ssl():list()
+local results, err = client:Ssl():list({ domain = "example" })
 ```
 
 ### Common Methods
@@ -594,7 +595,7 @@ local utility = client:Utility(nil)
 
 #### `load(reqmatch, ctrl) -> any, err`
 
-Load a single entity matching the given criteria.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get()` reads, or `nil` and an error on failure.
 
 ```lua
 local result, err = client:Utility():load({ input = "input" })
@@ -653,10 +654,10 @@ local whoi = client:Whoi(nil)
 
 #### `list(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+List entities matching the given criteria. Returns an array of entities, one per record, or `nil` and an error on failure.
 
 ```lua
-local results, err = client:Whoi():list()
+local results, err = client:Whoi():list({ domain = "example" })
 ```
 
 ### Common Methods
@@ -846,6 +847,7 @@ Timeout.
 | Option | Type |
 |---|---|
 | `clearTimer` | function |
+| `now` | function |
 | `setTimer` | function |
 
 These take no default: the feature behaves one way when you supply them and

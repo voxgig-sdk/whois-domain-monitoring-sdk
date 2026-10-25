@@ -9,7 +9,7 @@ import { createLiveTransport } from '../../live-runner'
 import { runLiveEntity } from '../../live-entity'
 
 
-import { WhoisDomainMonitoringSDK, BaseFeature, stdutil } from '../../..'
+import { WhoisDomainMonitoringSDK, BaseFeature, config, stdutil } from '../../..'
 
 import {
   envOverride,
@@ -41,6 +41,18 @@ describe('IpnEntity', async () => {
   })
 
 
+  test('validate', async (t) => {
+    if (null == (config as any).feature?.validate) {
+      t.skip('feature not present in this SDK: validate')
+      return
+    }
+    const client = WhoisDomainMonitoringSDK.test(undefined, { feature: { validate: { active: true } } })
+    await assert.rejects(client.Ipn().load({"ip":1} as any),
+      (err: any) => 'validate_failed' === err.code)
+  })
+
+
+
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.WHOIS_DOMAIN_MONITORING_TEST_LIVE
@@ -51,7 +63,7 @@ describe('IpnEntity', async () => {
     
     const setup = basicSetup()
     if (setup.live) {
-      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"asn":{"a":true,"h":"Asn","n":"asn","r":false,"t":"`$STRING`","key$":"asn","index$":0},"city":{"a":true,"h":"City","n":"city","r":false,"t":"`$STRING`","key$":"city","index$":1},"country":{"a":true,"h":"Country","n":"country","r":false,"t":"`$STRING`","key$":"country","index$":2},"country_code":{"a":true,"h":"Country Code","n":"country_code","r":false,"t":"`$STRING`","key$":"country_code","index$":3},"ip":{"a":true,"h":"Ip","n":"ip","r":false,"t":"`$STRING`","key$":"ip","index$":4},"latitude":{"a":true,"fo":"double","h":"Latitude","n":"latitude","r":false,"t":"`$NUMBER`","key$":"latitude","index$":5},"longitude":{"a":true,"fo":"double","h":"Longitude","n":"longitude","r":false,"t":"`$NUMBER`","key$":"longitude","index$":6},"org":{"a":true,"h":"Org","n":"org","r":false,"t":"`$STRING`","key$":"org","index$":7},"timezone":{"a":true,"h":"Timezone","n":"timezone","r":false,"t":"`$STRING`","key$":"timezone","index$":8}},"name":"ipn","op":{"load":{"input":"data","name":"load","points":[{"a":true,"co":{"id":"GET /ip","source":"openapi3","version":2},"g":{"query":[{"a":true,"ex":"8.8.8.8","k":"query","n":"ip","or":"ip","r":false,"t":"`$STRING`","index$":0}]},"k":"http","m":"GET","o":"/ip","q":{"exist":["ip"]},"r":{},"s":[{"lit":"ip"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"load"}},"relations":{"ancestors":[]},"key$":"ipn","name__orig":"ipn","Name":"Ipn","name_":"ipn","name-":"ipn","NAME":"IPN","index$":5}, {"active":true,"entity":"ipn","key$":"BasicIpnFlow","kind":"basic","name":"BasicIpnFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"ipn_ref01","srcdatavar":"ipn_ref01_data","suffix":"_dt0"},"m":{},"o":"load","s":[],"v":[{"apply":"TextFieldMark","def":{"mark":"Mark01-ipn_ref01"}}],"index$":0}]}, 'Ipn', {"GET /ip":{"protocol":"http","parameters":[{"name":"ip","in":"query","required":false,"schema":{"type":"string","example":"8.8.8.8"},"description":"IP address to look up. Omit for caller's IP.","index$":0}]}})
+      return runLiveEntity(setup, {"active":true,"alias":{"field":{}},"fields":{"asn":{"a":true,"h":"Asn","n":"asn","r":false,"t":"`$STRING`","key$":"asn","index$":0},"city":{"a":true,"h":"City","n":"city","r":false,"t":"`$STRING`","key$":"city","index$":1},"country":{"a":true,"h":"Country","n":"country","r":false,"t":"`$STRING`","key$":"country","index$":2},"country_code":{"a":true,"h":"Country Code","n":"country_code","r":false,"t":"`$STRING`","key$":"country_code","index$":3},"ip":{"a":true,"h":"Ip","n":"ip","r":false,"t":"`$STRING`","key$":"ip","index$":4},"latitude":{"a":true,"fo":"double","h":"Latitude","n":"latitude","r":false,"t":"`$NUMBER`","key$":"latitude","index$":5},"longitude":{"a":true,"fo":"double","h":"Longitude","n":"longitude","r":false,"t":"`$NUMBER`","key$":"longitude","index$":6},"org":{"a":true,"h":"Org","n":"org","r":false,"t":"`$STRING`","key$":"org","index$":7},"timezone":{"a":true,"h":"Timezone","n":"timezone","r":false,"t":"`$STRING`","key$":"timezone","index$":8}},"name":"ipn","op":{"load":{"input":"data","name":"load","points":[{"a":true,"co":{"id":"GET /ip","source":"openapi3","version":2},"g":{"query":[{"a":true,"ex":"8.8.8.8","k":"query","n":"ip","or":"ip","r":false,"t":"`$STRING`","index$":0}]},"k":"http","m":"GET","o":"/ip","q":{},"r":{},"rs":{"kind":"json","media":"application/json"},"s":[{"lit":"ip"}],"t":{"req":"`reqdata`","res":"`body`"},"index$":0}],"key$":"load"}},"relations":{"ancestors":[]},"key$":"ipn","name__orig":"ipn","Name":"Ipn","name_":"ipn","name-":"ipn","NAME":"IPN","index$":5}, {"active":true,"entity":"ipn","key$":"BasicIpnFlow","kind":"basic","name":"BasicIpnFlow","param":{},"step":[{"a":true,"d":{},"i":{"ref":"ipn_ref01","srcdatavar":"ipn_ref01_data","suffix":"_dt0"},"m":{},"o":"load","s":[],"v":[{"apply":"TextFieldMark","def":{"mark":"Mark01-ipn_ref01"}}],"index$":0}]}, 'Ipn', {"GET /ip":{"protocol":"http","parameters":[{"name":"ip","in":"query","required":false,"schema":{"type":"string","example":"8.8.8.8"},"description":"IP address to look up. Omit for caller's IP.","index$":0}]}}, { strict: LIVE_STRICT, t })
     }
     const client = setup.client
     const struct = setup.struct
@@ -72,6 +84,12 @@ describe('IpnEntity', async () => {
 })
 
 
+
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true
 
 function basicSetup(extra?: any) {
   // TODO: fix test def options

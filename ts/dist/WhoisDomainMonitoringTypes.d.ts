@@ -31,12 +31,11 @@ export interface EmailValidateLoadMatch {
 export interface Generate {
 }
 export interface GenerateLoadMatch {
-    bg?: string;
-    ec_level?: string;
-    fg?: string;
+    data: string;
     format?: string;
-    size?: number;
-    url: string;
+    height?: number;
+    output?: string;
+    width?: number;
 }
 export interface Grammar {
     correction_count?: number;
@@ -45,10 +44,8 @@ export interface Grammar {
     text?: string;
 }
 export interface GrammarCreateData {
-    correction_count?: number;
-    corrections?: any[];
     language?: string;
-    text?: string;
+    text: string;
 }
 export interface Ipn {
     asn?: string;
@@ -73,11 +70,8 @@ export interface Redact {
     text: string;
 }
 export interface RedactCreateData {
-    counts?: Record<string, any>;
     entities?: any[];
-    original_length?: number;
     redact?: string;
-    redacted?: string;
     text: string;
 }
 export interface Ssl {

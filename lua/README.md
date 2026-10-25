@@ -12,7 +12,7 @@ It exposes the API as capitalised, semantic **Entities** — e.g. `client:DnsRes
 
 ## Install
 This package is not yet published to LuaRocks. Install it from the
-GitHub release tag (`lua/vX.Y.Z`, see [Releases](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases)),
+GitHub release tag (`lua/vX.Y.Z`, see [Tags](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/tags)),
 or add the source directory to your `LUA_PATH`:
 
 ```bash
@@ -23,7 +23,7 @@ export LUA_PATH="path/to/lua/?.lua;path/to/lua/?/init.lua;;"
 ## Tutorial: your first API call
 
 This tutorial walks through creating a client, listing entities, and
-loading a specific record.
+loading a specific record. The client sends the API key in the `X-API-Key` header.
 
 ### 1. Create a client
 
@@ -37,10 +37,12 @@ local client = sdk.new({
 
 ### 3. Load a dnsresult
 
+`load` returns the entity; `data_get()` reads its record.
+
 ```lua
 local dnsresult, err = client:DnsResult():load({ domain = "example_domain" })
 if err then error(err) end
-print(dnsresult)
+for k, val in pairs(dnsresult:data_get()) do print(k, val) end
 ```
 
 
@@ -109,7 +111,7 @@ Create a mock client for unit testing — no server required:
 local client = sdk.test()
 
 local result, err = client:Utility():load({ input = "example" })
--- result is the returned data; err is set on failure
+-- result is the entity; data_get() reads its mock record; err is set on failure
 ```
 
 ### Use a custom fetch function
@@ -206,9 +208,9 @@ All entities share the same interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `load` | `(reqmatch, ctrl) -> any, err` | Load a single entity by match criteria. |
-| `list` | `(reqmatch, ctrl) -> any, err` | List entities matching the criteria. |
-| `create` | `(reqdata, ctrl) -> any, err` | Create a new entity. |
+| `load` | `(reqmatch, ctrl) -> any, err` | Load a single entity by match criteria, and return it. |
+| `list` | `(reqmatch, ctrl) -> any, err` | List entities matching the criteria, one per record. |
+| `create` | `(reqdata, ctrl) -> any, err` | Create a new entity, and return it. |
 | `data_get` | `() -> table` | Get entity data. |
 | `data_set` | `(data)` | Set entity data. |
 | `match_get` | `() -> table` | Get entity match criteria. |
@@ -218,19 +220,19 @@ All entities share the same interface.
 
 ### Result shape
 
-Entity operations return `(value, err)`. The `value` is the operation's
-data **directly** — there is no wrapper:
+Entity operations return `(value, err)`. The `value` is the entity
+itself — there is no wrapper:
 
 | Operation | `value` |
 | --- | --- |
-| `load` / `create` | the entity record (a `table`) |
-| `list` | an array (`table`) of entity records |
+| `load` / `create` | the entity, whose `data_get()` reads its record (a `table`) |
+| `list` | an array (`table`) of entities, one per record |
 
 Check `err` first (it is non-`nil` on failure), then use `value`:
 
-    local dns_result, err = client:DnsResult():load()
+    local dns_result, err = client:DnsResult():load({ domain = "example" })
     if err then error(err) end
-    -- dns_result is the loaded record
+    -- dns_result is the loaded entity
 
 Only `direct()` returns a response envelope — a `table` with `ok`,
 `status`, `headers`, and `data` keys.
@@ -285,7 +287,7 @@ API path: `/email-validate`
 
 Operations: Load.
 
-API path: `/qr`
+API path: `/barcode`
 
 #### Grammar
 
@@ -432,7 +434,7 @@ Create an instance: `local domain = client:Domain(nil)`
 #### Example: List
 
 ```lua
-local domains, err = client:Domain():list()
+local domains, err = client:Domain():list({ url = "example" })
 ```
 
 
@@ -480,7 +482,7 @@ Create an instance: `local generate = client:Generate(nil)`
 #### Example: Load
 
 ```lua
-local generate, err = client:Generate():load({ url = "url" })
+local generate, err = client:Generate():load({ data = "data" })
 ```
 
 
@@ -507,6 +509,7 @@ Create an instance: `local grammar = client:Grammar(nil)`
 
 ```lua
 local grammar, err = client:Grammar():create({
+  text = "example_text", -- string
 })
 ```
 
@@ -600,7 +603,7 @@ Create an instance: `local ssl = client:Ssl(nil)`
 #### Example: List
 
 ```lua
-local ssls, err = client:Ssl():list()
+local ssls, err = client:Ssl():list({ domain = "example" })
 ```
 
 
@@ -656,7 +659,7 @@ Create an instance: `local whoi = client:Whoi(nil)`
 #### Example: List
 
 ```lua
-local whois, err = client:Whoi():list()
+local whois, err = client:Whoi():list({ domain = "example" })
 ```
 
 ## Features

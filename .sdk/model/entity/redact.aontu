@@ -52,6 +52,11 @@ main: kit: entity: redact: {
       name: "create"
       points: [
         {
+          bf: [
+            "entities"
+            "redact"
+            "text"
+          ]
           co: {
             id: "POST /redact"
             source: "openapi3"
@@ -59,6 +64,10 @@ main: kit: entity: redact: {
           }
           m: "POST"
           o: "/redact"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "redact"

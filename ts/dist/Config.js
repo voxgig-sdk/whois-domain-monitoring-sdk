@@ -87,6 +87,7 @@ class Config {
             },
             "optspec": {
                 "clearTimer": "`$FUNCTION`",
+                "now": "`$FUNCTION`",
                 "setTimer": "`$FUNCTION`"
             },
             "strict": false,
@@ -160,7 +161,8 @@ class Config {
                                         "type": "`$STRING`",
                                         "kind": "query",
                                         "reqd": true,
-                                        "example": "example.com"
+                                        "example": "example.com",
+                                        "field": true
                                     },
                                     {
                                         "name": "type",
@@ -173,9 +175,12 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "domain",
-                                    "type"
+                                    "domain"
                                 ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]
@@ -234,7 +239,8 @@ class Config {
                                         "type": "`$STRING`",
                                         "kind": "query",
                                         "reqd": true,
-                                        "example": "https://example.com"
+                                        "example": "https://example.com",
+                                        "field": true
                                     }
                                 ]
                             },
@@ -242,6 +248,10 @@ class Config {
                                 "exist": [
                                     "url"
                                 ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]
@@ -333,7 +343,8 @@ class Config {
                                         "type": "`$STRING`",
                                         "kind": "query",
                                         "reqd": true,
-                                        "example": "user@example.com"
+                                        "example": "user@example.com",
+                                        "field": true
                                     }
                                 ]
                             },
@@ -341,6 +352,10 @@ class Config {
                                 "exist": [
                                     "email"
                                 ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]
@@ -358,6 +373,80 @@ class Config {
                     "input": "data",
                     "name": "load",
                     "points": [
+                        {
+                            "kind": "http",
+                            "method": "GET",
+                            "orig": "/barcode",
+                            "segments": [
+                                {
+                                    "lit": "barcode"
+                                }
+                            ],
+                            "parts": [
+                                "barcode"
+                            ],
+                            "rename": {},
+                            "transform": {
+                                "req": "`reqdata`",
+                                "res": "`body`"
+                            },
+                            "args": {
+                                "query": [
+                                    {
+                                        "name": "data",
+                                        "orig": "data",
+                                        "type": "`$STRING`",
+                                        "kind": "query",
+                                        "reqd": true,
+                                        "example": "HELLO123"
+                                    },
+                                    {
+                                        "name": "format",
+                                        "orig": "format",
+                                        "type": "`$STRING`",
+                                        "kind": "query",
+                                        "example": "code128"
+                                    },
+                                    {
+                                        "name": "height",
+                                        "orig": "height",
+                                        "type": "`$INTEGER`",
+                                        "kind": "query",
+                                        "example": 120
+                                    },
+                                    {
+                                        "name": "output",
+                                        "orig": "output",
+                                        "type": "`$STRING`",
+                                        "kind": "query",
+                                        "example": "svg"
+                                    },
+                                    {
+                                        "name": "width",
+                                        "orig": "width",
+                                        "type": "`$INTEGER`",
+                                        "kind": "query",
+                                        "example": 400
+                                    }
+                                ]
+                            },
+                            "select": {
+                                "exist": [
+                                    "data"
+                                ]
+                            },
+                            "response": {
+                                "alternatives": [
+                                    {
+                                        "kind": "raw",
+                                        "media": "image/svg+xml"
+                                    }
+                                ],
+                                "binary": true,
+                                "kind": "raw",
+                                "media": "image/png"
+                            }
+                        },
                         {
                             "kind": "http",
                             "method": "GET",
@@ -424,80 +513,19 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "bg",
-                                    "ec_level",
-                                    "fg",
-                                    "format",
-                                    "size",
                                     "url"
                                 ]
-                            }
-                        },
-                        {
-                            "kind": "http",
-                            "method": "GET",
-                            "orig": "/barcode",
-                            "segments": [
-                                {
-                                    "lit": "barcode"
-                                }
-                            ],
-                            "parts": [
-                                "barcode"
-                            ],
-                            "rename": {},
-                            "transform": {
-                                "req": "`reqdata`",
-                                "res": "`body`"
                             },
-                            "args": {
-                                "query": [
+                            "response": {
+                                "alternatives": [
                                     {
-                                        "name": "data",
-                                        "orig": "data",
-                                        "type": "`$STRING`",
-                                        "kind": "query",
-                                        "reqd": true,
-                                        "example": "HELLO123"
-                                    },
-                                    {
-                                        "name": "format",
-                                        "orig": "format",
-                                        "type": "`$STRING`",
-                                        "kind": "query",
-                                        "example": "code128"
-                                    },
-                                    {
-                                        "name": "height",
-                                        "orig": "height",
-                                        "type": "`$INTEGER`",
-                                        "kind": "query",
-                                        "example": 120
-                                    },
-                                    {
-                                        "name": "output",
-                                        "orig": "output",
-                                        "type": "`$STRING`",
-                                        "kind": "query",
-                                        "example": "svg"
-                                    },
-                                    {
-                                        "name": "width",
-                                        "orig": "width",
-                                        "type": "`$INTEGER`",
-                                        "kind": "query",
-                                        "example": 400
+                                        "kind": "raw",
+                                        "media": "image/svg+xml"
                                     }
-                                ]
-                            },
-                            "select": {
-                                "exist": [
-                                    "data",
-                                    "format",
-                                    "height",
-                                    "output",
-                                    "width"
-                                ]
+                                ],
+                                "binary": true,
+                                "kind": "raw",
+                                "media": "image/png"
                             }
                         },
                         {
@@ -545,10 +573,13 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "full_page",
-                                    "url",
-                                    "width"
+                                    "url"
                                 ]
+                            },
+                            "response": {
+                                "binary": true,
+                                "kind": "raw",
+                                "media": "image/png"
                             }
                         }
                     ]
@@ -613,7 +644,26 @@ class Config {
                                 "res": "`body`"
                             },
                             "args": {},
-                            "select": {}
+                            "select": {},
+                            "body": {
+                                "alternatives": [
+                                    {
+                                        "fields": [
+                                            {
+                                                "name": "text"
+                                            }
+                                        ],
+                                        "kind": "form",
+                                        "media": "application/x-www-form-urlencoded"
+                                    }
+                                ],
+                                "kind": "json",
+                                "media": "application/json"
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
                         }
                     ]
                 }
@@ -702,14 +752,15 @@ class Config {
                                         "orig": "ip",
                                         "type": "`$STRING`",
                                         "kind": "query",
-                                        "example": "8.8.8.8"
+                                        "example": "8.8.8.8",
+                                        "field": true
                                     }
                                 ]
                             },
-                            "select": {
-                                "exist": [
-                                    "ip"
-                                ]
+                            "select": {},
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]
@@ -780,7 +831,11 @@ class Config {
                                 "res": "`body`"
                             },
                             "args": {},
-                            "select": {}
+                            "select": {},
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
+                            }
                         }
                     ]
                 }
@@ -874,7 +929,8 @@ class Config {
                                         "type": "`$STRING`",
                                         "kind": "query",
                                         "reqd": true,
-                                        "example": "example.com"
+                                        "example": "example.com",
+                                        "field": true
                                     },
                                     {
                                         "name": "port",
@@ -887,9 +943,12 @@ class Config {
                             },
                             "select": {
                                 "exist": [
-                                    "domain",
-                                    "port"
+                                    "domain"
                                 ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]
@@ -952,7 +1011,8 @@ class Config {
                                         "orig": "algo",
                                         "type": "`$STRING`",
                                         "kind": "query",
-                                        "example": "sha256"
+                                        "example": "sha256",
+                                        "field": true
                                     },
                                     {
                                         "name": "input",
@@ -960,15 +1020,19 @@ class Config {
                                         "type": "`$STRING`",
                                         "kind": "query",
                                         "reqd": true,
-                                        "example": "hello world"
+                                        "example": "hello world",
+                                        "field": true
                                     }
                                 ]
                             },
                             "select": {
                                 "exist": [
-                                    "algo",
                                     "input"
                                 ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]
@@ -1055,7 +1119,8 @@ class Config {
                                         "type": "`$STRING`",
                                         "kind": "query",
                                         "reqd": true,
-                                        "example": "example.com"
+                                        "example": "example.com",
+                                        "field": true
                                     }
                                 ]
                             },
@@ -1063,6 +1128,10 @@ class Config {
                                 "exist": [
                                     "domain"
                                 ]
+                            },
+                            "response": {
+                                "kind": "json",
+                                "media": "application/json"
                             }
                         }
                     ]

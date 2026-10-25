@@ -71,6 +71,7 @@ func MakeConfig() map[string]any {
 				},
 				"optspec": map[string]any{
 					"clearTimer": "`$FUNCTION`",
+					"now": "`$FUNCTION`",
 					"setTimer": "`$FUNCTION`",
 				},
 				"strict": false,
@@ -145,6 +146,7 @@ func MakeConfig() map[string]any {
 											"kind": "query",
 											"reqd": true,
 											"example": "example.com",
+											"field": true,
 										},
 										map[string]any{
 											"name": "type",
@@ -158,8 +160,11 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"domain",
-										"type",
 									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
 								},
 							},
 						},
@@ -219,6 +224,7 @@ func MakeConfig() map[string]any {
 											"kind": "query",
 											"reqd": true,
 											"example": "https://example.com",
+											"field": true,
 										},
 									},
 								},
@@ -226,6 +232,10 @@ func MakeConfig() map[string]any {
 									"exist": []any{
 										"url",
 									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
 								},
 							},
 						},
@@ -318,6 +328,7 @@ func MakeConfig() map[string]any {
 											"kind": "query",
 											"reqd": true,
 											"example": "user@example.com",
+											"field": true,
 										},
 									},
 								},
@@ -325,6 +336,10 @@ func MakeConfig() map[string]any {
 									"exist": []any{
 										"email",
 									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
 								},
 							},
 						},
@@ -342,6 +357,80 @@ func MakeConfig() map[string]any {
 						"input": "data",
 						"name": "load",
 						"points": []any{
+							map[string]any{
+								"kind": "http",
+								"method": "GET",
+								"orig": "/barcode",
+								"segments": []any{
+									map[string]any{
+										"lit": "barcode",
+									},
+								},
+								"parts": []any{
+									"barcode",
+								},
+								"rename": map[string]any{},
+								"transform": map[string]any{
+									"req": "`reqdata`",
+									"res": "`body`",
+								},
+								"args": map[string]any{
+									"query": []any{
+										map[string]any{
+											"name": "data",
+											"orig": "data",
+											"type": "`$STRING`",
+											"kind": "query",
+											"reqd": true,
+											"example": "HELLO123",
+										},
+										map[string]any{
+											"name": "format",
+											"orig": "format",
+											"type": "`$STRING`",
+											"kind": "query",
+											"example": "code128",
+										},
+										map[string]any{
+											"name": "height",
+											"orig": "height",
+											"type": "`$INTEGER`",
+											"kind": "query",
+											"example": 120,
+										},
+										map[string]any{
+											"name": "output",
+											"orig": "output",
+											"type": "`$STRING`",
+											"kind": "query",
+											"example": "svg",
+										},
+										map[string]any{
+											"name": "width",
+											"orig": "width",
+											"type": "`$INTEGER`",
+											"kind": "query",
+											"example": 400,
+										},
+									},
+								},
+								"select": map[string]any{
+									"exist": []any{
+										"data",
+									},
+								},
+								"response": map[string]any{
+									"alternatives": []any{
+										map[string]any{
+											"kind": "raw",
+											"media": "image/svg+xml",
+										},
+									},
+									"binary": true,
+									"kind": "raw",
+									"media": "image/png",
+								},
+							},
 							map[string]any{
 								"kind": "http",
 								"method": "GET",
@@ -408,80 +497,19 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"bg",
-										"ec_level",
-										"fg",
-										"format",
-										"size",
 										"url",
 									},
 								},
-							},
-							map[string]any{
-								"kind": "http",
-								"method": "GET",
-								"orig": "/barcode",
-								"segments": []any{
-									map[string]any{
-										"lit": "barcode",
-									},
-								},
-								"parts": []any{
-									"barcode",
-								},
-								"rename": map[string]any{},
-								"transform": map[string]any{
-									"req": "`reqdata`",
-									"res": "`body`",
-								},
-								"args": map[string]any{
-									"query": []any{
+								"response": map[string]any{
+									"alternatives": []any{
 										map[string]any{
-											"name": "data",
-											"orig": "data",
-											"type": "`$STRING`",
-											"kind": "query",
-											"reqd": true,
-											"example": "HELLO123",
-										},
-										map[string]any{
-											"name": "format",
-											"orig": "format",
-											"type": "`$STRING`",
-											"kind": "query",
-											"example": "code128",
-										},
-										map[string]any{
-											"name": "height",
-											"orig": "height",
-											"type": "`$INTEGER`",
-											"kind": "query",
-											"example": 120,
-										},
-										map[string]any{
-											"name": "output",
-											"orig": "output",
-											"type": "`$STRING`",
-											"kind": "query",
-											"example": "svg",
-										},
-										map[string]any{
-											"name": "width",
-											"orig": "width",
-											"type": "`$INTEGER`",
-											"kind": "query",
-											"example": 400,
+											"kind": "raw",
+											"media": "image/svg+xml",
 										},
 									},
-								},
-								"select": map[string]any{
-									"exist": []any{
-										"data",
-										"format",
-										"height",
-										"output",
-										"width",
-									},
+									"binary": true,
+									"kind": "raw",
+									"media": "image/png",
 								},
 							},
 							map[string]any{
@@ -529,10 +557,13 @@ func MakeConfig() map[string]any {
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"full_page",
 										"url",
-										"width",
 									},
+								},
+								"response": map[string]any{
+									"binary": true,
+									"kind": "raw",
+									"media": "image/png",
 								},
 							},
 						},
@@ -598,6 +629,25 @@ func MakeConfig() map[string]any {
 								},
 								"args": map[string]any{},
 								"select": map[string]any{},
+								"body": map[string]any{
+									"alternatives": []any{
+										map[string]any{
+											"fields": []any{
+												map[string]any{
+													"name": "text",
+												},
+											},
+											"kind": "form",
+											"media": "application/x-www-form-urlencoded",
+										},
+									},
+									"kind": "json",
+									"media": "application/json",
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
 							},
 						},
 					},
@@ -687,13 +737,14 @@ func MakeConfig() map[string]any {
 											"type": "`$STRING`",
 											"kind": "query",
 											"example": "8.8.8.8",
+											"field": true,
 										},
 									},
 								},
-								"select": map[string]any{
-									"exist": []any{
-										"ip",
-									},
+								"select": map[string]any{},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
 								},
 							},
 						},
@@ -765,6 +816,10 @@ func MakeConfig() map[string]any {
 								},
 								"args": map[string]any{},
 								"select": map[string]any{},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
+								},
 							},
 						},
 					},
@@ -859,6 +914,7 @@ func MakeConfig() map[string]any {
 											"kind": "query",
 											"reqd": true,
 											"example": "example.com",
+											"field": true,
 										},
 										map[string]any{
 											"name": "port",
@@ -872,8 +928,11 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{
 									"exist": []any{
 										"domain",
-										"port",
 									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
 								},
 							},
 						},
@@ -937,6 +996,7 @@ func MakeConfig() map[string]any {
 											"type": "`$STRING`",
 											"kind": "query",
 											"example": "sha256",
+											"field": true,
 										},
 										map[string]any{
 											"name": "input",
@@ -945,14 +1005,18 @@ func MakeConfig() map[string]any {
 											"kind": "query",
 											"reqd": true,
 											"example": "hello world",
+											"field": true,
 										},
 									},
 								},
 								"select": map[string]any{
 									"exist": []any{
-										"algo",
 										"input",
 									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
 								},
 							},
 						},
@@ -1040,6 +1104,7 @@ func MakeConfig() map[string]any {
 											"kind": "query",
 											"reqd": true,
 											"example": "example.com",
+											"field": true,
 										},
 									},
 								},
@@ -1047,6 +1112,10 @@ func MakeConfig() map[string]any {
 									"exist": []any{
 										"domain",
 									},
+								},
+								"response": map[string]any{
+									"kind": "json",
+									"media": "application/json",
 								},
 							},
 						},

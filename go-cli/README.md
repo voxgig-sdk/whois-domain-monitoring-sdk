@@ -21,6 +21,7 @@ export WHOIS_DOMAIN_MONITORING_APIKEY=sk_live_xxx
 # 4. Each command line is ONE boru expression, run against the API:
 ./whois-domain-monitoring-cli load 1 dns_result            # {id:1} shorthand
 ./whois-domain-monitoring-cli load '{id:1}' dns_result       # explicit match map
+./whois-domain-monitoring-cli list domain
 
 # 5. Override the API base URL for a single call
 WHOIS_DOMAIN_MONITORING_BASE=https://api.example.com ./whois-domain-monitoring-cli load 1 dns_result

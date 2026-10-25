@@ -137,7 +137,7 @@ dns_result = client.DnsResult
 
 #### `load(reqmatch, ctrl = nil) -> result`
 
-Load a single entity matching the given criteria. Raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get` reads, and raises on error.
 
 ```ruby
 result = client.DnsResult.load({ "domain" => "domain" })
@@ -191,10 +191,11 @@ domain = client.Domain
 
 #### `list(reqmatch = nil, ctrl = nil) -> Array`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Raises on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record; `data_get` reads each record. Raises on error.
 
 ```ruby
-results = client.Domain.list
+results = client.Domain.list({ "url" => "example" })
+results.each { |item| puts item.data_get }
 ```
 
 ### Common Methods
@@ -251,7 +252,7 @@ email_validate = client.EmailValidate
 
 #### `load(reqmatch, ctrl = nil) -> result`
 
-Load a single entity matching the given criteria. Raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get` reads, and raises on error.
 
 ```ruby
 result = client.EmailValidate.load({ "email" => "email" })
@@ -297,10 +298,10 @@ generate = client.Generate
 
 #### `load(reqmatch, ctrl = nil) -> result`
 
-Load a single entity matching the given criteria. Raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get` reads, and raises on error.
 
 ```ruby
-result = client.Generate.load({ "url" => "url" })
+result = client.Generate.load({ "data" => "data" })
 ```
 
 ### Common Methods
@@ -361,10 +362,11 @@ grammar = client.Grammar
 
 #### `create(reqdata, ctrl = nil) -> result`
 
-Create a new entity with the given data. Raises on error.
+Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```ruby
 result = client.Grammar.create({
+  "text" => "example_text", # String
 })
 ```
 
@@ -422,7 +424,7 @@ ipn = client.Ipn
 
 #### `load(reqmatch, ctrl = nil) -> result`
 
-Load a single entity matching the given criteria. Raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get` reads, and raises on error.
 
 ```ruby
 result = client.Ipn.load()
@@ -479,7 +481,7 @@ redact = client.Redact
 
 #### `create(reqdata, ctrl = nil) -> result`
 
-Create a new entity with the given data. Raises on error.
+Create a new entity with the given data. Returns the created entity and raises on error.
 
 ```ruby
 result = client.Redact.create({
@@ -542,10 +544,11 @@ ssl = client.Ssl
 
 #### `list(reqmatch = nil, ctrl = nil) -> Array`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Raises on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record; `data_get` reads each record. Raises on error.
 
 ```ruby
-results = client.Ssl.list
+results = client.Ssl.list({ "domain" => "example" })
+results.each { |item| puts item.data_get }
 ```
 
 ### Common Methods
@@ -597,7 +600,7 @@ utility = client.Utility
 
 #### `load(reqmatch, ctrl = nil) -> result`
 
-Load a single entity matching the given criteria. Raises on error.
+Load a single entity matching the given criteria. Returns the entity, whose record `data_get` reads, and raises on error.
 
 ```ruby
 result = client.Utility.load({ "input" => "input" })
@@ -656,10 +659,11 @@ whoi = client.Whoi
 
 #### `list(reqmatch = nil, ctrl = nil) -> Array`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Raises on error.
+List entities matching the given criteria (call with no argument to list all). Returns an array of entities, one per record; `data_get` reads each record. Raises on error.
 
 ```ruby
-results = client.Whoi.list
+results = client.Whoi.list({ "domain" => "example" })
+results.each { |item| puts item.data_get }
 ```
 
 ### Common Methods
@@ -849,6 +853,7 @@ Timeout.
 | Option | Type |
 |---|---|
 | `clearTimer` | function |
+| `now` | function |
 | `setTimer` | function |
 
 These take no default: the feature behaves one way when you supply them and

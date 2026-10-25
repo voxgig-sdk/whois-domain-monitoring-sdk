@@ -94,6 +94,10 @@ main: kit: entity: email_validate: {
               "email"
             ]
           }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
           s: [
             {
               lit: "email-validate"

@@ -54,6 +54,53 @@ const utility_1 = require("../../utility");
         const ent = testsdk.Whoi();
         (0, node_assert_1.default)(null != ent);
     });
+    class FailHook extends __1.BaseFeature {
+        name = 'failhook';
+        version = '0.0.1';
+        active = true;
+        unexpected = 0;
+        init() { }
+        PreSpec() { throw new Error('whoi hook failed'); }
+        PreUnexpected() { this.unexpected++; }
+    }
+    (0, node_test_1.test)('stream-error', async () => {
+        const offline = { net: { offline: true } };
+        await node_assert_1.default.rejects(async () => {
+            for await (const _item of __1.WhoisDomainMonitoringSDK.test(offline).Whoi().stream('list')) { }
+        }, /offline/);
+        for await (const _item of __1.WhoisDomainMonitoringSDK.test(offline).Whoi()
+            .stream('list', undefined, { ctrl: { throw: false } })) { }
+        if (null != __1.config.feature?.rbac) {
+            const denied = __1.WhoisDomainMonitoringSDK.test(undefined, { feature: { rbac: { active: true, deny: true } } });
+            await node_assert_1.default.rejects(async () => {
+                for await (const _item of denied.Whoi().stream('list')) { }
+            }, (err) => 'rbac_denied' === err.code);
+        }
+    });
+    (0, node_test_1.test)('stream-ctrl', async () => {
+        const explain = {};
+        const ctrl = { explain };
+        for await (const _item of __1.WhoisDomainMonitoringSDK.test().Whoi().stream('list', undefined, { ctrl })) { }
+        node_assert_1.default.deepStrictEqual(Object.keys(ctrl), ['explain']);
+        (0, node_assert_1.default)(explain === ctrl.explain && 0 < Object.keys(explain).length);
+    });
+    (0, node_test_1.test)('unexpected', async () => {
+        const hook = new FailHook();
+        const client = new __1.WhoisDomainMonitoringSDK({ feature: { test: { active: true } }, extend: [hook] });
+        await node_assert_1.default.rejects(client.Whoi().list(), /hook failed/);
+        (0, node_assert_1.default)(0 < hook.unexpected);
+        const fired = hook.unexpected;
+        node_assert_1.default.strictEqual(await client.Whoi().list(undefined, { throw: false }), undefined);
+        (0, node_assert_1.default)(fired < hook.unexpected);
+    });
+    (0, node_test_1.test)('validate', async (t) => {
+        if (null == __1.config.feature?.validate) {
+            t.skip('feature not present in this SDK: validate');
+            return;
+        }
+        const client = __1.WhoisDomainMonitoringSDK.test(undefined, { feature: { validate: { active: true } } });
+        await node_assert_1.default.rejects(client.Whoi().list({ "domain": 1 }), (err) => 'validate_failed' === err.code);
+    });
     (0, node_test_1.test)('basic', async (t) => {
         const live = 'TRUE' === process.env.WHOIS_DOMAIN_MONITORING_TEST_LIVE;
         for (const op of ['list']) {
@@ -62,7 +109,7 @@ const utility_1 = require("../../utility");
         }
         const setup = basicSetup();
         if (setup.live) {
-            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": { "created": { "a": true, "fo": "date-time", "h": "Created", "n": "created", "r": false, "t": "`$STRING`", "key$": "created", "index$": 0 }, "domain": { "a": true, "h": "Domain", "n": "domain", "r": false, "t": "`$STRING`", "key$": "domain", "index$": 1 }, "expires": { "a": true, "fo": "date-time", "h": "Expires", "n": "expires", "r": false, "t": "`$STRING`", "key$": "expires", "index$": 2 }, "nameservers": { "a": true, "h": "Nameservers", "n": "nameservers", "r": false, "t": "`$ARRAY`", "key$": "nameservers", "index$": 3 }, "registered": { "a": true, "h": "Registered", "n": "registered", "r": false, "t": "`$BOOLEAN`", "key$": "registered", "index$": 4 }, "registrar": { "a": true, "h": "Registrar", "n": "registrar", "r": false, "t": "`$STRING`", "key$": "registrar", "index$": 5 }, "status": { "a": true, "h": "Status", "n": "status", "r": false, "t": "`$ARRAY`", "key$": "status", "index$": 6 }, "updated": { "a": true, "fo": "date-time", "h": "Updated", "n": "updated", "r": false, "t": "`$STRING`", "key$": "updated", "index$": 7 } }, "name": "whoi", "op": { "list": { "input": "data", "name": "list", "points": [{ "a": true, "co": { "id": "GET /whois", "source": "openapi3", "version": 2 }, "g": { "query": [{ "a": true, "ex": "example.com", "k": "query", "n": "domain", "or": "domain", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "GET", "o": "/whois", "q": { "exist": ["domain"] }, "r": {}, "s": [{ "lit": "whois" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "list" } }, "relations": { "ancestors": [] }, "key$": "whoi", "name__orig": "whoi", "Name": "Whoi", "name_": "whoi", "name-": "whoi", "NAME": "WHOI", "index$": 9 }, { "active": true, "entity": "whoi", "key$": "BasicWhoiFlow", "kind": "basic", "name": "BasicWhoiFlow", "param": {}, "step": [{ "a": true, "d": {}, "i": {}, "m": {}, "o": "list", "s": [], "v": [{ "apply": "ItemExists", "def": { "ref": "whoi_ref01" } }], "index$": 0 }] }, 'Whoi', { "GET /whois": { "protocol": "http", "parameters": [{ "name": "domain", "in": "query", "required": true, "schema": { "type": "string", "example": "example.com" }, "description": "Domain name to look up", "index$": 0 }] } });
+            return (0, live_entity_1.runLiveEntity)(setup, { "active": true, "alias": { "field": {} }, "fields": { "created": { "a": true, "fo": "date-time", "h": "Created", "n": "created", "r": false, "t": "`$STRING`", "key$": "created", "index$": 0 }, "domain": { "a": true, "h": "Domain", "n": "domain", "r": false, "t": "`$STRING`", "key$": "domain", "index$": 1 }, "expires": { "a": true, "fo": "date-time", "h": "Expires", "n": "expires", "r": false, "t": "`$STRING`", "key$": "expires", "index$": 2 }, "nameservers": { "a": true, "h": "Nameservers", "n": "nameservers", "r": false, "t": "`$ARRAY`", "key$": "nameservers", "index$": 3 }, "registered": { "a": true, "h": "Registered", "n": "registered", "r": false, "t": "`$BOOLEAN`", "key$": "registered", "index$": 4 }, "registrar": { "a": true, "h": "Registrar", "n": "registrar", "r": false, "t": "`$STRING`", "key$": "registrar", "index$": 5 }, "status": { "a": true, "h": "Status", "n": "status", "r": false, "t": "`$ARRAY`", "key$": "status", "index$": 6 }, "updated": { "a": true, "fo": "date-time", "h": "Updated", "n": "updated", "r": false, "t": "`$STRING`", "key$": "updated", "index$": 7 } }, "name": "whoi", "op": { "list": { "input": "data", "name": "list", "points": [{ "a": true, "co": { "id": "GET /whois", "source": "openapi3", "version": 2 }, "g": { "query": [{ "a": true, "ex": "example.com", "k": "query", "n": "domain", "or": "domain", "r": true, "t": "`$STRING`", "index$": 0 }] }, "k": "http", "m": "GET", "o": "/whois", "q": { "exist": ["domain"] }, "r": {}, "rs": { "kind": "json", "media": "application/json" }, "s": [{ "lit": "whois" }], "t": { "req": "`reqdata`", "res": "`body`" }, "index$": 0 }], "key$": "list" } }, "relations": { "ancestors": [] }, "key$": "whoi", "name__orig": "whoi", "Name": "Whoi", "name_": "whoi", "name-": "whoi", "NAME": "WHOI", "index$": 9 }, { "active": true, "entity": "whoi", "key$": "BasicWhoiFlow", "kind": "basic", "name": "BasicWhoiFlow", "param": {}, "step": [{ "a": true, "d": {}, "i": {}, "m": {}, "o": "list", "s": [], "v": [{ "apply": "ItemExists", "def": { "ref": "whoi_ref01" } }], "index$": 0 }] }, 'Whoi', { "GET /whois": { "protocol": "http", "parameters": [{ "name": "domain", "in": "query", "required": true, "schema": { "type": "string", "example": "example.com" }, "description": "Domain name to look up", "index$": 0 }] } }, { strict: LIVE_STRICT, t });
         }
         const client = setup.client;
         const struct = setup.struct;
@@ -75,6 +122,11 @@ const utility_1 = require("../../utility");
         const whoi_ref01_list = (await whoi_ref01_ent.list(whoi_ref01_match)).map((e) => e.data());
     });
 });
+// main.kit.test.live.strict is true (the default is true): a live
+// request that fails, or a live test missing an input it needs,
+// fails the test.
+// An account with no record for a test to read skips it either way.
+const LIVE_STRICT = true;
 function basicSetup(extra) {
     // TODO: fix test def options
     const options = {}; // null

@@ -46,12 +46,11 @@ type Generate struct {
 
 // GenerateLoadMatch is the typed request payload for Generate.LoadTyped.
 type GenerateLoadMatch struct {
-	Bg *string `json:"bg,omitempty"`
-	EcLevel *string `json:"ec_level,omitempty"`
-	Fg *string `json:"fg,omitempty"`
+	Data string `json:"data"`
 	Format *string `json:"format,omitempty"`
-	Size *int `json:"size,omitempty"`
-	Url string `json:"url"`
+	Height *int `json:"height,omitempty"`
+	Output *string `json:"output,omitempty"`
+	Width *int `json:"width,omitempty"`
 }
 
 // Grammar is the typed data model for the grammar entity.
@@ -60,10 +59,8 @@ type Grammar struct {
 
 // GrammarCreateData is the typed request payload for Grammar.CreateTyped.
 type GrammarCreateData struct {
-	CorrectionCount *int `json:"correction_count,omitempty"`
-	Corrections *[]any `json:"corrections,omitempty"`
 	Language *string `json:"language,omitempty"`
-	Text *string `json:"text,omitempty"`
+	Text string `json:"text"`
 }
 
 // Ipn is the typed data model for the ipn entity.
@@ -81,11 +78,8 @@ type Redact struct {
 
 // RedactCreateData is the typed request payload for Redact.CreateTyped.
 type RedactCreateData struct {
-	Counts *map[string]any `json:"counts,omitempty"`
 	Entities *[]any `json:"entities,omitempty"`
-	OriginalLength *int `json:"original_length,omitempty"`
 	Redact *string `json:"redact,omitempty"`
-	Redacted *string `json:"redacted,omitempty"`
 	Text string `json:"text"`
 }
 

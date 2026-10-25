@@ -16,7 +16,7 @@ go get github.com/voxgig-sdk/whois-domain-monitoring-sdk/go@latest
 ```
 
 The Go module proxy resolves the version from the `go/vX.Y.Z` GitHub
-release tag — see [Releases](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/releases) for the available versions.
+release tag — see [Tags](https://github.com/voxgig-sdk/whois-domain-monitoring-sdk/tags) for the available versions.
 
 To vendor from a local checkout instead, clone this repo alongside your
 project and add a `replace` directive pointing at the checked-out
@@ -30,14 +30,15 @@ go mod edit -replace github.com/voxgig-sdk/whois-domain-monitoring-sdk/go=../who
 ## Tutorial: your first API call
 
 This tutorial walks through creating a client, listing entities, and
-loading a specific record.
+loading a specific record. The client sends the API key in the `X-API-Key` header.
 
 ### Quickstart
 
 A complete program: create a client, then call the entity operations.
-Each operation returns `(value, error)` — the value is the data itself
-(there is no `{ok, data}` wrapper), so check `err` and use the value
-directly.
+Each operation returns `(value, error)` — the value is the entity, and for
+`List` a `[]any` of entities, one per record (there is no `{ok, data}`
+wrapper), so check `err` and read a record through the entity's
+`Data()`.
 
 ```go
 package main
@@ -53,12 +54,12 @@ func main() {
         "apikey": os.Getenv("WHOIS_DOMAIN_MONITORING_APIKEY"),
     })
 
-    // Load a single dnsResult — the value is the loaded record.
+    // Load a single dnsResult — the value is the entity; Data() reads its record.
     dnsResult, err := client.DnsResult(nil).Load(map[string]any{"domain": "example_domain"}, nil)
     if err != nil {
         panic(err)
     }
-    fmt.Println(dnsResult)
+    fmt.Println(dnsResult.(sdk.Entity).Data())
 }
 ```
 
@@ -144,7 +145,7 @@ utility, err := client.Utility(nil).Load(
 if err != nil {
     panic(err)
 }
-fmt.Println(utility) // the returned mock data
+fmt.Println(utility.(sdk.Entity).Data()) // the entity's mock record
 ```
 
 ### Use a custom fetch function
@@ -240,9 +241,9 @@ All entities implement the `WhoisDomainMonitoringEntity` interface.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `Load` | `(reqmatch, ctrl map[string]any) (any, error)` | Load a single entity by match criteria. |
-| `List` | `(reqmatch, ctrl map[string]any) (any, error)` | List entities matching the criteria. |
-| `Create` | `(reqdata, ctrl map[string]any) (any, error)` | Create a new entity. |
+| `Load` | `(reqmatch, ctrl map[string]any) (any, error)` | Load a single entity by match criteria, and return it. |
+| `List` | `(reqmatch, ctrl map[string]any) (any, error)` | List entities matching the criteria, one per record. |
+| `Create` | `(reqdata, ctrl map[string]any) (any, error)` | Create a new entity, and return it. |
 | `Data` | `(args ...any) any` | Get or set entity data. |
 | `Match` | `(args ...any) any` | Get or set entity match criteria. |
 | `Make` | `() Entity` | Create a new instance with the same options. |
@@ -250,21 +251,21 @@ All entities implement the `WhoisDomainMonitoringEntity` interface.
 
 ### Result shape
 
-Entity operations return `(value, error)`. The `value` is the
-operation's data **directly** — there is no wrapper:
+Entity operations return `(value, error)`. The `value` is the entity
+itself — there is no wrapper:
 
 | Operation | `value` |
 | --- | --- |
-| `Load` / `Create` | the entity record (`map[string]any`) |
-| `List` | a `[]any` of entity records |
+| `Load` / `Create` | the entity, whose `Data()` reads its record (`map[string]any`) |
+| `List` | a `[]any` of entities, one per record |
 
 Check `err` first, then use the value directly (or the typed
 `...Typed` variants, which return the entity's model struct and a typed
 slice):
 
-    dnsResult, err := client.DnsResult(nil).Load(nil, nil)
+    dnsResult, err := client.DnsResult(nil).Load(map[string]any{"domain": "example"}, nil)
     if err != nil { /* handle */ }
-    // dnsResult is the returned record
+    // dnsResult is the entity; dnsResult.(sdk.Entity).Data() reads its record
 
 Only `Direct()` returns a response envelope — a `map[string]any` with
 `"ok"`, `"status"`, `"headers"`, and `"data"` keys.
@@ -319,7 +320,7 @@ API path: `/email-validate`
 
 Operations: Load.
 
-API path: `/qr`
+API path: `/barcode`
 
 #### Grammar
 
@@ -445,7 +446,7 @@ dnsResult, err := client.DnsResult(nil).Load(map[string]any{"domain": "domain"},
 if err != nil {
     panic(err)
 }
-fmt.Println(dnsResult) // the loaded record
+fmt.Println(dnsResult.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 
@@ -470,11 +471,14 @@ Create an instance: `domain := client.Domain(nil)`
 #### Example: List
 
 ```go
-domains, err := client.Domain(nil).List(nil, nil)
+domains, err := client.Domain(nil).List(map[string]any{"url": "example"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(domains) // the array of records
+// A []any of entities, one per record.
+for _, item := range domains.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 
@@ -509,7 +513,7 @@ emailValidate, err := client.EmailValidate(nil).Load(map[string]any{"email": "em
 if err != nil {
     panic(err)
 }
-fmt.Println(emailValidate) // the loaded record
+fmt.Println(emailValidate.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 
@@ -526,11 +530,11 @@ Create an instance: `generate := client.Generate(nil)`
 #### Example: Load
 
 ```go
-generate, err := client.Generate(nil).Load(map[string]any{"url": "url"}, nil)
+generate, err := client.Generate(nil).Load(map[string]any{"data": "data"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(generate) // the loaded record
+fmt.Println(generate.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 
@@ -557,11 +561,12 @@ Create an instance: `grammar := client.Grammar(nil)`
 
 ```go
 result, err := client.Grammar(nil).Create(map[string]any{
+    "text": "example_text",
 }, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -596,7 +601,7 @@ ipn, err := client.Ipn(nil).Load(nil, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(ipn) // the loaded record
+fmt.Println(ipn.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 
@@ -630,7 +635,7 @@ result, err := client.Redact(nil).Create(map[string]any{
 if err != nil {
     panic(err)
 }
-fmt.Println(result)
+fmt.Println(result.(sdk.Entity).Data()) // the created entity's record
 ```
 
 
@@ -662,11 +667,14 @@ Create an instance: `ssl := client.Ssl(nil)`
 #### Example: List
 
 ```go
-ssls, err := client.Ssl(nil).List(nil, nil)
+ssls, err := client.Ssl(nil).List(map[string]any{"domain": "example"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(ssls) // the array of records
+// A []any of entities, one per record.
+for _, item := range ssls.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 
@@ -696,7 +704,7 @@ utility, err := client.Utility(nil).Load(map[string]any{"input": "input"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(utility) // the loaded record
+fmt.Println(utility.(sdk.Entity).Data()) // the loaded entity's record
 ```
 
 
@@ -726,11 +734,14 @@ Create an instance: `whoi := client.Whoi(nil)`
 #### Example: List
 
 ```go
-whois, err := client.Whoi(nil).List(nil, nil)
+whois, err := client.Whoi(nil).List(map[string]any{"domain": "example"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(whois) // the array of records
+// A []any of entities, one per record.
+for _, item := range whois.([]any) {
+    fmt.Println(item.(sdk.Entity).Data())
+}
 ```
 
 ## Features
@@ -867,7 +878,9 @@ The Go SDK uses `map[string]any` throughout rather than typed structs.
 This mirrors the dynamic nature of the API and keeps the SDK
 flexible — no code generation is needed when the API schema changes.
 
-Use `core.ToMapAny()` to safely cast results and nested data.
+An operation returns the entity, and its `Data()` returns the record. Use
+`core.ToMapAny()` to safely cast that record, or data nested in it, to
+`map[string]any`: it returns `nil` for anything else, an entity included.
 
 ### Package structure
 

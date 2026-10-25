@@ -116,30 +116,26 @@ end
 
 # Request payload for Generate#load.
 #
-# @!attribute [rw] bg
-#   @return [String, nil]
-#
-# @!attribute [rw] ec_level
-#   @return [String, nil]
-#
-# @!attribute [rw] fg
-#   @return [String, nil]
+# @!attribute [rw] data
+#   @return [String]
 #
 # @!attribute [rw] format
 #   @return [String, nil]
 #
-# @!attribute [rw] size
+# @!attribute [rw] height
 #   @return [Integer, nil]
 #
-# @!attribute [rw] url
-#   @return [String]
+# @!attribute [rw] output
+#   @return [String, nil]
+#
+# @!attribute [rw] width
+#   @return [Integer, nil]
 GenerateLoadMatch = Struct.new(
-  :bg,
-  :ec_level,
-  :fg,
+  :data,
   :format,
-  :size,
-  :url,
+  :height,
+  :output,
+  :width,
   keyword_init: true
 )
 
@@ -166,20 +162,12 @@ Grammar = Struct.new(
 
 # Request payload for Grammar#create.
 #
-# @!attribute [rw] correction_count
-#   @return [Integer, nil]
-#
-# @!attribute [rw] corrections
-#   @return [Array, nil]
-#
 # @!attribute [rw] language
 #   @return [String, nil]
 #
 # @!attribute [rw] text
-#   @return [String, nil]
+#   @return [String]
 GrammarCreateData = Struct.new(
-  :correction_count,
-  :corrections,
   :language,
   :text,
   keyword_init: true
@@ -266,29 +254,17 @@ Redact = Struct.new(
 
 # Request payload for Redact#create.
 #
-# @!attribute [rw] counts
-#   @return [Hash, nil]
-#
 # @!attribute [rw] entities
 #   @return [Array, nil]
 #
-# @!attribute [rw] original_length
-#   @return [Integer, nil]
-#
 # @!attribute [rw] redact
-#   @return [String, nil]
-#
-# @!attribute [rw] redacted
 #   @return [String, nil]
 #
 # @!attribute [rw] text
 #   @return [String]
 RedactCreateData = Struct.new(
-  :counts,
   :entities,
-  :original_length,
   :redact,
-  :redacted,
   :text,
   keyword_init: true
 )

@@ -1,6 +1,10 @@
 # Kiprio API
 
-30+ utility APIs for domain intelligence, email validation, SSL inspection, image generation, content processing, and more. Free tier included, no credit card required. Base URL: `https://kiprio.com/v1` Authentication: Pass your API key in the `X-API-Key` header. Get a free key at https://kiprio.com/signup
+> 30+ utility APIs for domain intelligence, email validation, SSL inspection, image generation, content processing, and more. Free tier included, no credit card required.
+>
+> Base URL: `https://kiprio.com/v1`
+>
+> Authentication: Pass your API key in the `X-API-Key` header. Get a free key at https://kiprio.com/signup
 
 ## Start here
 
@@ -36,7 +40,7 @@ Key fields to recognise:
 
 ### Generate
 
-Results: QR code image; Barcode image; PNG screenshot.
+Results: Barcode image; QR code image; PNG screenshot.
 
 SDK operations: `load`.
 
@@ -96,8 +100,8 @@ Use this map to locate a capability. Consult the entity reference before supplyi
 | DnsResult | `load` | `GET /dns-lookup` | Required |
 | Domain | `list` | `GET /robots-txt` | Required |
 | EmailValidate | `load` | `GET /email-validate` | Required |
-| Generate | `load` | `GET /qr` | Not required |
 | Generate | `load` | `GET /barcode` | Not required |
+| Generate | `load` | `GET /qr` | Not required |
 | Generate | `load` | `GET /screenshot` | Required |
 | Grammar | `create` | `POST /grammar` | Required |
 | Ipn | `load` | `GET /ip` | Not required |
